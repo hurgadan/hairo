@@ -1,52 +1,44 @@
-<script setup lang="ts">
-import type { Hairstyle } from "~/types/hairstyle";
-
-const config = useRuntimeConfig();
-
-const {
-  data: hairstyles,
-  pending,
-  error,
-} = await useFetch<Hairstyle[]>(
-  () => `${config.public.apiBase}/catalog/hairstyles`,
-);
-</script>
-
 <template>
-  <main class="mx-auto min-h-screen max-w-3xl px-6 py-10">
-    <header class="mb-8">
+  <div class="flex flex-1 flex-col px-6 pb-8">
+    <section class="pt-6">
       <p
-        class="text-xs font-semibold uppercase tracking-widest text-accent-dark"
+        class="text-xs font-semibold tracking-widest text-accent-dark uppercase"
       >
         AI-примерка причёсок
       </p>
-      <h1 class="mt-2 font-display text-5xl leading-none text-text">Hairo</h1>
-      <p class="mt-3 text-text-muted">Каталог образов из API.</p>
-    </header>
+      <h1 class="mt-3 font-display text-4xl leading-tight text-text">
+        Примерьте новую причёску по своему фото
+      </h1>
+      <p class="mt-3 text-text-muted">
+        Загрузите селфи — подберём образы, которые вам идут, и покажем результат
+        на вашем лице.
+      </p>
+    </section>
 
-    <p v-if="pending" class="text-text-muted">Загрузка…</p>
-    <p v-else-if="error" class="text-red-600">
-      Не удалось загрузить каталог: {{ error.message }}
-    </p>
-
-    <div v-else class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-      <article
-        v-for="h in hairstyles"
-        :key="h.id"
-        class="overflow-hidden rounded-[18px] border border-border bg-surface shadow-sm"
-      >
-        <div
-          class="flex aspect-[3/4] items-center justify-center bg-surface-2 text-xs text-text-muted"
+    <section
+      class="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border"
+    >
+      <div class="flex aspect-[3/4] items-end justify-center bg-surface-2 pb-4">
+        <span
+          class="rounded-full bg-surface/90 px-3 py-1 text-xs font-bold text-text-muted"
         >
-          превью
-        </div>
-        <div class="p-3">
-          <h2 class="font-display text-lg text-text">
-            {{ h.name.ru ?? h.slug }}
-          </h2>
-          <p class="text-xs text-text-muted">{{ h.groupName }}</p>
-        </div>
-      </article>
+          до
+        </span>
+      </div>
+      <div
+        class="flex aspect-[3/4] items-end justify-center bg-accent-soft pb-4"
+      >
+        <span class="rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
+          после
+        </span>
+      </div>
+    </section>
+
+    <div class="mt-auto pt-8">
+      <AppButton @click="navigateTo('/upload')">✦ Примерить причёску</AppButton>
+      <p class="mt-3 text-center text-sm font-semibold text-text-muted">
+        Первая примерка — бесплатно · 30 образов
+      </p>
     </div>
-  </main>
+  </div>
 </template>
