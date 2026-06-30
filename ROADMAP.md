@@ -41,7 +41,8 @@
 - [x] `auth`/`users`: JWT + email/пароль (bcrypt) + Telegram initData (HMAC) + `JwtAuthGuard` + `/auth/me` — проверено вживую
 - [x] `docker-compose` — dev Postgres (`db:up`, проект `hairo`) + изолированный тестовый Postgres на tmpfs (`docker:test`, проект `hairo-test`)
 - [x] Тестовый контур e2e (`catalog` + `auth`, 8 тестов, на тест-утилитах) + CI (GitHub Actions: lint · build · e2e на postgres-сервисе)
-- [ ] Nuxt.js-скелет, связка с API
+- [x] Nuxt.js-скелет (`web/`): Nuxt 4 + Tailwind v4 + токены `DESIGN.md`, страница каталога из API — проверено сквозь (SSR рендерит каталог из БД)
+  - follow-up: фронт должен потреблять `@hurgadan/hairo-contracts` — нужен токен/секрет с `read:packages` (сейчас 403), пока локальная копия типа в `web/app/types`
 
 **Выход:** «пустое, но правильное» приложение с зелёным CI.
 

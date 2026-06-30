@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Дизайн-токены Hairo (DESIGN.md, светлая тема) */
+@theme {
+  --color-bg: #faf7f2;
+  --color-surface: #ffffff;
+  --color-surface-2: #f3ede4;
+  --color-accent-soft: #f6e7de;
+  --color-accent: #c26a4a;
+  --color-accent-dark: #a4502f;
+  --color-text: #211c18;
+  --color-text-muted: #6b6259;
+  --color-border: #ece3d6;
+  --color-border-strong: #e2d7c9;
+  --color-success: #5b8c6e;
+
+  --font-display: "Cormorant", serif;
+  --font-sans: "Manrope", sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
