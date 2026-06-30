@@ -1,0 +1,40 @@
+name: hairo-test
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123123"
+      POSTGRES_DB: hairo_test
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hairo_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker-compose/Dockerfile.test
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    environment:
+      APP_NAME: hairo
+      NODE_ENV: test
+      PORT: "3001"
+      LOG_LEVEL: warn
+      DB_HOST: postgres-test
+      DB_PORT: "5432"
+      DB_LOGIN: postgres
+      DB_PASSWORD: "123123"
+      DB_NAME: hairo_test
+      DB_ENABLE_LOGGING: "false"
+      RECIPIENT: ""
+      TELEGRAM_BOT_TOKEN: ""
+      JWT_SECRET: test-secret
+      JWT_EXPIRES_IN: 1h
+    command: npm run test:e2e

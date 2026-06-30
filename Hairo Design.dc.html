@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+
+<div style="position:absolute;left:0;top:0;width:1300px;">
+  <div style="font:600 13px Manrope,sans-serif;letter-spacing:3px;text-transform:uppercase;color:#A4502F;">Фаза 0.5 · Визуальная система</div>
+  <div style="font:500 64px Cormorant,serif;color:#211C18;line-height:1;margin-top:8px;">Hairo — дизайн приложения</div>
+  <div style="font:400 17px Manrope,sans-serif;color:#6B6259;margin-top:14px;max-width:760px;line-height:1.5;">Бренд, дизайн-система и ключевые экраны для AI-примерки причёсок. Mobile-first, тексты переживают RU / ES / DE, есть подхват светлой и тёмной темы Telegram Mini App.</div>
+</div>
+
+<!-- ============ LOGO / BRAND ============ -->
+<div style="position:absolute;left:0;top:200px;width:560px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9A8E7E;margin-bottom:12px;">Логотип</div>
+  <div style="background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:40px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <svg width="46" height="46" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="22" fill="#F6E7DE"/><path d="M14 31c0-12 5-19 9-19s9 7 9 19" stroke="#C26A4A" stroke-width="2.6" stroke-linecap="round"/><path d="M19 31c0-8 2-12 4-12s4 4 4 12" stroke="#C26A4A" stroke-width="2.6" stroke-linecap="round" opacity=".5"/></svg>
+      <span style="font:500 52px Cormorant,serif;color:#211C18;letter-spacing:.5px;">Hairo</span>
+    </div>
+    <div style="margin-top:28px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;background:#211C18;border-radius:14px;padding:14px 18px;">
+        <svg width="28" height="28" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="22" fill="#3a2f28"/><path d="M14 31c0-12 5-19 9-19s9 7 9 19" stroke="#E08862" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <span style="font:500 26px Cormorant,serif;color:#F3ECE2;">Hairo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:#F6E7DE;border-radius:14px;padding:14px 18px;">
+        <svg width="22" height="22" viewBox="0 0 46 46" fill="none"><path d="M14 33c0-13 5-21 9-21s9 8 9 21" stroke="#C26A4A" stroke-width="3" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div style="margin-top:26px;font:400 15px Manrope,sans-serif;color:#6B6259;line-height:1.5;">Знак — мягкая дуга-локон, отсылка к причёске и зеркалу. Вордмарк в Cormorant — «бьюти-редакция», тёплый премиум без вычурности.</div>
+  </div>
+
+  <div data-drags-parent="1" style="font:600 12px Manrope,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9A8E7E;margin:30px 0 12px;">Тон голоса</div>
+  <div style="background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:32px;display:flex;flex-direction:column;gap:16px;">
+    <div style="display:flex;gap:14px;align-items:flex-start;"><span style="font:700 14px Manrope;color:#5B8C6E;margin-top:1px;">✓</span><div><div style="font:700 15px Manrope;color:#211C18;">Тёплый и на «вы», но без официоза</div><div style="font:400 14px Manrope;color:#6B6259;">«Загрузите селфи — покажем, что вам идёт».</div></div></div>
+    <div style="display:flex;gap:14px;align-items:flex-start;"><span style="font:700 14px Manrope;color:#5B8C6E;margin-top:1px;">✓</span><div><div style="font:700 15px Manrope;color:#211C18;">Конкретно, без хайпа про «нейросети»</div><div style="font:400 14px Manrope;color:#6B6259;">Говорим о результате, а не о технологии.</div></div></div>
+    <div style="display:flex;gap:14px;align-items:flex-start;"><span style="font:700 14px Manrope;color:#C0392B;margin-top:1px;">✕</span><div><div style="font:700 15px Manrope;color:#211C18;">Не давим и не обещаем «идеал»</div><div style="font:400 14px Manrope;color:#6B6259;">Образ — это примерка и вдохновение, а не приговор.</div></div></div>
+  </div>
+</div>
+
+<!-- ============ PALETTE ============ -->
+<div style="position:absolute;left:640px;top:200px;width:840px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9A8E7E;margin-bottom:12px;">Палитра · токены</div>
+  <div style="background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:36px;">
+    <div style="font:700 13px Manrope;letter-spacing:1px;text-transform:uppercase;color:#A4502F;margin-bottom:16px;">Светлая тема</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div><div style="height:80px;border-radius:12px;background:#FAF7F2;border:1px solid #ECE3D6;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Фон</div><div style="font:400 12px Manrope;color:#9A8E7E;">#FAF7F2</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#FFFFFF;border:1px solid #ECE3D6;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Поверхность</div><div style="font:400 12px Manrope;color:#9A8E7E;">#FFFFFF</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#F3EDE4;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Поверхность-2</div><div style="font:400 12px Manrope;color:#9A8E7E;">#F3EDE4</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#F6E7DE;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Акцент-фон</div><div style="font:400 12px Manrope;color:#9A8E7E;">#F6E7DE</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#C26A4A;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Акцент</div><div style="font:400 12px Manrope;color:#9A8E7E;">#C26A4A</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#A4502F;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Акцент-тёмн.</div><div style="font:400 12px Manrope;color:#9A8E7E;">#A4502F</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#211C18;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Текст</div><div style="font:400 12px Manrope;color:#9A8E7E;">#211C18</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#6B6259;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Текст-тихий</div><div style="font:400 12px Manrope;color:#9A8E7E;">#6B6259</div></div>
+    </div>
+    <div style="font:700 13px Manrope;letter-spacing:1px;text-transform:uppercase;color:#A4502F;margin:30px 0 16px;">Тёмная тема (Telegram dark)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div><div style="height:80px;border-radius:12px;background:#16130F;border:1px solid #2C261F;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Фон</div><div style="font:400 12px Manrope;color:#9A8E7E;">#16130F</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#211C17;border:1px solid #2C261F;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Поверхность</div><div style="font:400 12px Manrope;color:#9A8E7E;">#211C17</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#2C261F;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Поверхность-2</div><div style="font:400 12px Manrope;color:#9A8E7E;">#2C261F</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#E08862;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Акцент</div><div style="font:400 12px Manrope;color:#9A8E7E;">#E08862</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#F3ECE2;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Текст</div><div style="font:400 12px Manrope;color:#9A8E7E;">#F3ECE2</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#A89C8D;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Текст-тихий</div><div style="font:400 12px Manrope;color:#9A8E7E;">#A89C8D</div></div>
+      <div><div style="height:80px;border-radius:12px;background:#5B8C6E;"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">Успех</div><div style="font:400 12px Manrope;color:#9A8E7E;">#5B8C6E</div></div>
+      <div><div style="height:80px;border-radius:12px;background:linear-gradient(135deg,#C26A4A,#E08862);"></div><div style="font:700 13px Manrope;color:#211C18;margin-top:8px;">AI-акцент</div><div style="font:400 12px Manrope;color:#9A8E7E;">градиент</div></div>
+    </div>
+    <div style="margin-top:24px;padding:16px 18px;background:#F6E7DE;border-radius:12px;font:400 13px Manrope;color:#7A4B33;line-height:1.5;">Токены маппятся на <b>theme_params</b> Telegram: <code>bg_color</code>, <code>text_color</code>, <code>button_color</code>, <code>hint_color</code>. Акцент держим собственный (бренд), не подменяем кнопкой Telegram.</div>
+  </div>
+</div>
+
+<!-- ============ TYPOGRAPHY ============ -->
+<div style="position:absolute;left:0;top:880px;width:560px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9A8E7E;margin-bottom:12px;">Типографика</div>
+  <div style="background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:36px;">
+    <div style="display:flex;gap:24px;margin-bottom:24px;">
+      <div style="flex:1;padding:18px;background:#FAF7F2;border-radius:12px;"><div style="font:500 44px Cormorant,serif;color:#211C18;line-height:1;">Aa</div><div style="font:700 13px Manrope;color:#211C18;margin-top:10px;">Cormorant</div><div style="font:400 12px Manrope;color:#9A8E7E;">Дисплей · заголовки</div></div>
+      <div style="flex:1;padding:18px;background:#FAF7F2;border-radius:12px;"><div style="font:700 44px Manrope;color:#211C18;line-height:1;">Аа</div><div style="font:700 13px Manrope;color:#211C18;margin-top:10px;">Manrope</div><div style="font:400 12px Manrope;color:#9A8E7E;">UI · текст · кнопки</div></div>
+    </div>
+    <div style="border-top:1px solid #ECE3D6;padding-top:20px;display:flex;flex-direction:column;gap:14px;">
+      <div><div style="font:500 40px Cormorant,serif;color:#211C18;line-height:1.05;">Новый образ за минуту</div><div style="font:400 11px Manrope;color:#9A8E7E;margin-top:2px;">Display / Cormorant 40 · 1.05</div></div>
+      <div><div style="font:600 26px Cormorant,serif;color:#211C18;">Вам подойдёт</div><div style="font:400 11px Manrope;color:#9A8E7E;margin-top:2px;">H1 / Cormorant 26</div></div>
+      <div><div style="font:800 18px Manrope;color:#211C18;">Загрузите селфи</div><div style="font:400 11px Manrope;color:#9A8E7E;margin-top:2px;">H2 / Manrope 18 / 800</div></div>
+      <div><div style="font:400 16px Manrope;color:#211C18;line-height:1.5;">Основной текст для абзацев и подсказок в интерфейсе.</div><div style="font:400 11px Manrope;color:#9A8E7E;margin-top:2px;">Body / Manrope 16 / 1.5</div></div>
+      <div><div style="font:600 13px Manrope;letter-spacing:.5px;text-transform:uppercase;color:#A4502F;">Метка · бейдж</div><div style="font:400 11px Manrope;color:#9A8E7E;margin-top:2px;">Label / Manrope 13 / uppercase</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COMPONENTS ============ -->
+<div style="position:absolute;left:640px;top:880px;width:840px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9A8E7E;margin-bottom:12px;">Компоненты</div>
+  <div style="background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:36px;">
+    <div>
+      <div style="font:700 13px Manrope;color:#9A8E7E;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">Кнопки</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:16px;background:#C26A4A;color:#fff;font:700 16px Manrope;box-shadow:0 8px 18px -8px rgba(194,106,74,.6);">Примерить причёску</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:52px;border-radius:16px;background:transparent;border:1.5px solid #E2D7C9;color:#211C18;font:700 16px Manrope;">Из галереи</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:16px;background:#211C18;color:#fff;font:700 16px Manrope;">Сгенерировать · 1 кредит</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:44px;align-self:flex-start;padding:0 18px;border-radius:999px;background:#F3EDE4;color:#211C18;font:600 14px Manrope;">Текстовая кнопка</div>
+      </div>
+    </div>
+    <div>
+      <div style="font:700 13px Manrope;color:#9A8E7E;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">Поля и чипы</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="height:52px;border-radius:14px;border:1.5px solid #E2D7C9;background:#fff;display:flex;align-items:center;padding:0 16px;font:400 15px Manrope;color:#9A8E7E;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="651c0a1017250008040c094b060a08">[email&#160;protected]</a></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="padding:9px 15px;border-radius:999px;background:#C26A4A;color:#fff;font:600 13px Manrope;">Повседнев</span>
+          <span style="padding:9px 15px;border-radius:999px;background:#F3EDE4;color:#211C18;font:600 13px Manrope;">Деловой</span>
+          <span style="padding:9px 15px;border-radius:999px;background:#F3EDE4;color:#211C18;font:600 13px Manrope;">Событие</span>
+          <span style="padding:9px 15px;border-radius:999px;background:#F3EDE4;color:#211C18;font:600 13px Manrope;">Смелый</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:#FAF7F2;"><div style="width:22px;height:22px;border-radius:7px;background:#C26A4A;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><span style="font:500 14px Manrope;color:#211C18;">Согласие на обработку фото</span></div>
+      </div>
+    </div>
+    <div>
+      <div style="font:700 13px Manrope;color:#9A8E7E;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">Шаги визарда</div>
+      <div style="display:flex;gap:6px;margin-bottom:14px;">
+        <div style="flex:1;height:6px;border-radius:999px;background:#C26A4A;"></div>
+        <div style="flex:1;height:6px;border-radius:999px;background:#C26A4A;"></div>
+        <div style="flex:1;height:6px;border-radius:999px;background:#C26A4A;"></div>
+        <div style="flex:1;height:6px;border-radius:999px;background:#E2D7C9;"></div>
+        <div style="flex:1;height:6px;border-radius:999px;background:#E2D7C9;"></div>
+        <div style="flex:1;height:6px;border-radius:999px;background:#E2D7C9;"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="padding:16px;border-radius:14px;border:2px solid #C26A4A;background:#F6E7DE;font:700 15px Manrope;color:#211C18;">Заметная смена</div>
+        <div style="padding:16px;border-radius:14px;border:1.5px solid #E2D7C9;background:#fff;font:600 15px Manrope;color:#6B6259;">Лёгкое обновление</div>
+      </div>
+    </div>
+    <div>
+      <div style="font:700 13px Manrope;color:#9A8E7E;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">Карточка образа</div>
+      <div style="border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 6px 18px -10px rgba(60,40,30,.3);border:1px solid #ECE3D6;width:200px;">
+        <div style="height:170px;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 10px,#F3EDE4 10px,#F3EDE4 20px);display:flex;align-items:center;justify-content:center;"><span style="font:500 13px Manrope;color:#B0A492;">превью</span><span style="position:absolute;top:10px;right:10px;background:#fff;border-radius:999px;padding:4px 9px;font:800 12px Manrope;color:#A4502F;box-shadow:0 2px 6px rgba(0,0,0,.1);">94%</span><span style="position:absolute;top:10px;left:10px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C26A4A" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span></div>
+        <div style="padding:14px;"><div style="font:600 17px Cormorant,serif;color:#211C18;">Лоб со шторкой</div><div style="font:400 12px Manrope;color:#9A8E7E;margin-top:3px;">до плеч · чёлка-шторка</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ LIGHT FLOW · ROW LABEL ============ -->
+<div style="position:absolute;left:0;top:1500px;width:900px;">
+  <div style="font:500 34px Cormorant,serif;color:#211C18;">Пользовательский флоу · светлая тема</div>
+  <div style="font:400 14px Manrope;color:#6B6259;margin-top:4px;">Лендинг → загрузка → автодетект → визард → подбор → результат → оплата → галерея</div>
+</div>
+
+<!-- LANDING -->
+<div style="position:absolute;left:0;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">01 · Лендинг</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:8px;"><svg width="26" height="26" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="22" fill="#F6E7DE"/><path d="M14 31c0-12 5-19 9-19s9 7 9 19" stroke="#C26A4A" stroke-width="3" stroke-linecap="round"/></svg><span style="font:500 26px Cormorant,serif;color:#211C18;">Hairo</span></div>
+      <span style="padding:6px 12px;border-radius:999px;background:#F3EDE4;font:700 12px Manrope;color:#6B6259;">RU</span>
+    </div>
+    <div style="padding:26px 24px 0;">
+      <div style="font:700 12px Manrope;letter-spacing:1.5px;text-transform:uppercase;color:#A4502F;">AI-примерка причёсок</div>
+      <div style="font:500 38px Cormorant,serif;color:#211C18;line-height:1.06;margin-top:10px;">Примерьте новую причёску по своему фото</div>
+      <div style="font:400 15px Manrope;color:#6B6259;line-height:1.5;margin-top:12px;">Загрузите селфи — подберём образы, которые вам идут, и покажем результат на вашем лице.</div>
+    </div>
+    <div style="margin:22px 24px 0;border-radius:22px;overflow:hidden;display:flex;height:240px;border:1px solid #ECE3D6;">
+      <div style="flex:1;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 11px,#F3EDE4 11px,#F3EDE4 22px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;"><span style="background:rgba(255,255,255,.9);padding:5px 12px;border-radius:999px;font:700 12px Manrope;color:#6B6259;">до</span></div>
+      <div style="flex:1;position:relative;background:repeating-linear-gradient(45deg,#F2DFD4,#F2DFD4 11px,#F6E7DE 11px,#F6E7DE 22px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;"><span style="background:#C26A4A;padding:5px 12px;border-radius:999px;font:700 12px Manrope;color:#fff;">после</span></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 24px 30px;background:linear-gradient(to top,#FAF7F2 70%,transparent);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:9px;height:56px;border-radius:18px;background:#C26A4A;color:#fff;font:700 17px Manrope;box-shadow:0 12px 24px -10px rgba(194,106,74,.65);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Примерить причёску</div>
+      <div style="text-align:center;font:600 13px Manrope;color:#6B6259;margin-top:12px;">Первая примерка — бесплатно · 30 образов</div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div style="position:absolute;left:450px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">02 · Загрузка селфи</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;"><div style="width:38px;height:38px;border-radius:12px;background:#F3EDE4;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211C18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;gap:5px;"><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div></div></div>
+    <div style="padding:24px 24px 0;">
+      <div style="font:500 30px Cormorant,serif;color:#211C18;line-height:1.1;">Загрузите селфи</div>
+      <div style="font:400 14px Manrope;color:#6B6259;margin-top:8px;">Лучше всего анфас при дневном свете.</div>
+    </div>
+    <div style="margin:20px 24px 0;height:300px;border-radius:24px;border:2px dashed #D8C9B6;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
+      <div style="width:64px;height:64px;border-radius:20px;background:#F6E7DE;display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C26A4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-4l-1.5-2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div style="font:600 15px Manrope;color:#211C18;">Перетащите фото сюда</div>
+    </div>
+    <div style="display:flex;gap:12px;padding:16px 24px 0;">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border-radius:16px;background:#211C18;color:#fff;font:700 15px Manrope;">Снять фото</div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;height:50px;border-radius:16px;border:1.5px solid #E2D7C9;color:#211C18;font:700 15px Manrope;">Из галереи</div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:18px 24px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:#F3EDE4;margin-bottom:14px;"><div style="width:22px;height:22px;border-radius:7px;border:2px solid #C26A4A;flex-shrink:0;"></div><span style="font:500 13px Manrope;color:#6B6259;line-height:1.4;">Согласен на обработку фото для подбора. <span style="color:#A4502F;font-weight:700;">Подробнее</span></span></div>
+      <div style="display:flex;align-items:center;justify-content:center;height:54px;border-radius:18px;background:#E2D7C9;color:#A89C8D;font:700 16px Manrope;">Продолжить</div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTODETECT -->
+<div style="position:absolute;left:900px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">03 · Автодетект</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;"><div style="width:38px;height:38px;border-radius:12px;background:#F3EDE4;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211C18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;gap:5px;"><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div></div></div>
+    <div style="padding:22px 24px 0;display:flex;gap:16px;align-items:center;">
+      <div style="width:96px;height:120px;border-radius:18px;flex-shrink:0;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 9px,#F3EDE4 9px,#F3EDE4 18px);border:1px solid #ECE3D6;position:relative;"><span style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font:600 11px Manrope;color:#B0A492;">ваше фото</span></div>
+      <div><div style="font:700 11px Manrope;letter-spacing:1px;text-transform:uppercase;color:#5B8C6E;">✓ Фото улучшено</div><div style="font:500 26px Cormorant,serif;color:#211C18;line-height:1.1;margin-top:6px;">Мы определили ваши черты</div></div>
+    </div>
+    <div style="padding:22px 24px 0;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid #ECE3D6;"><div><div style="font:400 12px Manrope;color:#9A8E7E;">Форма лица</div><div style="font:700 16px Manrope;color:#211C18;">Овальное</div></div><span style="font:600 13px Manrope;color:#A4502F;">Изменить</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid #ECE3D6;"><div><div style="font:400 12px Manrope;color:#9A8E7E;">Текущая длина</div><div style="font:700 16px Manrope;color:#211C18;">Средняя</div></div><span style="font:600 13px Manrope;color:#A4502F;">Изменить</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid #ECE3D6;"><div><div style="font:400 12px Manrope;color:#9A8E7E;">Текстура</div><div style="font:700 16px Manrope;color:#211C18;">Волнистые</div></div><span style="font:600 13px Manrope;color:#A4502F;">Изменить</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid #ECE3D6;"><div><div style="font:400 12px Manrope;color:#9A8E7E;">Густота</div><div style="font:700 16px Manrope;color:#211C18;">Средняя</div></div><span style="font:600 13px Manrope;color:#A4502F;">Изменить</span></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:18px 24px 28px;background:linear-gradient(to top,#FAF7F2 75%,transparent);"><div style="display:flex;align-items:center;justify-content:center;height:54px;border-radius:18px;background:#C26A4A;color:#fff;font:700 16px Manrope;box-shadow:0 12px 24px -10px rgba(194,106,74,.6);">Всё верно, дальше</div></div>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div style="position:absolute;left:1350px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">04 · Визард (шаг 3 из 6)</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;"><div style="width:38px;height:38px;border-radius:12px;background:#F3EDE4;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211C18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;gap:5px;"><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#C26A4A;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E2D7C9;"></div></div></div>
+    <div style="padding:26px 24px 0;">
+      <div style="font:700 12px Manrope;letter-spacing:1px;text-transform:uppercase;color:#A4502F;">Шаг 3 из 6</div>
+      <div style="font:500 30px Cormorant,serif;color:#211C18;line-height:1.12;margin-top:8px;">Насколько смелую смену хотите?</div>
+    </div>
+    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:12px;">
+      <div style="padding:18px;border-radius:18px;border:1.5px solid #E2D7C9;background:#fff;"><div style="font:700 17px Manrope;color:#211C18;">Лёгкое обновление</div><div style="font:400 13px Manrope;color:#9A8E7E;margin-top:3px;">Освежить, оставаясь собой</div></div>
+      <div style="padding:18px;border-radius:18px;border:2px solid #C26A4A;background:#F6E7DE;position:relative;"><div style="font:700 17px Manrope;color:#211C18;">Заметная смена</div><div style="font:400 13px Manrope;color:#7A4B33;margin-top:3px;">Новый образ, но узнаваемо</div><div style="position:absolute;top:18px;right:18px;width:24px;height:24px;border-radius:50%;background:#C26A4A;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <div style="padding:18px;border-radius:18px;border:1.5px solid #E2D7C9;background:#fff;"><div style="font:700 17px Manrope;color:#211C18;">Кардинально</div><div style="font:400 13px Manrope;color:#9A8E7E;margin-top:3px;">Полностью другой человек</div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 24px 28px;background:linear-gradient(to top,#FAF7F2 75%,transparent);">
+      <div style="text-align:center;font:600 14px Manrope;color:#A4502F;margin-bottom:14px;">Просто покажите варианты →</div>
+      <div style="display:flex;gap:12px;"><div style="width:54px;height:54px;border-radius:18px;border:1.5px solid #E2D7C9;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#211C18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;align-items:center;justify-content:center;height:54px;border-radius:18px;background:#C26A4A;color:#fff;font:700 16px Manrope;box-shadow:0 12px 24px -10px rgba(194,106,74,.6);">Далее</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATALOG -->
+<div style="position:absolute;left:1800px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">05 · Подбор / каталог</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;">
+      <div style="font:500 28px Cormorant,serif;color:#211C18;">Вам подойдёт</div>
+      <div style="font:400 13px Manrope;color:#9A8E7E;margin-top:2px;">8 образов по вашим ответам</div>
+      <div style="display:flex;gap:8px;margin-top:14px;overflow:hidden;"><span style="padding:8px 14px;border-radius:999px;background:#211C18;color:#fff;font:600 13px Manrope;white-space:nowrap;">Все</span><span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #E2D7C9;color:#6B6259;font:600 13px Manrope;white-space:nowrap;">Боб</span><span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #E2D7C9;color:#6B6259;font:600 13px Manrope;white-space:nowrap;">Средние</span><span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #E2D7C9;color:#6B6259;font:600 13px Manrope;white-space:nowrap;">Длинн.</span></div>
+    </div>
+    <div style="padding:16px 24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="border-radius:16px;overflow:hidden;background:#fff;border:2px solid #C26A4A;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 9px,#F3EDE4 9px,#F3EDE4 18px);"><span style="position:absolute;top:8px;right:8px;background:#fff;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#A4502F;">96%</span><span style="position:absolute;bottom:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#C26A4A;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#211C18;">Лоб со шторкой</div><div style="font:400 11px Manrope;color:#9A8E7E;">до плеч</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#fff;border:1px solid #ECE3D6;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#F2DFD4,#F2DFD4 9px,#F6E7DE 9px,#F6E7DE 18px);"><span style="position:absolute;top:8px;right:8px;background:#fff;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#A4502F;">92%</span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#211C18;">Французский боб</div><div style="font:400 11px Manrope;color:#9A8E7E;">до подбородка</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#fff;border:1px solid #ECE3D6;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 9px,#F3EDE4 9px,#F3EDE4 18px);"><span style="position:absolute;top:8px;right:8px;background:#fff;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#A4502F;">89%</span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#211C18;">Пляжные волны</div><div style="font:400 11px Manrope;color:#9A8E7E;">средние</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#fff;border:2px solid #C26A4A;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#F2DFD4,#F2DFD4 9px,#F6E7DE 9px,#F6E7DE 18px);"><span style="position:absolute;top:8px;right:8px;background:#fff;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#A4502F;">87%</span><span style="position:absolute;bottom:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#C26A4A;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#211C18;">Итальянский боб</div><div style="font:400 11px Manrope;color:#9A8E7E;">до челюсти</div></div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 24px;background:#fff;border-top:1px solid #ECE3D6;border-radius:28px 28px 0 0;display:flex;align-items:center;gap:14px;box-shadow:0 -8px 24px -12px rgba(60,40,30,.2);">
+      <div><div style="font:700 15px Manrope;color:#211C18;">Выбрано 2</div><div style="font:400 12px Manrope;color:#9A8E7E;">1-я генерация бесплатно</div></div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:52px;border-radius:16px;background:#C26A4A;color:#fff;font:700 15px Manrope;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Сгенерировать</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div style="position:absolute;left:2250px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">06 · Результат</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#211C18;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#fff;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#fff;border-radius:1px;"></div><div style="width:3px;height:9px;background:#fff;border-radius:1px;"></div><div style="width:3px;height:12px;background:#fff;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#fff;border-radius:1px;"></div></div></div></div>
+    <div style="position:absolute;inset:0;top:0;background:repeating-linear-gradient(45deg,#2c2620,#2c2620 14px,#332b24 14px,#332b24 28px);"></div>
+    <div style="position:absolute;left:24px;top:54px;right:24px;display:flex;justify-content:space-between;align-items:center;z-index:2;"><div style="width:40px;height:40px;border-radius:13px;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);font:700 12px Manrope;color:#fff;letter-spacing:.5px;">✦ Hairo</div></div>
+    <div style="position:absolute;left:0;right:0;top:42%;text-align:center;z-index:2;"><span style="background:rgba(255,255,255,.14);backdrop-filter:blur(4px);padding:8px 16px;border-radius:999px;font:600 13px Manrope;color:#fff;">Ваше фото · Итальянский боб</span></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:24px 24px 28px;background:linear-gradient(to top,#16130F 55%,transparent);z-index:2;">
+      <div style="font:700 11px Manrope;letter-spacing:1.5px;text-transform:uppercase;color:#E08862;">✓ Готово</div>
+      <div style="font:500 32px Cormorant,serif;color:#F3ECE2;line-height:1.05;margin-top:6px;">Вот ваш новый образ</div>
+      <div style="display:flex;gap:10px;margin-top:18px;">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:52px;border-radius:16px;background:#E08862;color:#16130F;font:700 15px Manrope;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14"/></svg>Скачать</div>
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"/><path d="M16 6l-4-4-4 4M12 2v13"/></svg></div>
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></div>
+      </div>
+      <div style="text-align:center;font:600 13px Manrope;color:#A89C8D;margin-top:14px;">Поделитесь и получите <span style="color:#E08862;">+2 примерки</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYWALL -->
+<div style="position:absolute;left:2700px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">07 · Пополнение баланса</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="padding:8px 24px 0;text-align:right;"><span style="font:600 13px Manrope;color:#9A8E7E;">✕</span></div>
+    <div style="padding:16px 24px 0;text-align:center;">
+      <div style="width:64px;height:64px;border-radius:20px;background:#F6E7DE;display:flex;align-items:center;justify-content:center;margin:0 auto;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C26A4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></div>
+      <div style="font:500 30px Cormorant,serif;color:#211C18;line-height:1.1;margin-top:16px;">Продолжите примерки</div>
+      <div style="font:400 14px Manrope;color:#6B6259;margin-top:8px;line-height:1.5;">Первая была бесплатной. Пополните баланс — кредиты не сгорают.</div>
+    </div>
+    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;padding:18px;border-radius:18px;border:1.5px solid #E2D7C9;background:#fff;"><div style="flex:1;"><div style="font:700 17px Manrope;color:#211C18;">1 примерка</div><div style="font:400 12px Manrope;color:#9A8E7E;">проба</div></div><div style="font:800 18px Manrope;color:#211C18;">€2,90</div></div>
+      <div style="display:flex;align-items:center;padding:18px;border-radius:18px;border:2px solid #C26A4A;background:#F6E7DE;position:relative;"><span style="position:absolute;top:-10px;left:18px;background:#C26A4A;color:#fff;font:800 10px Manrope;letter-spacing:.5px;padding:3px 9px;border-radius:999px;">ВЫГОДНО</span><div style="flex:1;"><div style="font:700 17px Manrope;color:#211C18;">5 примерок</div><div style="font:400 12px Manrope;color:#7A4B33;">€1,80 за образ</div></div><div style="font:800 18px Manrope;color:#211C18;">€8,90</div></div>
+      <div style="display:flex;align-items:center;padding:18px;border-radius:18px;border:1.5px solid #E2D7C9;background:#fff;"><div style="flex:1;"><div style="font:700 17px Manrope;color:#211C18;">15 примерок</div><div style="font:400 12px Manrope;color:#9A8E7E;">€1,33 за образ</div></div><div style="font:800 18px Manrope;color:#211C18;">€19,90</div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 24px 28px;background:linear-gradient(to top,#FAF7F2 75%,transparent);">
+      <div style="display:flex;align-items:center;justify-content:center;height:54px;border-radius:18px;background:#211C18;color:#fff;font:700 16px Manrope;">Оплатить · €8,90</div>
+      <div style="text-align:center;font:400 12px Manrope;color:#9A8E7E;margin-top:10px;">Безопасная оплата через Stripe</div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div style="position:absolute;left:3150px;top:1580px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">08 · Галерея / аккаунт</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#FAF7F2;box-shadow:0 30px 60px -22px rgba(60,40,30,.28);border:1px solid rgba(0,0,0,.05);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#211C18;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:9px;background:#211C18;border-radius:1px;"></div><div style="width:3px;height:12px;background:#211C18;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #211C18;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#211C18;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font:500 28px Cormorant,serif;color:#211C18;">Мои образы</div>
+      <div style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:#211C18;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E08862" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span style="font:700 13px Manrope;color:#fff;">3</span></div>
+    </div>
+    <div style="margin:18px 24px 0;padding:18px;border-radius:20px;background:linear-gradient(135deg,#C26A4A,#A4502F);position:relative;overflow:hidden;">
+      <div style="font:700 14px Manrope;color:#fff;">Приведите друга</div>
+      <div style="font:400 13px Manrope;color:rgba(255,255,255,.85);margin-top:4px;max-width:210px;line-height:1.4;">Вы оба получите по 2 бесплатных примерки.</div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:12px;background:#fff;font:700 13px Manrope;color:#A4502F;">Поделиться ссылкой</div>
+    </div>
+    <div style="padding:18px 24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 9px,#F3EDE4 9px,#F3EDE4 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(255,255,255,.9);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#6B6259;">Итал. боб</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#F2DFD4,#F2DFD4 9px,#F6E7DE 9px,#F6E7DE 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(255,255,255,.9);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#6B6259;">Лоб</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#EFE7DC,#EFE7DC 9px,#F3EDE4 9px,#F3EDE4 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(255,255,255,.9);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#6B6259;">Волны</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;border:2px dashed #D8C9B6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;"><div style="width:44px;height:44px;border-radius:14px;background:#F6E7DE;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C26A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div><span style="font:600 12px Manrope;color:#9A8E7E;">Новый образ</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DARK ROW LABEL ============ -->
+<div style="position:absolute;left:0;top:2660px;width:900px;">
+  <div style="font:500 34px Cormorant,serif;color:#211C18;">Тёмная тема · Telegram Mini App</div>
+  <div style="font:400 14px Manrope;color:#6B6259;margin-top:4px;">Те же экраны при подхвате тёмной темы клиента. Акцент бренда сохраняется.</div>
+</div>
+
+<!-- DARK LANDING -->
+<div style="position:absolute;left:0;top:2740px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">Лендинг · dark</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#16130F;box-shadow:0 30px 60px -22px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#F3ECE2;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:9px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:12px;background:#F3ECE2;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #F3ECE2;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#F3ECE2;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:8px;"><svg width="26" height="26" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="22" fill="#3a2f28"/><path d="M14 31c0-12 5-19 9-19s9 7 9 19" stroke="#E08862" stroke-width="3" stroke-linecap="round"/></svg><span style="font:500 26px Cormorant,serif;color:#F3ECE2;">Hairo</span></div>
+      <span style="padding:6px 12px;border-radius:999px;background:#2C261F;font:700 12px Manrope;color:#A89C8D;">RU</span>
+    </div>
+    <div style="padding:26px 24px 0;">
+      <div style="font:700 12px Manrope;letter-spacing:1.5px;text-transform:uppercase;color:#E08862;">AI-примерка причёсок</div>
+      <div style="font:500 38px Cormorant,serif;color:#F3ECE2;line-height:1.06;margin-top:10px;">Примерьте новую причёску по своему фото</div>
+      <div style="font:400 15px Manrope;color:#A89C8D;line-height:1.5;margin-top:12px;">Загрузите селфи — подберём образы, которые вам идут, и покажем результат на вашем лице.</div>
+    </div>
+    <div style="margin:22px 24px 0;border-radius:22px;overflow:hidden;display:flex;height:240px;border:1px solid #2C261F;">
+      <div style="flex:1;position:relative;background:repeating-linear-gradient(45deg,#241e18,#241e18 11px,#2C261F 11px,#2C261F 22px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;"><span style="background:rgba(0,0,0,.45);padding:5px 12px;border-radius:999px;font:700 12px Manrope;color:#A89C8D;">до</span></div>
+      <div style="flex:1;position:relative;background:repeating-linear-gradient(45deg,#3a2a22,#3a2a22 11px,#46332a 11px,#46332a 22px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;"><span style="background:#E08862;padding:5px 12px;border-radius:999px;font:700 12px Manrope;color:#16130F;">после</span></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 24px 30px;background:linear-gradient(to top,#16130F 70%,transparent);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:9px;height:56px;border-radius:18px;background:#E08862;color:#16130F;font:700 17px Manrope;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Примерить причёску</div>
+      <div style="text-align:center;font:600 13px Manrope;color:#A89C8D;margin-top:12px;">Первая примерка — бесплатно · 30 образов</div>
+    </div>
+  </div>
+</div>
+
+<!-- DARK WIZARD -->
+<div style="position:absolute;left:450px;top:2740px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">Визард · dark</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#16130F;box-shadow:0 30px 60px -22px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#F3ECE2;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:9px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:12px;background:#F3ECE2;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #F3ECE2;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#F3ECE2;border-radius:1px;"></div></div></div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;"><div style="width:38px;height:38px;border-radius:12px;background:#2C261F;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3ECE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;gap:5px;"><div style="flex:1;height:5px;border-radius:999px;background:#E08862;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E08862;"></div><div style="flex:1;height:5px;border-radius:999px;background:#E08862;"></div><div style="flex:1;height:5px;border-radius:999px;background:#2C261F;"></div><div style="flex:1;height:5px;border-radius:999px;background:#2C261F;"></div><div style="flex:1;height:5px;border-radius:999px;background:#2C261F;"></div></div></div>
+    <div style="padding:26px 24px 0;">
+      <div style="font:700 12px Manrope;letter-spacing:1px;text-transform:uppercase;color:#E08862;">Шаг 3 из 6</div>
+      <div style="font:500 30px Cormorant,serif;color:#F3ECE2;line-height:1.12;margin-top:8px;">Насколько смелую смену хотите?</div>
+    </div>
+    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:12px;">
+      <div style="padding:18px;border-radius:18px;border:1.5px solid #2C261F;background:#211C17;"><div style="font:700 17px Manrope;color:#F3ECE2;">Лёгкое обновление</div><div style="font:400 13px Manrope;color:#A89C8D;margin-top:3px;">Освежить, оставаясь собой</div></div>
+      <div style="padding:18px;border-radius:18px;border:2px solid #E08862;background:#46332a;position:relative;"><div style="font:700 17px Manrope;color:#F3ECE2;">Заметная смена</div><div style="font:400 13px Manrope;color:#E0C3B5;margin-top:3px;">Новый образ, но узнаваемо</div><div style="position:absolute;top:18px;right:18px;width:24px;height:24px;border-radius:50%;background:#E08862;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <div style="padding:18px;border-radius:18px;border:1.5px solid #2C261F;background:#211C17;"><div style="font:700 17px Manrope;color:#F3ECE2;">Кардинально</div><div style="font:400 13px Manrope;color:#A89C8D;margin-top:3px;">Полностью другой человек</div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 24px 28px;background:linear-gradient(to top,#16130F 75%,transparent);">
+      <div style="text-align:center;font:600 14px Manrope;color:#E08862;margin-bottom:14px;">Просто покажите варианты →</div>
+      <div style="display:flex;gap:12px;"><div style="width:54px;height:54px;border-radius:18px;border:1.5px solid #2C261F;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F3ECE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></div><div style="flex:1;display:flex;align-items:center;justify-content:center;height:54px;border-radius:18px;background:#E08862;color:#16130F;font:700 16px Manrope;">Далее</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DARK CATALOG -->
+<div style="position:absolute;left:900px;top:2740px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">Подбор · dark</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#16130F;box-shadow:0 30px 60px -22px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#F3ECE2;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:9px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:12px;background:#F3ECE2;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #F3ECE2;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#F3ECE2;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;">
+      <div style="font:500 28px Cormorant,serif;color:#F3ECE2;">Вам подойдёт</div>
+      <div style="font:400 13px Manrope;color:#A89C8D;margin-top:2px;">8 образов по вашим ответам</div>
+      <div style="display:flex;gap:8px;margin-top:14px;overflow:hidden;"><span style="padding:8px 14px;border-radius:999px;background:#E08862;color:#16130F;font:600 13px Manrope;white-space:nowrap;">Все</span><span style="padding:8px 14px;border-radius:999px;background:#211C17;border:1px solid #2C261F;color:#A89C8D;font:600 13px Manrope;white-space:nowrap;">Боб</span><span style="padding:8px 14px;border-radius:999px;background:#211C17;border:1px solid #2C261F;color:#A89C8D;font:600 13px Manrope;white-space:nowrap;">Средние</span><span style="padding:8px 14px;border-radius:999px;background:#211C17;border:1px solid #2C261F;color:#A89C8D;font:600 13px Manrope;white-space:nowrap;">Длинн.</span></div>
+    </div>
+    <div style="padding:16px 24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="border-radius:16px;overflow:hidden;background:#211C17;border:2px solid #E08862;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#241e18,#241e18 9px,#2C261F 9px,#2C261F 18px);"><span style="position:absolute;top:8px;right:8px;background:#2C261F;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#E08862;">96%</span><span style="position:absolute;bottom:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#E08862;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#F3ECE2;">Лоб со шторкой</div><div style="font:400 11px Manrope;color:#A89C8D;">до плеч</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#211C17;border:1px solid #2C261F;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#3a2a22,#3a2a22 9px,#46332a 9px,#46332a 18px);"><span style="position:absolute;top:8px;right:8px;background:#2C261F;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#E08862;">92%</span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#F3ECE2;">Французский боб</div><div style="font:400 11px Manrope;color:#A89C8D;">до подбородка</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#211C17;border:1px solid #2C261F;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#241e18,#241e18 9px,#2C261F 9px,#2C261F 18px);"><span style="position:absolute;top:8px;right:8px;background:#2C261F;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#E08862;">89%</span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#F3ECE2;">Пляжные волны</div><div style="font:400 11px Manrope;color:#A89C8D;">средние</div></div></div>
+      <div style="border-radius:16px;overflow:hidden;background:#211C17;border:2px solid #E08862;"><div style="height:120px;position:relative;background:repeating-linear-gradient(45deg,#3a2a22,#3a2a22 9px,#46332a 9px,#46332a 18px);"><span style="position:absolute;top:8px;right:8px;background:#2C261F;border-radius:999px;padding:3px 8px;font:800 11px Manrope;color:#E08862;">87%</span><span style="position:absolute;bottom:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#E08862;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div><div style="padding:10px 12px;"><div style="font:600 15px Cormorant,serif;color:#F3ECE2;">Итальянский боб</div><div style="font:400 11px Manrope;color:#A89C8D;">до челюсти</div></div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 24px;background:#211C17;border-top:1px solid #2C261F;border-radius:28px 28px 0 0;display:flex;align-items:center;gap:14px;">
+      <div><div style="font:700 15px Manrope;color:#F3ECE2;">Выбрано 2</div><div style="font:400 12px Manrope;color:#A89C8D;">1-я генерация бесплатно</div></div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;height:52px;border-radius:16px;background:#E08862;color:#16130F;font:700 15px Manrope;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16130F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>Сгенерировать</div>
+    </div>
+  </div>
+</div>
+
+<!-- DARK GALLERY -->
+<div style="position:absolute;left:1350px;top:2740px;width:390px;">
+  <div data-drags-parent="1" style="font:600 12px Manrope;color:#9A8E7E;margin-bottom:10px;">Галерея · dark</div>
+  <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#16130F;box-shadow:0 30px 60px -22px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px 4px;"><span style="font:700 14px Manrope;color:#F3ECE2;">9:41</span><div style="display:flex;align-items:center;gap:7px;"><div style="display:flex;gap:2px;align-items:flex-end;"><div style="width:3px;height:6px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:9px;background:#F3ECE2;border-radius:1px;"></div><div style="width:3px;height:12px;background:#F3ECE2;border-radius:1px;"></div></div><div style="width:22px;height:11px;border:1.5px solid #F3ECE2;border-radius:3px;position:relative;"><div style="position:absolute;left:1px;top:1px;bottom:1px;width:12px;background:#F3ECE2;border-radius:1px;"></div></div></div></div>
+    <div style="padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font:500 28px Cormorant,serif;color:#F3ECE2;">Мои образы</div>
+      <div style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:#2C261F;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E08862" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg><span style="font:700 13px Manrope;color:#F3ECE2;">3</span></div>
+    </div>
+    <div style="margin:18px 24px 0;padding:18px;border-radius:20px;background:linear-gradient(135deg,#C26A4A,#7a3a22);position:relative;overflow:hidden;">
+      <div style="font:700 14px Manrope;color:#fff;">Приведите друга</div>
+      <div style="font:400 13px Manrope;color:rgba(255,255,255,.85);margin-top:4px;max-width:210px;line-height:1.4;">Вы оба получите по 2 бесплатных примерки.</div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:12px;background:#16130F;font:700 13px Manrope;color:#E08862;">Поделиться ссылкой</div>
+    </div>
+    <div style="padding:18px 24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#241e18,#241e18 9px,#2C261F 9px,#2C261F 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.5);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#E0D4C5;">Итал. боб</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#3a2a22,#3a2a22 9px,#46332a 9px,#46332a 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.5);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#E0D4C5;">Лоб</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;position:relative;background:repeating-linear-gradient(45deg,#241e18,#241e18 9px,#2C261F 9px,#2C261F 18px);"><span style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.5);padding:3px 9px;border-radius:999px;font:600 11px Manrope;color:#E0D4C5;">Волны</span></div>
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:3/4;border:2px dashed #3a3128;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;"><div style="width:44px;height:44px;border-radius:14px;background:#2C261F;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E08862" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div><span style="font:600 12px Manrope;color:#A89C8D;">Новый образ</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>
