@@ -16,12 +16,21 @@
 
 ---
 
+## Хранение фото — S3-совместимое хранилище (зафиксировано)
+
+Единый протокол (S3 API) на всех окружениях, переключение — только через env, без изменения кода. Абстракция в бэкенде: `StorageModule` (global) + `StorageService` на `@aws-sdk/client-s3` (`api/src/storage`).
+
+- **Локальная разработка:** **MinIO** в `docker-compose` (`db:up`), S3 API на `:9000`, консоль на `:9001`. Бакет создаётся автоматически при старте (`onModuleInit`, только при `STORAGE_FORCE_PATH_STYLE=true`).
+- **Продакшн:** **Cloudflare R2** (бакет с `jurisdiction: eu` — data residency под GDPR/биометрию; бесплатный egress; free tier покрывает старт; встроенный CDN). `region=auto`, `FORCE_PATH_STYLE=false`, endpoint `https://<account>.eu.r2.cloudflarestorage.com`, `STORAGE_PUBLIC_URL` = CDN-домен бакета.
+- **Альтернатива для прода:** Hetzner Object Storage (Германия/ЕС, €4.99/мес) — если хочется один поставщик/DPA с VPS; минус — платный egress при росте.
+- **Отдача:** публичный CDN-URL через `STORAGE_PUBLIC_URL`; если не задан — presigned URL (приватные объекты). Клиентская загрузка — через presigned PUT (browser → хранилище напрямую).
+- **Env:** `STORAGE_ENDPOINT`, `STORAGE_REGION`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_BUCKET`, `STORAGE_FORCE_PATH_STYLE`, `STORAGE_PUBLIC_URL` (см. `.env.dist`).
+
 ## Открытые технические вопросы (на потом)
 
 - [ ] **Пайплайн генерации:** улучшение фото → подбор → финальная генерация. Шаги, промпт-шаблоны.
 - [ ] **Модель / API:** Nano Banana / Gemini 2.5 Flash Image (Google AI). Подтвердить доступ, лимиты, цены, латентность.
 - [ ] **Очередь генераций:** генерация асинхронная (секунды) → очередь (BullMQ/Redis) + статусы + вебсокеты/поллинг для UI.
-- [ ] **Хранение фото:** S3-совместимое хранилище (фото пользователей + референсы каталога). CDN для отдачи.
 - [ ] **Баланс / кредиты:** модель кредитов за генерацию, списание, история, пополнение через Stripe.
 - [ ] **Stripe:** разовые пополнения баланса + (опц.) подписки. Stripe Tax для НДС/OSS.
 - [ ] **Auth:** Telegram login (для Mini App) + email/пароль для web. Единый аккаунт.

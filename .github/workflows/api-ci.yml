@@ -141,6 +141,9 @@ jobs:
       TELEGRAM_BOT_TOKEN: ""
       JWT_SECRET: ci-secret
       JWT_EXPIRES_IN: 1h
+      STORAGE_ACCESS_KEY_ID: ci
+      STORAGE_SECRET_ACCESS_KEY: ci
+      STORAGE_BUCKET: hairo-ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

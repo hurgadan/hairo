@@ -7,6 +7,7 @@ import config from "./_common/app/config";
 import { AuthModule } from "./auth/auth.module";
 import { CatalogModule } from "./catalog/catalog.module";
 import { HealthModule } from "./health/health.module";
+import { StorageModule } from "./storage/storage.module";
 import { UsersModule } from "./users/users.module";
 
 @Module({
@@ -14,6 +15,7 @@ import { UsersModule } from "./users/users.module";
     ConfigModule.forRoot({ isGlobal: true, load: [config] }),
     pinoLoggerModule,
     typeOrmModule,
+    StorageModule,
     HealthModule,
     CatalogModule,
     UsersModule,

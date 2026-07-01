@@ -4,58 +4,79 @@ dotenv.config({ quiet: true });
 
 import * as process from "node:process";
 import { DataSourceOptions } from "typeorm";
-import { AppConfig } from "../types";
-
-const dbHost = getEnv<string>("DB_HOST");
+import { AppConfig, StorageConfig } from "../types";
 
 const databaseConnectionOptions: DataSourceOptions = {
   type: "postgres",
-  host: dbHost,
-  port: getEnv<number>("DB_PORT"),
-  username: getEnv<string>("DB_LOGIN"),
-  password: getEnv<string>("DB_PASSWORD"),
-  database: getEnv<string>("DB_NAME"),
-  logging: getEnv<boolean>("DB_ENABLE_LOGGING"),
+  host: getEnvString("DB_HOST"),
+  port: getEnvNumber("DB_PORT"),
+  username: getEnvString("DB_LOGIN"),
+  password: getEnvString("DB_PASSWORD"),
+  database: getEnvString("DB_NAME"),
+  logging: getEnvBoolean("DB_ENABLE_LOGGING"),
   synchronize: false,
 };
 
+const storage: StorageConfig = {
+  endpoint: getEnvString("STORAGE_ENDPOINT", false) || undefined,
+  region: getEnvString("STORAGE_REGION", false) || "eu-central-1",
+  accessKeyId: getEnvString("STORAGE_ACCESS_KEY_ID"),
+  secretAccessKey: getEnvString("STORAGE_SECRET_ACCESS_KEY"),
+  bucket: getEnvString("STORAGE_BUCKET"),
+  forcePathStyle: getEnvBoolean("STORAGE_FORCE_PATH_STYLE", false) ?? false,
+  publicUrl: getEnvString("STORAGE_PUBLIC_URL", false) || undefined,
+};
+
 export default (): AppConfig => ({
-  appName: getEnv<string>("APP_NAME", true),
-  port: getEnv<number>("PORT", false) || 3001,
-  nodeEnv: getEnv<string>("NODE_ENV", false) || "development",
-  logLevel: getEnv<string>("LOG_LEVEL", false) || "info",
-  recipient: getEnv<string>("RECIPIENT", true),
-  telegramBotToken: getEnv<string>("TELEGRAM_BOT_TOKEN", true),
-  jwtSecret: getEnv<string>("JWT_SECRET", false) || "dev-secret-change-me",
-  jwtExpiresIn: getEnv<string>("JWT_EXPIRES_IN", false) || "7d",
+  appName: getEnvString("APP_NAME"),
+  port: getEnvNumber("PORT", false) ?? 3001,
+  nodeEnv: getEnvString("NODE_ENV", false) || "development",
+  logLevel: getEnvString("LOG_LEVEL", false) || "info",
+  recipient: getEnvString("RECIPIENT"),
+  telegramBotToken: getEnvString("TELEGRAM_BOT_TOKEN"),
+  jwtSecret: getEnvString("JWT_SECRET", false) || "dev-secret-change-me",
+  jwtExpiresIn: getEnvString("JWT_EXPIRES_IN", false) || "7d",
   databaseConnectionOptions,
+  storage,
 });
 
-function getEnv<T extends string | number | boolean>(
-  envName: string,
-  strict = true,
-): T {
+function getEnvString(envName: string, strict?: true): string;
+function getEnvString(envName: string, strict: false): string | undefined;
+function getEnvString(envName: string, strict = true): string | undefined {
   const raw = process.env[envName];
   if (raw === undefined) {
     if (strict) {
       throw new Error(`Environment ${envName} is undefined.`);
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return;
+    return undefined;
   }
 
-  if (typeof ("" as T) === "number") {
-    return Number(raw) as T;
+  return raw.trim();
+}
+
+function getEnvNumber(envName: string, strict?: true): number;
+function getEnvNumber(envName: string, strict: false): number | undefined;
+function getEnvNumber(envName: string, strict = true): number | undefined {
+  const raw = strict ? getEnvString(envName) : getEnvString(envName, false);
+  if (raw === undefined) {
+    return undefined;
   }
 
-  if (typeof ("" as T) === "boolean") {
-    return (raw === "true") as T;
+  const value = Number(raw);
+  if (Number.isNaN(value)) {
+    throw new Error(`Environment ${envName} is not a number: "${raw}".`);
   }
 
-  if (typeof ("" as T) === "string") {
-    return String(raw).trim() as T;
+  return value;
+}
+
+function getEnvBoolean(envName: string, strict?: true): boolean;
+function getEnvBoolean(envName: string, strict: false): boolean | undefined;
+function getEnvBoolean(envName: string, strict = true): boolean | undefined {
+  const raw = strict ? getEnvString(envName) : getEnvString(envName, false);
+  if (raw === undefined) {
+    return undefined;
   }
 
-  return raw as T;
+  return raw === "true";
 }
