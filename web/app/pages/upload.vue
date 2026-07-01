@@ -1,11 +1,42 @@
 <script setup lang="ts">
+const { upload } = usePhotos();
+
+const file = ref<File | null>(null);
+const previewUrl = ref<string | null>(null);
 const consent = ref(false);
-const fileName = ref<string | null>(null);
+const uploading = ref(false);
+const error = ref<string | null>(null);
 
 function onFile(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0];
-  fileName.value = file ? file.name : null;
+  const picked = (e.target as HTMLInputElement).files?.[0] ?? null;
+  file.value = picked;
+  error.value = null;
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+  previewUrl.value = picked ? URL.createObjectURL(picked) : null;
 }
+
+const canSubmit = computed(
+  () => !!file.value && consent.value && !uploading.value,
+);
+
+async function onContinue() {
+  if (!file.value || !consent.value || uploading.value) return;
+  uploading.value = true;
+  error.value = null;
+  try {
+    await upload(file.value, consent.value);
+    await navigateTo("/detect");
+  } catch (e) {
+    error.value = "Не удалось загрузить фото. Попробуйте ещё раз.";
+    console.error(e);
+  } finally {
+    uploading.value = false;
+  }
+}
+
+onBeforeUnmount(() => {
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+});
 </script>
 
 <template>
@@ -18,16 +49,28 @@ function onFile(e: Event) {
     </p>
 
     <label
-      class="mt-6 flex aspect-square cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-border-strong bg-surface text-center"
+      class="mt-6 flex aspect-square cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-3xl border-2 border-dashed border-border-strong bg-surface text-center"
     >
-      <span
-        class="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent-soft text-2xl"
-      >
-        📷
-      </span>
-      <span class="font-semibold text-text">Выберите фото</span>
-      <span v-if="fileName" class="text-xs text-text-muted">{{ fileName }}</span>
-      <input type="file" accept="image/*" class="hidden" @change="onFile" />
+      <img
+        v-if="previewUrl"
+        :src="previewUrl"
+        alt="Ваше селфи"
+        class="h-full w-full object-cover"
+      />
+      <template v-else>
+        <span
+          class="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent-soft text-2xl"
+        >
+          📷
+        </span>
+        <span class="font-semibold text-text">Выберите фото</span>
+      </template>
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="hidden"
+        @change="onFile"
+      />
     </label>
 
     <label class="mt-6 flex items-center gap-3 rounded-2xl bg-surface-2 p-4">
@@ -42,11 +85,12 @@ function onFile(e: Event) {
     </label>
 
     <div class="mt-auto pt-8">
+      <p v-if="error" class="mb-3 text-sm text-red-600">{{ error }}</p>
       <AppButton
-        :class="{ 'pointer-events-none opacity-50': !consent }"
-        @click="navigateTo('/detect')"
+        :class="{ 'pointer-events-none opacity-50': !canSubmit }"
+        @click="onContinue"
       >
-        Продолжить
+        {{ uploading ? "Загрузка…" : "Продолжить" }}
       </AppButton>
     </div>
   </div>
