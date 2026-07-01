@@ -7,6 +7,7 @@ import config from "./_common/app/config";
 import { AuthModule } from "./auth/auth.module";
 import { CatalogModule } from "./catalog/catalog.module";
 import { HealthModule } from "./health/health.module";
+import { PhotosModule } from "./photos/photos.module";
 import { StorageModule } from "./storage/storage.module";
 import { UsersModule } from "./users/users.module";
 
@@ -20,6 +21,7 @@ import { UsersModule } from "./users/users.module";
     CatalogModule,
     UsersModule,
     AuthModule,
+    PhotosModule,
   ],
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import { BodyTelegramAuth } from "./body-telegram-auth.type";
 export abstract class AuthApi implements ApiBase {
   public readonly baseUrl = "/auth";
 
+  protected abstract guest(): Promise<AuthResponse>;
   protected abstract register(data: BodyRegister): Promise<AuthResponse>;
   protected abstract login(data: BodyLogin): Promise<AuthResponse>;
   protected abstract telegram(data: BodyTelegramAuth): Promise<AuthResponse>;

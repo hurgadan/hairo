@@ -46,6 +46,11 @@ export class AuthService {
     return this.buildResult(user);
   }
 
+  public async loginAsGuest(): Promise<AuthResult> {
+    const user = await this.users.createGuest();
+    return this.buildResult(user);
+  }
+
   public async login(dto: LoginDto): Promise<AuthResult> {
     const user = await this.users.findByEmail(dto.email);
     if (!user?.passwordHash) {

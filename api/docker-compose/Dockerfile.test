@@ -1,9 +1,11 @@
-FROM node:22-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+# npm install (не ci): согласовано с CI (`npm i`) и устойчиво к кросс-платформенным
+# optional-зависимостям в lockfile (alpine/musl wasm-биндинги резолвера Jest).
+RUN npm install --no-audit --no-fund
 
 COPY . .
 

@@ -29,6 +29,11 @@ export class UsersService {
     return this.repo.findByEmail(email);
   }
 
+  /** Анонимный пользователь (без email/telegram) — гостевая сессия до регистрации. */
+  public createGuest(locale?: string): Promise<User> {
+    return this.repo.save({ locale: locale ?? "ru" });
+  }
+
   public createEmailUser(data: CreateEmailUserData): Promise<User> {
     return this.repo.save({
       email: data.email,

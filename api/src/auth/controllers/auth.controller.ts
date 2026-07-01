@@ -28,6 +28,11 @@ export class AuthController {
     private readonly users: UsersService,
   ) {}
 
+  @Post("guest")
+  public async guest(): Promise<AuthResponseDto> {
+    return transformToDto(AuthResponseDto, await this.auth.loginAsGuest());
+  }
+
   @Post("register")
   public async register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
     return transformToDto(AuthResponseDto, await this.auth.register(dto));
