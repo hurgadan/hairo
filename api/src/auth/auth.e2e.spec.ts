@@ -62,6 +62,20 @@ describe("Auth (e2e)", () => {
     await clearTables(moduleFixture);
   });
 
+  it("guest issues a token for an anonymous user that works on protected routes", async () => {
+    const res = await request(httpServer).post("/auth/guest").expect(201);
+
+    expect(res.body.accessToken).toBeDefined();
+    expect(res.body.user.id).toBeDefined();
+    expect(res.body.user.email).toBeNull();
+
+    await request(httpServer)
+      .get("/auth/me")
+      .set("authorization", `Bearer ${res.body.accessToken}`)
+      .expect(200)
+      .expect((r) => expect(r.body.email).toBeNull());
+  });
+
   it("register returns a token and the user", async () => {
     const res = await request(httpServer)
       .post("/auth/register")

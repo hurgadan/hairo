@@ -41,6 +41,7 @@
     "dotenv": "^17.2.3",
     "grammy": "^1.43.0",
     "handlebars": "^4.7.9",
+    "multer": "^2.1.1",
     "nestjs-pino": "^4.5.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
