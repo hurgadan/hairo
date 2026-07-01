@@ -1,4 +1,4 @@
-import type { Photo } from "~/types/photo";
+import type { Photo } from "@hurgadan/hairo-contracts";
 
 /** Текущее загруженное селфи — доступно последующим шагам флоу. */
 export function useCurrentPhoto() {

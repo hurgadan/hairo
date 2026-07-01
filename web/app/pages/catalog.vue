@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Hairstyle } from "~/types/hairstyle";
+import type { Hairstyle } from "@hurgadan/hairo-contracts";
 
 const config = useRuntimeConfig();
 const wizard = useWizard();
