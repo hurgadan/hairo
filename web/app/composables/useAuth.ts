@@ -1,4 +1,4 @@
-import type { AuthResponse } from "~/types/auth";
+import type { AuthResponse } from "@hurgadan/hairo-contracts";
 
 const TOKEN_KEY = "hairo-token";
 
