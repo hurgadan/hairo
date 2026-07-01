@@ -41,7 +41,9 @@
 - [x] `auth`/`users`: JWT + email/пароль (bcrypt) + Telegram initData (HMAC) + `JwtAuthGuard` + `/auth/me` — проверено вживую
 - [x] `docker-compose` — dev Postgres (`db:up`, проект `hairo`) + изолированный тестовый Postgres на tmpfs (`docker:test`, проект `hairo-test`)
 - [x] Тестовый контур e2e (`catalog` + `auth`, 8 тестов, на тест-утилитах) + CI (GitHub Actions: lint · build · e2e на postgres-сервисе)
-- [ ] Nuxt.js-скелет, связка с API
+- [x] Nuxt.js-фронт (`web/`): Nuxt 4 + Tailwind v4 + дизайн-система `DESIGN.md` (свет/тёмная тема, компоненты), все экраны флоу (лендинг → загрузка → автодетект → визард → каталог → результат → пополнение → галерея). Каталог — на реальном API, остальное — на моках до Фазы 2. Проверено сквозь (все маршруты 200, SSR рендерит каталог из БД)
+  - follow-up: фронт должен потреблять `@hurgadan/hairo-contracts` — нужен токен/секрет с `read:packages` (сейчас 403), пока локальная копия типа в `web/app/types`
+  - follow-up: i18n RU/ES/DE (пока тексты RU), отдельный `web-ci`, подхват темы Telegram Mini App
 
 **Выход:** «пустое, но правильное» приложение с зелёным CI.
 

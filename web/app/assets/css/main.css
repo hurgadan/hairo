@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* тёмная тема через класс .dark (на <html>) — под подхват темы Telegram Mini App */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Дизайн-токены Hairo (DESIGN.md) */
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-2: #f3ede4;
+  --accent-soft: #f6e7de;
+  --accent: #c26a4a;
+  --accent-dark: #a4502f;
+  --text: #211c18;
+  --text-muted: #6b6259;
+  --border: #ece3d6;
+  --border-strong: #e2d7c9;
+  --success: #5b8c6e;
+}
+
+.dark {
+  --bg: #16130f;
+  --surface: #211c17;
+  --surface-2: #2c261f;
+  --accent-soft: #46332a;
+  --accent: #e08862;
+  --accent-dark: #e08862;
+  --text: #f3ece2;
+  --text-muted: #a89c8d;
+  --border: #2c261f;
+  --border-strong: #2c261f;
+  --success: #5b8c6e;
+}
+
+/* inline → утилиты используют CSS-переменные, поэтому .dark переключает их в рантайме */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+
+  --font-display: "Cormorant", serif;
+  --font-sans: "Manrope", sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
