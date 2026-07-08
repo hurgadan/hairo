@@ -23,6 +23,7 @@ export interface AppConfig {
   jwtSecret: string;
   jwtExpiresIn: string;
   imageModel: string;
+  llmModel: string;
   googleAiApiKey: string;
   databaseConnectionOptions: DataSourceOptions;
   storage: StorageConfig;
