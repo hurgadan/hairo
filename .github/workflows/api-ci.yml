@@ -144,6 +144,8 @@ jobs:
       STORAGE_ACCESS_KEY_ID: ci
       STORAGE_SECRET_ACCESS_KEY: ci
       STORAGE_BUCKET: hairo-ci
+      IMAGE_MODEL: gemini-2.5-flash-image
+      GOOGLE_AI_API_KEY: ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
