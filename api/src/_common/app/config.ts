@@ -36,6 +36,8 @@ export default (): AppConfig => ({
   telegramBotToken: getEnvString("TELEGRAM_BOT_TOKEN"),
   jwtSecret: getEnvString("JWT_SECRET", false) || "dev-secret-change-me",
   jwtExpiresIn: getEnvString("JWT_EXPIRES_IN", false) || "7d",
+  imageModel: getEnvString("IMAGE_MODEL"),
+  googleAiApiKey: getEnvString("GOOGLE_AI_API_KEY"),
   databaseConnectionOptions,
   storage,
 });
