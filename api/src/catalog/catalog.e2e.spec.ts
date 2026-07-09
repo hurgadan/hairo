@@ -5,6 +5,12 @@ import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { Repository } from "typeorm";
 
+import {
+  GenderPresentation,
+  HairLength,
+  HairTexture,
+} from "../_contracts/enums";
+import { Maintenance } from "../_contracts/catalog/enums/maintenance.enum";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getRepository } from "../_common/utils/tests/get-repository";
@@ -41,10 +47,10 @@ describe("Catalog (e2e)", () => {
         slug: "french-bob",
         name: { ru: "Французский боб" },
         groupName: "Боб",
-        length: "chin",
-        genderPresentation: "feminine",
-        maintenance: "low",
-        texture: ["straight"],
+        length: HairLength.Chin,
+        genderPresentation: GenderPresentation.Feminine,
+        maintenance: Maintenance.Low,
+        texture: [HairTexture.Straight],
         hairstyleFragment: "classic french bob",
         isActive: true,
         sortOrder: 10,
@@ -63,7 +69,7 @@ describe("Catalog (e2e)", () => {
     expect(res.body).toHaveLength(1);
     expect(res.body[0].slug).toBe("french-bob");
     expect(res.body[0].name.ru).toBe("Французский боб");
-    expect(res.body[0].texture).toEqual(["straight"]);
+    expect(res.body[0].texture).toEqual([HairTexture.Straight]);
   });
 
   it("GET /catalog/hairstyles/:slug returns a single hairstyle", async () => {

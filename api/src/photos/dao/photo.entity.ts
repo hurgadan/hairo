@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { PHOTO_KIND, PHOTO_STATUS } from "../constants";
+import { PhotoKind, PhotoStatus } from "../../_contracts/photos/enums";
 
 @Entity({ name: "photos" })
 export class Photo {
@@ -21,11 +21,11 @@ export class Photo {
   @Column({ name: "storage_key", type: "varchar", unique: true })
   public storageKey: string;
 
-  @Column({ type: "varchar", default: PHOTO_KIND.selfie })
-  public kind: string;
+  @Column({ type: "varchar", default: PhotoKind.Selfie })
+  public kind: PhotoKind;
 
-  @Column({ type: "varchar", default: PHOTO_STATUS.uploaded })
-  public status: string;
+  @Column({ type: "varchar", default: PhotoStatus.Uploaded })
+  public status: PhotoStatus;
 
   @Column({ name: "content_type", type: "varchar" })
   public contentType: string;

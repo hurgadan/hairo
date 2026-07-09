@@ -1,4 +1,9 @@
+import { GenderPresentation, HairLength, HairTexture } from "../enums";
 import { LocalizedText } from "../localized-text.type";
+import { Aesthetic } from "./enums/aesthetic.enum";
+import { Fringe } from "./enums/fringe.enum";
+import { Maintenance } from "./enums/maintenance.enum";
+import { Occasion } from "./enums/occasion.enum";
 
 export interface Hairstyle {
   id: string;
@@ -6,12 +11,12 @@ export interface Hairstyle {
   name: LocalizedText;
   description: LocalizedText | null;
   groupName: string;
-  length: string;
-  genderPresentation: string;
-  texture: string[];
-  fringe: string | null;
-  maintenance: string;
-  aesthetic: string[];
-  occasion: string[];
+  length: HairLength;
+  genderPresentation: GenderPresentation;
+  texture: HairTexture[];
+  fringe: Fringe | null;
+  maintenance: Maintenance;
+  aesthetic: Aesthetic[];
+  occasion: Occasion[];
   previewImage: string | null;
 }

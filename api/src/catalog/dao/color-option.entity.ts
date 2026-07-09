@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { ColorFamily } from "../enums/color-family.enum";
+import { ColorTechnique } from "../enums/color-technique.enum";
 import type { LocalizedText } from "./hairstyle.entity";
 
 @Entity({ name: "color_options" })
@@ -20,13 +22,13 @@ export class ColorOption {
   public name: LocalizedText;
 
   @Column()
-  public family: string; // natural | fashion
+  public family: ColorFamily;
 
   @Column({ type: "int", nullable: true })
   public level: number | null;
 
   @Column()
-  public technique: string; // solid | balayage | highlights | ombre | money-piece | roots
+  public technique: ColorTechnique;
 
   @Column({ name: "hex_swatch", type: "varchar", nullable: true })
   public hexSwatch: string | null;

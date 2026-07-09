@@ -6,7 +6,23 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import {
+  FaceShape,
+  GenderPresentation,
+  HairDensity,
+  HairLength,
+  HairTexture,
+} from "../../_contracts/enums";
+import { Aesthetic } from "../../_contracts/catalog/enums/aesthetic.enum";
+import { Fringe } from "../../_contracts/catalog/enums/fringe.enum";
+import { Maintenance } from "../../_contracts/catalog/enums/maintenance.enum";
+import { Occasion } from "../../_contracts/catalog/enums/occasion.enum";
 import { LocalizedText } from "../../_contracts/localized-text.type";
+import { Finish } from "../enums/finish.enum";
+import { Layering } from "../enums/layering.enum";
+import { Parting } from "../enums/parting.enum";
+import { Silhouette } from "../enums/silhouette.enum";
+import { Volume } from "../enums/volume.enum";
 
 export type { LocalizedText };
 
@@ -29,43 +45,44 @@ export class Hairstyle {
 
   // структурные теги (CATALOG.md §1)
   @Column()
-  public length: string;
+  public length: HairLength;
 
   @Column({ type: "varchar", nullable: true })
-  public silhouette: string | null;
+  public silhouette: Silhouette | null;
 
   @Column({ name: "gender_presentation" })
-  public genderPresentation: string;
+  public genderPresentation: GenderPresentation;
 
   @Column({ type: "varchar", nullable: true })
-  public fringe: string | null;
+  public fringe: Fringe | null;
 
   @Column({ type: "varchar", nullable: true })
-  public layering: string | null;
+  public layering: Layering | null;
 
   @Column({ type: "varchar", nullable: true })
-  public parting: string | null;
+  public parting: Parting | null;
 
   @Column({ type: "varchar", nullable: true })
-  public volume: string | null;
+  public volume: Volume | null;
 
+  /** Отсылка к эпохе — открытый словарь (CATALOG.md §1: "90s, y2k, 70s, 60s, modern, …"), не enum. */
   @Column({ type: "varchar", nullable: true })
   public era: string | null;
 
   @Column()
-  public maintenance: string;
+  public maintenance: Maintenance;
 
   @Column({ type: "text", array: true, default: () => "'{}'" })
-  public texture: string[];
+  public texture: HairTexture[];
 
   @Column({ type: "text", array: true, default: () => "'{}'" })
-  public finish: string[];
+  public finish: Finish[];
 
   @Column({ type: "text", array: true, default: () => "'{}'" })
-  public aesthetic: string[];
+  public aesthetic: Aesthetic[];
 
   @Column({ type: "text", array: true, default: () => "'{}'" })
-  public occasion: string[];
+  public occasion: Occasion[];
 
   // подходящесть (CATALOG.md §2) — для ранжирования
   @Column({
@@ -74,7 +91,7 @@ export class Hairstyle {
     array: true,
     default: () => "'{}'",
   })
-  public flattersFaceShapes: string[];
+  public flattersFaceShapes: FaceShape[];
 
   @Column({
     name: "works_on_textures",
@@ -82,7 +99,7 @@ export class Hairstyle {
     array: true,
     default: () => "'{}'",
   })
-  public worksOnTextures: string[];
+  public worksOnTextures: HairTexture[];
 
   @Column({
     name: "suits_hair_density",
@@ -90,7 +107,7 @@ export class Hairstyle {
     array: true,
     default: () => "'{}'",
   })
-  public suitsHairDensity: string[];
+  public suitsHairDensity: HairDensity[];
 
   // ассеты
   @Column({ name: "hairstyle_fragment", type: "text" })

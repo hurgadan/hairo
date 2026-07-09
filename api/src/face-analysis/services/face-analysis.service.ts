@@ -1,13 +1,13 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
-import { FaceAnalysisResult } from "../../_contracts/face-analysis/photo-analysis.type";
+import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
+import { FaceAnalysisResult } from "../../_contracts/face-analysis/face-analysis-result.type";
 import { LlmModelService } from "../../llm-model/llm-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";
 import {
   FACE_ANALYSIS_PROMPT,
   FACE_ANALYSIS_RESPONSE_SCHEMA,
-  FACE_ANALYSIS_STATUS,
 } from "../constants";
 import { PhotoAnalysis } from "../dao/photo-analysis.entity";
 import { FaceAnalysisRepository } from "../repositories/face-analysis.repository";
@@ -31,7 +31,7 @@ export class FaceAnalysisService {
     const analysis = await this.analyses.save({
       userId,
       photoId,
-      status: FACE_ANALYSIS_STATUS.pending,
+      status: FaceAnalysisStatus.Pending,
     });
 
     this.run(analysis.id, userId, photoId).catch((error: unknown) => {
@@ -70,7 +70,7 @@ export class FaceAnalysisService {
       );
 
       await this.analyses.update(id, {
-        status: FACE_ANALYSIS_STATUS.completed,
+        status: FaceAnalysisStatus.Completed,
         result,
       });
     } catch (error) {
@@ -79,7 +79,7 @@ export class FaceAnalysisService {
         error instanceof Error ? error.stack : error,
       );
       await this.analyses.update(id, {
-        status: FACE_ANALYSIS_STATUS.failed,
+        status: FaceAnalysisStatus.Failed,
         error: error instanceof Error ? error.message : "Unknown error",
       });
     }

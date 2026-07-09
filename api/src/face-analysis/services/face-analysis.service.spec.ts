@@ -1,5 +1,6 @@
 import { NotFoundException } from "@nestjs/common";
 
+import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
 import { LlmModelService } from "../../llm-model/llm-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";
@@ -64,7 +65,7 @@ describe("FaceAnalysisService", () => {
       expect(analyses.save).toHaveBeenCalledWith({
         userId: "user-1",
         photoId: "photo-1",
-        status: "pending",
+        status: FaceAnalysisStatus.Pending,
       });
       // фоновая часть ещё не выполнилась синхронно
       expect(llmModel.generateStructured).not.toHaveBeenCalled();
@@ -77,7 +78,7 @@ describe("FaceAnalysisService", () => {
         responseSchema: expect.any(Object),
       });
       expect(analyses.update).toHaveBeenCalledWith("analysis-1", {
-        status: "completed",
+        status: FaceAnalysisStatus.Completed,
         result: { faceShape: "oval" },
       });
     });
@@ -97,7 +98,7 @@ describe("FaceAnalysisService", () => {
       await flushPromises();
 
       expect(analyses.update).toHaveBeenCalledWith("analysis-1", {
-        status: "failed",
+        status: FaceAnalysisStatus.Failed,
         error: "rate limited",
       });
     });

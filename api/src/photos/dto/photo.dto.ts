@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
 
 import { TransformToDateString } from "../../_common/utils/decorators/transform-to-date-string.decorator";
+import { PhotoKind, PhotoStatus } from "../../_contracts/photos/enums";
 import { Photo } from "../../_contracts/photos/photo.type";
 
 export class PhotoDto implements Photo {
@@ -9,13 +10,13 @@ export class PhotoDto implements Photo {
   @Expose()
   public id: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: PhotoKind })
   @Expose()
-  public kind: string;
+  public kind: PhotoKind;
 
-  @ApiProperty()
+  @ApiProperty({ enum: PhotoStatus })
   @Expose()
-  public status: string;
+  public status: PhotoStatus;
 
   @ApiProperty()
   @Expose()

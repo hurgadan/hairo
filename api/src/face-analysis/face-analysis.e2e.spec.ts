@@ -4,6 +4,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
+import { FaceAnalysisStatus } from "../_contracts/face-analysis/enums";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
@@ -22,7 +23,7 @@ const PNG = Buffer.from(
 );
 
 interface AnalysisBody {
-  status: string;
+  status: FaceAnalysisStatus;
   result: { faceShape: string } | null;
   error: string | null;
 }
@@ -41,7 +42,10 @@ async function pollUntilSettled(
       .set("authorization", `Bearer ${token}`)
       .expect(200);
 
-    if (res.body.status !== "pending" || Date.now() > deadline) {
+    if (
+      res.body.status !== FaceAnalysisStatus.Pending ||
+      Date.now() > deadline
+    ) {
       return res.body as AnalysisBody;
     }
 
@@ -135,12 +139,12 @@ describe("FaceAnalysis (e2e)", () => {
       .send({ photoId })
       .expect(202);
 
-    expect(started.body.status).toBe("pending");
+    expect(started.body.status).toBe(FaceAnalysisStatus.Pending);
     expect(started.body.result).toBeNull();
 
     const result = await pollUntilSettled(httpServer, token, started.body.id);
 
-    expect(result.status).toBe("completed");
+    expect(result.status).toBe(FaceAnalysisStatus.Completed);
     expect(result.result?.faceShape).toBe("oval");
   });
 
@@ -160,7 +164,7 @@ describe("FaceAnalysis (e2e)", () => {
 
     const result = await pollUntilSettled(httpServer, token, started.body.id);
 
-    expect(result.status).toBe("failed");
+    expect(result.status).toBe(FaceAnalysisStatus.Failed);
     expect(result.error).toBe("rate limited");
   });
 
