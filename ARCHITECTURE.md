@@ -134,18 +134,24 @@ api/src/_contracts/
   index.ts            # реэкспорт всех модулей
   {module}/
     index.ts
-    {entity}.type.ts
+    enums/            # если у модуля есть enum'ы
+      index.ts
+      {enum-name}.enum.ts   # один enum на файл
+    {entity}.type.ts        # один interface на файл
     body-{action}.type.ts | create-{entity}.type.ts
     {module}-api.ts   # abstract class с baseUrl и сигнатурами эндпоинтов
 ```
 
 Правила:
-- контракты — только `interface`/типы и abstract `*-api.ts` классы (без runtime-логики);
+- контракты — только `interface`/типы, `enum` и abstract `*-api.ts` классы (без runtime-логики);
+- один `interface` — один файл (`{name}.type.ts`), один `enum` — один файл (`enums/{name}.enum.ts`); не группировать несколько типов/enum'ов в одном файле ради компактности;
 - **backend DTO реализуют контракты через `implements`** (компилятор держит DTO в синхроне с API);
 - backend импортирует контракты по относительному пути к файлам типов: `../../_contracts/{module}/{x}.type` (не из корня папки — у неё свой `package.json`, dist локально не собран);
 - frontend потребляет опубликованный пакет `@hurgadan/hairo-contracts`;
-- модульные `index.ts` реэкспортируют модуль, корневой `index.ts` — все модули;
+- модульные `index.ts` реэкспортируют модуль (включая `enums/index.ts`), корневой `index.ts` — все модули;
 - публикация: `.github/workflows/publish-contracts.yml`, версия — через `.github/scripts/bump-version.sh` (feat → minor, иначе patch).
+
+**Controlled-vocabulary поля — всегда `enum`, никогда голый `string`.** Если у поля есть фиксированный набор значений (статус задания, ось таксономии вроде формы лица/длины волос), тип поля в entity/DTO/контракте — `enum`, а не `string`/`string[]` с параллельным списком допустимых значений где-то рядом (это красиво выглядит, но ничего не типизирует — компилятор пропустит произвольную строку). Если тип с этим полем — часть контракта (используется фронтом), enum живёт в `_contracts/{module}/enums/`, а не в `{module}/enums/` бэкенд-модуля — фронту нужен тот же enum, а не только бэкенду. `{module}/enums/` (в самом доменном/инфра-модуле, не в контрактах) — только для enum'ов, никогда не пересекающих HTTP-границу (например `image-model`/`llm-model` выбирают версию модели по `ImageModel`/`LlmModel` — это внутренняя деталь бэкенда). Колонка в БД остаётся `type: "varchar"` — это чисто типизация на уровне TS, миграция не меняется.
 
 ---
 

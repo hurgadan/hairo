@@ -6,7 +6,7 @@ import {
   HairDensity,
   HairLength,
   HairTexture,
-} from "../../_contracts/face-analysis/photo-analysis.type";
+} from "../../_contracts/face-analysis/enums";
 
 export const PHOTO_ANALYSES_TABLE = "photo_analyses";
 

@@ -4,7 +4,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
-import { FaceAnalysisStatus } from "../_contracts/face-analysis/photo-analysis.type";
+import { FaceAnalysisStatus } from "../_contracts/face-analysis/enums";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";

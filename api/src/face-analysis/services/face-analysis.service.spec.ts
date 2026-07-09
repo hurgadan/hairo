@@ -1,6 +1,6 @@
 import { NotFoundException } from "@nestjs/common";
 
-import { FaceAnalysisStatus } from "../../_contracts/face-analysis/photo-analysis.type";
+import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
 import { LlmModelService } from "../../llm-model/llm-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";

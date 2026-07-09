@@ -2,13 +2,9 @@ import { randomUUID } from "node:crypto";
 
 import { Injectable, NotFoundException } from "@nestjs/common";
 
+import { PhotoKind, PhotoStatus } from "../../_contracts/photos/enums";
 import { StorageService } from "../../storage/services/storage.service";
-import {
-  PHOTO_KIND,
-  PHOTO_MIME_EXTENSIONS,
-  PHOTO_STATUS,
-  PHOTO_STORAGE_PREFIX,
-} from "../constants";
+import { PHOTO_MIME_EXTENSIONS, PHOTO_STORAGE_PREFIX } from "../constants";
 import { Photo } from "../dao/photo.entity";
 import { PhotosRepository } from "../repositories/photos.repository";
 
@@ -40,8 +36,8 @@ export class PhotosService {
       id,
       userId,
       storageKey,
-      kind: PHOTO_KIND.selfie,
-      status: PHOTO_STATUS.uploaded,
+      kind: PhotoKind.Selfie,
+      status: PhotoStatus.Uploaded,
       contentType: file.mimetype,
       sizeBytes: file.size,
       consentAt: new Date(),

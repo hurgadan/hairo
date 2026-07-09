@@ -1,11 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Transform } from "class-transformer";
 
-import {
-  FaceAnalysisResult,
-  FaceAnalysisStatus,
-  PhotoAnalysis,
-} from "../../_contracts/face-analysis/photo-analysis.type";
+import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
+import { FaceAnalysisResult } from "../../_contracts/face-analysis/face-analysis-result.type";
+import { PhotoAnalysis } from "../../_contracts/face-analysis/photo-analysis.type";
 import { TransformToDateString } from "../../_common/utils/decorators/transform-to-date-string.decorator";
 
 export class PhotoAnalysisDto implements PhotoAnalysis {

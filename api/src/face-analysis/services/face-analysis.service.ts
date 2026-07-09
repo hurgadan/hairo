@@ -1,9 +1,7 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
-import {
-  FaceAnalysisResult,
-  FaceAnalysisStatus,
-} from "../../_contracts/face-analysis/photo-analysis.type";
+import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
+import { FaceAnalysisResult } from "../../_contracts/face-analysis/face-analysis-result.type";
 import { LlmModelService } from "../../llm-model/llm-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";

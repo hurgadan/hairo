@@ -17,11 +17,3 @@ export const PHOTO_MIME_EXTENSIONS: Record<string, string> = {
   "image/png": "png",
   "image/webp": "webp",
 };
-
-export const PHOTO_KIND = {
-  selfie: "selfie",
-} as const;
-
-export const PHOTO_STATUS = {
-  uploaded: "uploaded",
-} as const;

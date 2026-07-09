@@ -4,6 +4,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
+import { PhotoKind, PhotoStatus } from "../_contracts/photos/enums";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
@@ -81,8 +82,8 @@ describe("Photos (e2e)", () => {
       .expect(201);
 
     expect(res.body.id).toBeDefined();
-    expect(res.body.kind).toBe("selfie");
-    expect(res.body.status).toBe("uploaded");
+    expect(res.body.kind).toBe(PhotoKind.Selfie);
+    expect(res.body.status).toBe(PhotoStatus.Uploaded);
     expect(res.body.contentType).toBe("image/png");
     expect(res.body.url).toBe("https://signed.example/selfie");
     expect(res.body.storageKey).toBeUndefined();
