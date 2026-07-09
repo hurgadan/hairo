@@ -22,6 +22,8 @@ export interface AppConfig {
   telegramBotToken: string;
   jwtSecret: string;
   jwtExpiresIn: string;
+  imageModel: string;
+  googleAiApiKey: string;
   databaseConnectionOptions: DataSourceOptions;
   storage: StorageConfig;
 }
