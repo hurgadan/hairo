@@ -25,7 +25,7 @@ async function onContinue() {
   error.value = null;
   try {
     await upload(file.value, consent.value);
-    await navigateTo("/detect");
+    await navigateTo("/analyze");
   } catch (e) {
     error.value = "Не удалось загрузить фото. Попробуйте ещё раз.";
     console.error(e);
