@@ -21,7 +21,33 @@ const PNG = Buffer.from(
   "base64",
 );
 
-const flushPromises = (): Promise<void> => new Promise((r) => setImmediate(r));
+interface AnalysisBody {
+  status: string;
+  result: { faceShape: string } | null;
+  error: string | null;
+}
+
+async function pollUntilSettled(
+  httpServer: Server,
+  token: string,
+  id: string,
+  timeoutMs = 2000,
+): Promise<AnalysisBody> {
+  const deadline = Date.now() + timeoutMs;
+
+  for (;;) {
+    const res = await request(httpServer)
+      .get(`/face-analysis/${id}`)
+      .set("authorization", `Bearer ${token}`)
+      .expect(200);
+
+    if (res.body.status !== "pending" || Date.now() > deadline) {
+      return res.body as AnalysisBody;
+    }
+
+    await new Promise((r) => setTimeout(r, 25));
+  }
+}
 
 describe("FaceAnalysis (e2e)", () => {
   let app: INestApplication;
@@ -112,15 +138,10 @@ describe("FaceAnalysis (e2e)", () => {
     expect(started.body.status).toBe("pending");
     expect(started.body.result).toBeNull();
 
-    await flushPromises();
+    const result = await pollUntilSettled(httpServer, token, started.body.id);
 
-    const res = await request(httpServer)
-      .get(`/face-analysis/${started.body.id}`)
-      .set("authorization", `Bearer ${token}`)
-      .expect(200);
-
-    expect(res.body.status).toBe("completed");
-    expect(res.body.result.faceShape).toBe("oval");
+    expect(result.status).toBe("completed");
+    expect(result.result?.faceShape).toBe("oval");
   });
 
   it("marks the job as failed when the LLM call throws", async () => {
@@ -137,15 +158,10 @@ describe("FaceAnalysis (e2e)", () => {
       .send({ photoId })
       .expect(202);
 
-    await flushPromises();
+    const result = await pollUntilSettled(httpServer, token, started.body.id);
 
-    const res = await request(httpServer)
-      .get(`/face-analysis/${started.body.id}`)
-      .set("authorization", `Bearer ${token}`)
-      .expect(200);
-
-    expect(res.body.status).toBe("failed");
-    expect(res.body.error).toBe("rate limited");
+    expect(result.status).toBe("failed");
+    expect(result.error).toBe("rate limited");
   });
 
   it("rejects starting an analysis for a photo that isn't the caller's (404)", async () => {
