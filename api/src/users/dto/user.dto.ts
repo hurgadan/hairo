@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
 
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { User } from "../../_contracts/users/user.type";
 
 export class UserDto implements User {
@@ -24,7 +25,7 @@ export class UserDto implements User {
   @Expose()
   public lastName: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Locale })
   @Expose()
-  public locale: string;
+  public locale: Locale;
 }

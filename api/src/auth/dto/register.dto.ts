@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsIn, IsOptional, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsOptional, MinLength } from "class-validator";
 
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { BodyRegister } from "../../_contracts/auth/body-register.type";
 
 export class RegisterDto implements BodyRegister {
@@ -12,8 +13,8 @@ export class RegisterDto implements BodyRegister {
   @MinLength(8)
   public password: string;
 
-  @ApiProperty({ required: false, enum: ["ru", "es", "de"] })
+  @ApiProperty({ required: false, enum: Locale })
   @IsOptional()
-  @IsIn(["ru", "es", "de"])
-  public locale?: string;
+  @IsEnum(Locale)
+  public locale?: Locale;
 }

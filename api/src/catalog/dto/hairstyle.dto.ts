@@ -1,6 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Transform } from "class-transformer";
 
+import {
+  GenderPresentation,
+  HairLength,
+  HairTexture,
+} from "../../_contracts/enums";
+import { Aesthetic } from "../../_contracts/catalog/enums/aesthetic.enum";
+import { Fringe } from "../../_contracts/catalog/enums/fringe.enum";
+import { Maintenance } from "../../_contracts/catalog/enums/maintenance.enum";
+import { Occasion } from "../../_contracts/catalog/enums/occasion.enum";
 import { Hairstyle } from "../../_contracts/catalog/hairstyle.type";
 import { LocalizedText } from "../../_contracts/localized-text.type";
 
@@ -28,33 +37,33 @@ export class HairstyleDto implements Hairstyle {
   @Expose()
   public groupName: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: HairLength })
   @Expose()
-  public length: string;
+  public length: HairLength;
 
-  @ApiProperty()
+  @ApiProperty({ enum: GenderPresentation })
   @Expose()
-  public genderPresentation: string;
+  public genderPresentation: GenderPresentation;
 
-  @ApiProperty({ type: [String] })
+  @ApiProperty({ enum: HairTexture, isArray: true })
   @Expose()
-  public texture: string[];
+  public texture: HairTexture[];
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ enum: Fringe, nullable: true })
   @Expose()
-  public fringe: string | null;
+  public fringe: Fringe | null;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Maintenance })
   @Expose()
-  public maintenance: string;
+  public maintenance: Maintenance;
 
-  @ApiProperty({ type: [String] })
+  @ApiProperty({ enum: Aesthetic, isArray: true })
   @Expose()
-  public aesthetic: string[];
+  public aesthetic: Aesthetic[];
 
-  @ApiProperty({ type: [String] })
+  @ApiProperty({ enum: Occasion, isArray: true })
   @Expose()
-  public occasion: string[];
+  public occasion: Occasion[];
 
   @ApiProperty({ nullable: true })
   @Expose()

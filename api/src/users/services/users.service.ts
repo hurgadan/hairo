@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { User } from "../dao/user.entity";
 import { UsersRepository } from "../repositories/users.repository";
 
 export interface CreateEmailUserData {
   email: string;
   passwordHash: string;
-  locale?: string;
+  locale?: Locale;
 }
 
 export interface TelegramUserData {
@@ -14,7 +15,7 @@ export interface TelegramUserData {
   telegramUsername?: string | null;
   firstName?: string | null;
   lastName?: string | null;
-  locale?: string;
+  locale?: Locale;
 }
 
 @Injectable()
@@ -30,15 +31,15 @@ export class UsersService {
   }
 
   /** Анонимный пользователь (без email/telegram) — гостевая сессия до регистрации. */
-  public createGuest(locale?: string): Promise<User> {
-    return this.repo.save({ locale: locale ?? "ru" });
+  public createGuest(locale?: Locale): Promise<User> {
+    return this.repo.save({ locale: locale ?? Locale.Ru });
   }
 
   public createEmailUser(data: CreateEmailUserData): Promise<User> {
     return this.repo.save({
       email: data.email,
       passwordHash: data.passwordHash,
-      locale: data.locale ?? "ru",
+      locale: data.locale ?? Locale.Ru,
     });
   }
 
@@ -51,7 +52,7 @@ export class UsersService {
       telegramUsername: data.telegramUsername ?? null,
       firstName: data.firstName ?? null,
       lastName: data.lastName ?? null,
-      locale: existing?.locale ?? data.locale ?? "ru",
+      locale: existing?.locale ?? data.locale ?? Locale.Ru,
     });
   }
 }

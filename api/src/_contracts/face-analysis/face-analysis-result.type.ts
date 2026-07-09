@@ -1,8 +1,10 @@
-import { FaceShape } from "./enums/face-shape.enum";
-import { GenderPresentation } from "./enums/gender-presentation.enum";
-import { HairDensity } from "./enums/hair-density.enum";
-import { HairLength } from "./enums/hair-length.enum";
-import { HairTexture } from "./enums/hair-texture.enum";
+import {
+  FaceShape,
+  GenderPresentation,
+  HairDensity,
+  HairLength,
+  HairTexture,
+} from "../enums";
 
 export interface FaceAnalysisResult {
   faceShape: FaceShape;

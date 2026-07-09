@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Locale } from "../../_contracts/users/enums/locale.enum";
+
 @Entity({ name: "users" })
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -35,8 +37,8 @@ export class User {
   @Column({ name: "last_name", type: "varchar", nullable: true })
   public lastName: string | null;
 
-  @Column({ type: "varchar", default: "ru" })
-  public locale: string;
+  @Column({ type: "varchar", default: Locale.Ru })
+  public locale: Locale;
 
   @CreateDateColumn({ name: "created_at" })
   public createdAt: Date;
