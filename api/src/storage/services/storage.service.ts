@@ -85,6 +85,15 @@ export class StorageService implements OnModuleInit {
     );
   }
 
+  /** Скачивает объект целиком в память — для передачи байтов во внешние API (например, LLM). */
+  public async getObject(key: string): Promise<Buffer> {
+    const response = await this.client.send(
+      new GetObjectCommand({ Bucket: this.config.bucket, Key: key }),
+    );
+    const bytes = await response.Body!.transformToByteArray();
+    return Buffer.from(bytes);
+  }
+
   public async objectExists(key: string): Promise<boolean> {
     try {
       await this.client.send(

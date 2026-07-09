@@ -40,4 +40,7 @@ services:
       STORAGE_ACCESS_KEY_ID: test
       STORAGE_SECRET_ACCESS_KEY: test
       STORAGE_BUCKET: hairo-test
+      IMAGE_MODEL: gemini-2.5-flash-image
+      LLM_MODEL: gemini-2.5-flash
+      GOOGLE_AI_API_KEY: test
     command: npm run test:e2e

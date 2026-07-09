@@ -1,9 +1,3 @@
-export const SUPPORTED_IMAGE_MIME_TYPES = [
-  "image/png",
-  "image/jpeg",
-  "image/webp",
-] as const;
-
 export const SUPPORTED_IMAGE_SIZES = ["1K", "2K", "4K"] as const;
 
 /** SDK-дефолт без явного imageSize — 1K, мало для "улучшения качества" фото. */
