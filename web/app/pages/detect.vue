@@ -1,10 +1,72 @@
 <script setup lang="ts">
-const detected = [
-  { label: "Форма лица", value: "Овальное" },
-  { label: "Текущая длина", value: "Средняя" },
-  { label: "Текстура", value: "Волнистые" },
-  { label: "Густота", value: "Средняя" },
-];
+import type { FaceAnalysisResult } from "@hurgadan/hairo-contracts";
+
+// Ярлыки для значений таксономии (CATALOG.md §1-2) — код на английском, отображение на русском.
+const FACE_SHAPE_LABELS: Record<string, string> = {
+  oval: "Овальное",
+  round: "Круглое",
+  square: "Квадратное",
+  heart: "Сердце",
+  oblong: "Вытянутое",
+  diamond: "Ромб",
+};
+
+const LENGTH_LABELS: Record<string, string> = {
+  buzz: "Очень короткая",
+  short: "Короткая",
+  chin: "До подбородка",
+  shoulder: "До плеч",
+  mid: "Средняя",
+  long: "Длинная",
+};
+
+const TEXTURE_LABELS: Record<string, string> = {
+  straight: "Прямые",
+  wavy: "Волнистые",
+  curly: "Кудрявые",
+  coily: "Афро",
+};
+
+const DENSITY_LABELS: Record<string, string> = {
+  fine: "Тонкие",
+  medium: "Средняя",
+  thick: "Густые",
+};
+
+const analysis = useCurrentAnalysis();
+
+const detected = computed(() => {
+  const result: FaceAnalysisResult | null | undefined = analysis.value?.result;
+  if (!result) return [];
+
+  return [
+    {
+      label: "Форма лица",
+      value: FACE_SHAPE_LABELS[result.faceShape] ?? result.faceShape,
+    },
+    {
+      label: "Текущая длина",
+      value: LENGTH_LABELS[result.length] ?? result.length,
+    },
+    {
+      label: "Текстура",
+      value: result.texture
+        .map((t) => TEXTURE_LABELS[t] ?? t)
+        .join(", "),
+    },
+    {
+      label: "Густота",
+      value: DENSITY_LABELS[result.density] ?? result.density,
+    },
+  ];
+});
+
+onMounted(() => {
+  // Прямой заход без пройденного анализа — вернуть в начало флоу.
+  if (!analysis.value || analysis.value.status !== "completed") {
+    navigateTo("/analyze");
+  }
+});
 </script>
 
 <template>
@@ -12,7 +74,7 @@ const detected = [
     <StepProgress :total="3" :current="2" class="mt-4" />
 
     <p class="mt-6 text-xs font-bold tracking-wide text-success uppercase">
-      ✓ Фото улучшено
+      ✓ Фото проанализировано
     </p>
     <h1 class="mt-2 font-display text-3xl text-text">
       Мы определили ваши черты
