@@ -1,20 +1,20 @@
 import { Injectable } from "@nestjs/common";
-
-import { BaseModel, IGenerateImage } from "./models/base-model";
 import { ConfigService } from "@nestjs/config";
+
 import { AppConfig } from "../_common/types";
-import { createModel } from "./models/create-model";
 import { isSupportedImageMimeType } from "../_common/utils/is-supported-image-mime-type";
+import { BaseModel, IGenerateStructured } from "./models/base-model";
+import { createModel } from "./models/create-model";
 
 @Injectable()
-export class ImageModelService {
-  private imageModel: BaseModel;
+export class LlmModelService {
+  private model: BaseModel;
 
   constructor(private readonly config: ConfigService<AppConfig, true>) {
-    this.imageModel = createModel(this.config);
+    this.model = createModel(this.config);
   }
 
-  public async generateImage(param: IGenerateImage): Promise<Buffer> {
+  public async generateStructured<T>(param: IGenerateStructured): Promise<T> {
     const unsupported = param.images
       .map((image) => image.mimeType)
       .find((mimeType) => !isSupportedImageMimeType(mimeType));
@@ -23,6 +23,6 @@ export class ImageModelService {
       throw new Error(`Unsupported image mime type: ${unsupported}`);
     }
 
-    return this.imageModel.generateImage(param);
+    return this.model.generateStructured<T>(param);
   }
 }

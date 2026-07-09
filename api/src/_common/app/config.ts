@@ -37,6 +37,7 @@ export default (): AppConfig => ({
   jwtSecret: getEnvString("JWT_SECRET", false) || "dev-secret-change-me",
   jwtExpiresIn: getEnvString("JWT_EXPIRES_IN", false) || "7d",
   imageModel: getEnvString("IMAGE_MODEL"),
+  llmModel: getEnvString("LLM_MODEL"),
   googleAiApiKey: getEnvString("GOOGLE_AI_API_KEY"),
   databaseConnectionOptions,
   storage,

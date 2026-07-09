@@ -1,6 +1,6 @@
 # Hairo — Промпт-шаблоны
 
-> Шаблоны промптов для image-модели (Nano Banana / Gemini 2.5 Flash Image).
+> Шаблоны промптов для image-модели (Nano Banana / Gemini 2.5 Flash Image) и для vision-анализа фото (`llm-model`, Gemini 2.5 Flash).
 > **Статус: плейсхолдеры (Фаза 0).** Промпты — непрерывно дорабатываемый трек; финальная доводка с Валерией и на реальных прогонах. Промпты на английском — модели на нём точнее.
 > Связано: `CATALOG.md` 3.1 (борьба с подмешиванием лица), `data/hairstyles.seed.json` (`hairstyle_fragment` на каждый образ).
 
@@ -67,6 +67,24 @@ photo's lighting. Photorealistic, high detail, single person.
 
 ### Фолбэк: только текст (provisional)
 Если тест покажет, что референс не нужен — убрать упоминание второй картинки, оставить `{hairstyle_fragment}` текстом. Подтвердить у Валерии (см. `CATALOG.md` 3.1).
+
+## Промпт D — Анализ фото (structured output, `llm-model`)
+
+Не image-модель — обычный Gemini (`gemini-2.5-flash`) с `responseSchema` (JSON, не картинка). Определяет форму лица, длину/текстуру/густоту волос, гендер-подачу и текущий цвет — поля из таксономии `CATALOG.md` §1-2. Используется в модуле `face-analysis` (`api/src/face-analysis/constants/index.ts`).
+
+```
+Analyze the person's face and hair in this photo.
+Return a single JSON object describing:
+- faceShape: their face shape.
+- length: their current hair length.
+- texture: their current hair texture(s), can be more than one if mixed.
+- density: how thick/dense their hair looks.
+- genderPresentation: their apparent gender presentation.
+- currentColorDescription: a short natural-language description of their current hair colour.
+Base every field strictly on what is visible in the photo. Do not guess beyond the image.
+```
+
+Допустимые значения полей заданы через `enum` в `responseSchema` (не в тексте промпта) — контролируемый словарь `CATALOG.md` §1-2.
 
 ---
 
