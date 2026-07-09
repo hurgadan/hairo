@@ -3,6 +3,7 @@ import { Expose, Transform } from "class-transformer";
 
 import {
   FaceAnalysisResult,
+  FaceAnalysisStatus,
   PhotoAnalysis,
 } from "../../_contracts/face-analysis/photo-analysis.type";
 import { TransformToDateString } from "../../_common/utils/decorators/transform-to-date-string.decorator";
@@ -16,9 +17,9 @@ export class PhotoAnalysisDto implements PhotoAnalysis {
   @Expose()
   public photoId: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: FaceAnalysisStatus })
   @Expose()
-  public status: string;
+  public status: FaceAnalysisStatus;
 
   // jsonb — читаем из источника, иначе excludeExtraneousValues рекурсивно вычищает объект
   @ApiProperty({ type: Object, nullable: true })

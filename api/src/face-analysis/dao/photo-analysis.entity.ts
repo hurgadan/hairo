@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { FaceAnalysisResult } from "../../_contracts/face-analysis/photo-analysis.type";
-import { FACE_ANALYSIS_STATUS } from "../constants";
+import {
+  FaceAnalysisResult,
+  FaceAnalysisStatus,
+} from "../../_contracts/face-analysis/photo-analysis.type";
 
 @Entity({ name: "photo_analyses" })
 export class PhotoAnalysis {
@@ -23,8 +25,8 @@ export class PhotoAnalysis {
   @Column({ name: "photo_id", type: "uuid" })
   public photoId: string;
 
-  @Column({ type: "varchar", default: FACE_ANALYSIS_STATUS.pending })
-  public status: string;
+  @Column({ type: "varchar", default: FaceAnalysisStatus.Pending })
+  public status: FaceAnalysisStatus;
 
   @Column({ type: "jsonb", nullable: true })
   public result: FaceAnalysisResult | null;
