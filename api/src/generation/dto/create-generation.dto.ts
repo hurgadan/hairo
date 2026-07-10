@@ -7,4 +7,8 @@ export class CreateGenerationDto implements CreateGeneration {
   @ApiProperty()
   @IsUUID()
   public photoId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  public hairstyleId: string;
 }

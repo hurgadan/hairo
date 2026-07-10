@@ -22,6 +22,10 @@ export class CatalogRepository {
     return this.hairstyles.findOne({ where: { slug } });
   }
 
+  public findActiveById(id: string): Promise<Hairstyle | null> {
+    return this.hairstyles.findOne({ where: { id, isActive: true } });
+  }
+
   public count(): Promise<number> {
     return this.hairstyles.count();
   }

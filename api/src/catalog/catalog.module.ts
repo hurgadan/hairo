@@ -12,6 +12,6 @@ import { CatalogService } from "./services/catalog.service";
   imports: [TypeOrmModule.forFeature([Hairstyle, ColorOption])],
   controllers: [CatalogController],
   providers: [CatalogRepository, CatalogService, CatalogSeedService],
-  exports: [CatalogSeedService],
+  exports: [CatalogSeedService, CatalogService],
 })
 export class CatalogModule {}

@@ -3,12 +3,22 @@ import { Server } from "node:http";
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
+import { Repository } from "typeorm";
 
 import { GenerationStatus } from "../_contracts/generation/enums";
+import {
+  GenderPresentation,
+  HairLength,
+  HairTexture,
+} from "../_contracts/enums";
+import { Maintenance } from "../_contracts/catalog/enums/maintenance.enum";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
+import { getRepository } from "../_common/utils/tests/get-repository";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
 import { AuthModule } from "../auth/auth.module";
+import { CatalogModule } from "../catalog/catalog.module";
+import { Hairstyle } from "../catalog/dao/hairstyle.entity";
 import { ImageModelService } from "../image-model/image-model.service";
 import { ImageModelModule } from "../image-model/image-model.module";
 import { PhotosModule } from "../photos/photos.module";
@@ -54,6 +64,7 @@ describe("Generation (e2e)", () => {
   let app: INestApplication;
   let httpServer: Server;
   let moduleFixture: TestingModule;
+  let hairstyles: Repository<Hairstyle>;
 
   const storageMock = {
     putObject: jest.fn().mockResolvedValue(undefined),
@@ -87,6 +98,24 @@ describe("Generation (e2e)", () => {
     return res.body.id as string;
   }
 
+  async function seedHairstyle(): Promise<string> {
+    const hairstyle = await hairstyles.save(
+      hairstyles.create({
+        slug: `style-${Date.now()}-${Math.random()}`,
+        name: { ru: "Тестовый образ" },
+        groupName: "Тест",
+        length: HairLength.Shoulder,
+        genderPresentation: GenderPresentation.Unisex,
+        maintenance: Maintenance.Medium,
+        texture: [HairTexture.Wavy],
+        hairstyleFragment: "long layered hair past the chest",
+        isActive: true,
+        sortOrder: 0,
+      }),
+    );
+    return hairstyle.id;
+  }
+
   beforeAll(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [
@@ -95,6 +124,7 @@ describe("Generation (e2e)", () => {
         AuthModule,
         StorageModule,
         PhotosModule,
+        CatalogModule,
         ImageModelModule,
         GenerationModule,
       ],
@@ -106,6 +136,7 @@ describe("Generation (e2e)", () => {
       .compile();
 
     ({ app, httpServer } = await createTestingAppAndHttpServer(moduleFixture));
+    hairstyles = getRepository<Hairstyle>(moduleFixture, Hairstyle);
   });
 
   afterAll(async () => {
@@ -124,11 +155,12 @@ describe("Generation (e2e)", () => {
 
     const token = await registerUser("owner@example.com");
     const photoId = await uploadPhoto(token);
+    const hairstyleId = await seedHairstyle();
 
     const started = await request(httpServer)
       .post("/generation")
       .set("authorization", `Bearer ${token}`)
-      .send({ photoId })
+      .send({ photoId, hairstyleId })
       .expect(202);
 
     expect(started.body.status).toBe(GenerationStatus.Pending);
@@ -148,11 +180,12 @@ describe("Generation (e2e)", () => {
 
     const token = await registerUser("failing@example.com");
     const photoId = await uploadPhoto(token);
+    const hairstyleId = await seedHairstyle();
 
     const started = await request(httpServer)
       .post("/generation")
       .set("authorization", `Bearer ${token}`)
-      .send({ photoId })
+      .send({ photoId, hairstyleId })
       .expect(202);
 
     const result = await pollUntilSettled(httpServer, token, started.body.id);
@@ -165,12 +198,26 @@ describe("Generation (e2e)", () => {
   it("rejects starting a generation for a photo that isn't the caller's (404)", async () => {
     const ownerToken = await registerUser("photo-owner@example.com");
     const photoId = await uploadPhoto(ownerToken);
+    const hairstyleId = await seedHairstyle();
     const strangerToken = await registerUser("stranger@example.com");
 
     await request(httpServer)
       .post("/generation")
       .set("authorization", `Bearer ${strangerToken}`)
-      .send({ photoId })
+      .send({ photoId, hairstyleId })
+      .expect(404);
+
+    expect(imageModelMock.generateImage).not.toHaveBeenCalled();
+  });
+
+  it("rejects starting a generation for a hairstyle that doesn't exist (404)", async () => {
+    const token = await registerUser("no-hairstyle@example.com");
+    const photoId = await uploadPhoto(token);
+
+    await request(httpServer)
+      .post("/generation")
+      .set("authorization", `Bearer ${token}`)
+      .send({ photoId, hairstyleId: "00000000-0000-0000-0000-000000000000" })
       .expect(404);
 
     expect(imageModelMock.generateImage).not.toHaveBeenCalled();
@@ -183,12 +230,13 @@ describe("Generation (e2e)", () => {
 
     const ownerToken = await registerUser("owner2@example.com");
     const photoId = await uploadPhoto(ownerToken);
+    const hairstyleId = await seedHairstyle();
     const strangerToken = await registerUser("stranger2@example.com");
 
     const started = await request(httpServer)
       .post("/generation")
       .set("authorization", `Bearer ${ownerToken}`)
-      .send({ photoId })
+      .send({ photoId, hairstyleId })
       .expect(202);
 
     await request(httpServer)

@@ -22,6 +22,10 @@ export class Generation {
   @Column({ name: "photo_id", type: "uuid" })
   public photoId: string;
 
+  @Index("IDX_generations_hairstyle_id")
+  @Column({ name: "hairstyle_id", type: "uuid" })
+  public hairstyleId: string;
+
   @Column({ type: "varchar", default: GenerationStatus.Pending })
   public status: GenerationStatus;
 
