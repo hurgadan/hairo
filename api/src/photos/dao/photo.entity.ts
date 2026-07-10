@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { PhotoKind, PhotoStatus } from "../../_contracts/photos/enums";
+import { PhotoKind, PhotoStatus } from "../../_contracts";
 
 @Entity({ name: "photos" })
 export class Photo {
