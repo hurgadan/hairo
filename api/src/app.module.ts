@@ -7,6 +7,7 @@ import config from "./_common/app/config";
 import { AuthModule } from "./auth/auth.module";
 import { CatalogModule } from "./catalog/catalog.module";
 import { FaceAnalysisModule } from "./face-analysis/face-analysis.module";
+import { GenerationModule } from "./generation/generation.module";
 import { HealthModule } from "./health/health.module";
 import { PhotosModule } from "./photos/photos.module";
 import { StorageModule } from "./storage/storage.module";
@@ -28,6 +29,7 @@ import { LlmModelModule } from "./llm-model/llm-model.module";
     AuthModule,
     PhotosModule,
     FaceAnalysisModule,
+    GenerationModule,
   ],
 })
 export class AppModule {}
