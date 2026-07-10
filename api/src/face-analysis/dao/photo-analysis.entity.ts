@@ -7,8 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { FaceAnalysisStatus } from "../../_contracts/face-analysis/enums";
-import { FaceAnalysisResult } from "../../_contracts/face-analysis/face-analysis-result.type";
+import { FaceAnalysisResult, FaceAnalysisStatus } from "../../_contracts";
 
 @Entity({ name: "photo_analyses" })
 export class PhotoAnalysis {
