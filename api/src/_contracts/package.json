@@ -1,6 +1,6 @@
 {
   "name": "@hurgadan/hairo-contracts",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Shared contracts and types for Hairo",
   "private": false,
   "repository": {
