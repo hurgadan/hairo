@@ -1,11 +1,56 @@
 <script setup lang="ts">
-import type { Hairstyle } from "@hurgadan/hairo-contracts";
+import { GenderPresentation, HairLength, Maintenance } from "@hurgadan/hairo-contracts";
+import type { Hairstyle, HairstyleFilter } from "@hurgadan/hairo-contracts";
+
+const LENGTH_ORDER = [
+  HairLength.Buzz,
+  HairLength.Short,
+  HairLength.Chin,
+  HairLength.Shoulder,
+  HairLength.Mid,
+  HairLength.Long,
+];
 
 const config = useRuntimeConfig();
 const wizard = useWizard();
+const analysis = useCurrentAnalysis();
+
+function targetLength(): HairLength | undefined {
+  if (wizard.value.length === "any") return undefined;
+
+  const current = analysis.value?.result?.length;
+  if (!current) return undefined;
+
+  const i = LENGTH_ORDER.indexOf(current);
+  if (i < 0) return undefined;
+
+  if (wizard.value.length === "shorter") return LENGTH_ORDER[Math.max(0, i - 1)];
+  if (wizard.value.length === "longer")
+    return LENGTH_ORDER[Math.min(LENGTH_ORDER.length - 1, i + 1)];
+  return current; // "same"
+}
+
+const query = computed<HairstyleFilter>(() => {
+  const result = analysis.value?.result;
+  const filter: HairstyleFilter = {};
+
+  if (wizard.value.gender !== "all") {
+    filter.gender = wizard.value.gender as GenderPresentation;
+  }
+  const length = targetLength();
+  if (length) filter.length = length;
+  filter.maintenance = wizard.value.maintenance as Maintenance;
+  if (result?.faceShape) filter.faceShape = result.faceShape;
+  if (result?.texture?.length) filter.texture = result.texture;
+  if (result?.density) filter.density = result.density;
+  if (wizard.value.occasions.length) filter.occasion = wizard.value.occasions;
+
+  return filter;
+});
 
 const { data, pending, error } = await useFetch<Hairstyle[]>(
   () => `${config.public.apiBase}/catalog/hairstyles`,
+  { query },
 );
 
 const activeGroup = ref("Все");
@@ -21,14 +66,9 @@ const filtered = computed(() =>
     : (data.value ?? []).filter((h) => h.groupName === activeGroup.value),
 );
 
-function toggle(slug: string) {
-  const sel = wizard.value.selected;
-  const i = sel.indexOf(slug);
-  if (i >= 0) sel.splice(i, 1);
-  else sel.push(slug);
+function toggle(id: string) {
+  wizard.value.selected = wizard.value.selected === id ? null : id;
 }
-
-const fakeMatch = (i: number) => Math.max(72, 96 - i * 2);
 </script>
 
 <template>
@@ -55,12 +95,12 @@ const fakeMatch = (i: number) => Math.max(72, 96 - i * 2);
     </p>
     <div v-else class="mt-4 grid grid-cols-2 gap-3">
       <HairstyleCard
-        v-for="(h, i) in filtered"
+        v-for="h in filtered"
         :key="h.id"
         :hairstyle="h"
-        :match="fakeMatch(i)"
-        :selected="wizard.selected.includes(h.slug)"
-        @click="toggle(h.slug)"
+        :match="h.matchScore ?? undefined"
+        :selected="wizard.selected === h.id"
+        @click="toggle(h.id)"
       />
     </div>
   </div>
@@ -71,13 +111,13 @@ const fakeMatch = (i: number) => Math.max(72, 96 - i * 2);
     >
       <div>
         <div class="font-bold text-text">
-          Выбрано {{ wizard.selected.length }}
+          {{ wizard.selected ? "Выбрано" : "Выберите образ" }}
         </div>
         <div class="text-xs text-text-muted">1-я генерация бесплатно</div>
       </div>
       <AppButton
         class="flex-1"
-        :class="{ 'pointer-events-none opacity-50': !wizard.selected.length }"
+        :class="{ 'pointer-events-none opacity-50': !wizard.selected }"
         @click="navigateTo('/result')"
       >
         ✦ Сгенерировать
