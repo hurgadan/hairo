@@ -14,6 +14,10 @@ export class GenerationDto implements Generation {
   @Expose()
   public photoId: string;
 
+  @ApiProperty()
+  @Expose()
+  public hairstyleId: string;
+
   @ApiProperty({ enum: GenerationStatus })
   @Expose()
   public status: GenerationStatus;

@@ -33,7 +33,7 @@ export class GenerationController {
   ): Promise<GenerationDto> {
     return transformToDto(
       GenerationDto,
-      await this.generation.start(current.userId, dto.photoId),
+      await this.generation.start(current.userId, dto.photoId, dto.hairstyleId),
     );
   }
 

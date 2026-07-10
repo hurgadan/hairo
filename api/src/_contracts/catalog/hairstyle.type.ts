@@ -19,4 +19,6 @@ export interface Hairstyle {
   aesthetic: Aesthetic[];
   occasion: Occasion[];
   previewImage: string | null;
+  /** 0–100, null если ни один ranking-параметр фильтра не передан. */
+  matchScore: number | null;
 }

@@ -1,6 +1,7 @@
 import { NotFoundException } from "@nestjs/common";
 
 import { GenerationStatus } from "../../_contracts/generation/enums";
+import { CatalogService } from "../../catalog/services/catalog.service";
 import { ImageModelService } from "../../image-model/image-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";
@@ -20,6 +21,10 @@ describe("GenerationService", () => {
     getOwned: jest.fn(),
   } as unknown as jest.Mocked<PhotosService>;
 
+  const catalog = {
+    getActive: jest.fn(),
+  } as unknown as jest.Mocked<CatalogService>;
+
   const storage = {
     getObject: jest.fn(),
     putObject: jest.fn(),
@@ -32,7 +37,7 @@ describe("GenerationService", () => {
   } as unknown as jest.Mocked<ImageModelService>;
 
   const buildService = (): GenerationService =>
-    new GenerationService(generations, photos, storage, imageModel);
+    new GenerationService(generations, photos, catalog, storage, imageModel);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -40,6 +45,10 @@ describe("GenerationService", () => {
     storage.getSignedDownloadUrl.mockResolvedValue(
       "https://signed.example/result",
     );
+    catalog.getActive.mockResolvedValue({
+      id: "hairstyle-1",
+      hairstyleFragment: "long layered hair past the chest",
+    } as never);
   });
 
   describe("start", () => {
@@ -49,9 +58,22 @@ describe("GenerationService", () => {
       );
       const service = buildService();
 
-      await expect(service.start("user-1", "photo-1")).rejects.toThrow(
-        "Photo not found",
+      await expect(
+        service.start("user-1", "photo-1", "hairstyle-1"),
+      ).rejects.toThrow("Photo not found");
+      expect(generations.save).not.toHaveBeenCalled();
+    });
+
+    it("rejects when the hairstyle is not found/inactive, without creating a job", async () => {
+      photos.getOwned.mockResolvedValue({ id: "photo-1" } as never);
+      catalog.getActive.mockRejectedValue(
+        new NotFoundException("Hairstyle not found"),
       );
+      const service = buildService();
+
+      await expect(
+        service.start("user-1", "photo-1", "hairstyle-1"),
+      ).rejects.toThrow("Hairstyle not found");
       expect(generations.save).not.toHaveBeenCalled();
     });
 
@@ -71,7 +93,11 @@ describe("GenerationService", () => {
         .mockResolvedValueOnce(Buffer.from("restyled"));
 
       const service = buildService();
-      const generation = await service.start("user-1", "photo-1");
+      const generation = await service.start(
+        "user-1",
+        "photo-1",
+        "hairstyle-1",
+      );
 
       expect(generation).toEqual({
         id: "generation-1",
@@ -81,6 +107,7 @@ describe("GenerationService", () => {
       expect(generations.save).toHaveBeenCalledWith({
         userId: "user-1",
         photoId: "photo-1",
+        hairstyleId: "hairstyle-1",
         status: GenerationStatus.Pending,
       });
       // фоновая часть ещё не выполнилась синхронно
@@ -94,7 +121,7 @@ describe("GenerationService", () => {
       });
       expect(imageModel.generateImage).toHaveBeenNthCalledWith(2, {
         images: [{ data: Buffer.from("enhanced"), mimeType: "image/png" }],
-        prompt: expect.any(String),
+        prompt: expect.stringContaining("long layered hair past the chest"),
       });
       expect(storage.putObject).toHaveBeenCalledWith({
         key: "generations/user-1/generation-1.png",
@@ -122,7 +149,7 @@ describe("GenerationService", () => {
       imageModel.generateImage.mockRejectedValueOnce(new Error("rate limited"));
 
       const service = buildService();
-      await service.start("user-1", "photo-1");
+      await service.start("user-1", "photo-1", "hairstyle-1");
       await flushPromises();
 
       expect(imageModel.generateImage).toHaveBeenCalledTimes(1);
@@ -149,7 +176,7 @@ describe("GenerationService", () => {
         .mockRejectedValueOnce(new Error("model overloaded"));
 
       const service = buildService();
-      await service.start("user-1", "photo-1");
+      await service.start("user-1", "photo-1", "hairstyle-1");
       await flushPromises();
 
       expect(storage.putObject).not.toHaveBeenCalled();

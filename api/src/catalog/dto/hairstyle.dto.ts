@@ -68,4 +68,8 @@ export class HairstyleDto implements Hairstyle {
   @ApiProperty({ nullable: true })
   @Expose()
   public previewImage: string | null;
+
+  @ApiProperty({ nullable: true })
+  @Expose()
+  public matchScore: number | null;
 }
