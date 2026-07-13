@@ -1,11 +1,19 @@
 <script setup lang="ts">
+import { Occasion } from "@hurgadan/hairo-contracts";
+
 const wizard = useWizard();
+const analysis = useCurrentAnalysis();
 const step = ref(1);
 const total = 6;
 
-const occasionOptions = ["Повседнев", "Деловой", "Событие", "Смелый"];
+const occasionOptions: { v: Occasion; t: string }[] = [
+  { v: Occasion.Everyday, t: "Повседнев" },
+  { v: Occasion.Work, t: "Деловой" },
+  { v: Occasion.Event, t: "Событие" },
+  { v: Occasion.Bold, t: "Смелый" },
+];
 
-function toggleOccasion(o: string) {
+function toggleOccasion(o: Occasion) {
   const list = wizard.value.occasions;
   const i = list.indexOf(o);
   if (i >= 0) list.splice(i, 1);
@@ -21,6 +29,18 @@ function back() {
   if (step.value > 1) step.value -= 1;
   else navigateTo("/detect");
 }
+
+onMounted(() => {
+  // Префилл из автодетекта — только если пользователь ещё не трогал шаг вручную.
+  const detectedGender = analysis.value?.result?.genderPresentation as
+    | "feminine"
+    | "masculine"
+    | "unisex"
+    | undefined;
+  if (wizard.value.gender === "all" && detectedGender && detectedGender !== "unisex") {
+    wizard.value.gender = detectedGender;
+  }
+});
 </script>
 
 <template>
@@ -103,12 +123,12 @@ function back() {
       <p class="mt-2 text-sm text-text-muted">Можно выбрать несколько.</p>
       <div class="mt-6 flex flex-wrap gap-2">
         <AppChip
-          v-for="o in occasionOptions"
-          :key="o"
-          :active="wizard.occasions.includes(o)"
-          @click="toggleOccasion(o)"
+          v-for="opt in occasionOptions"
+          :key="opt.v"
+          :active="wizard.occasions.includes(opt.v)"
+          @click="toggleOccasion(opt.v)"
         >
-          {{ o }}
+          {{ opt.t }}
         </AppChip>
       </div>
     </template>

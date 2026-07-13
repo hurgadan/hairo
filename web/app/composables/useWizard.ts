@@ -1,11 +1,13 @@
+import { Occasion } from "@hurgadan/hairo-contracts";
+
 export interface WizardState {
   gender: "feminine" | "masculine" | "all";
   length: "shorter" | "same" | "longer" | "any";
   boldness: "light" | "noticeable" | "radical";
-  occasions: string[];
+  occasions: Occasion[];
   maintenance: "low" | "medium" | "high";
   changeColor: boolean;
-  selected: string[]; // slugs выбранных образов
+  selected: string | null; // id выбранного образа (Hairstyle.id)
 }
 
 export function useWizard() {
@@ -16,6 +18,6 @@ export function useWizard() {
     occasions: [],
     maintenance: "medium",
     changeColor: false,
-    selected: [],
+    selected: null,
   }));
 }
