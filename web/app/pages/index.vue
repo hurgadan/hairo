@@ -39,6 +39,11 @@
       <p class="mt-3 text-center text-sm font-semibold text-text-muted">
         Первая примерка — бесплатно · 30 образов
       </p>
+      <p class="mt-4 text-center text-xs text-text-muted">
+        <NuxtLink to="/privacy" class="underline">Обработка данных</NuxtLink>
+        ·
+        <NuxtLink to="/impressum" class="underline">Impressum</NuxtLink>
+      </p>
     </div>
   </div>
 </template>

@@ -11,10 +11,12 @@
     <section class="mt-6">
       <h2 class="font-display text-xl text-text">1. Кто мы</h2>
       <p class="mt-2 text-sm text-text-muted">
-        Hairo — сервис примерки причёсок. Оператор данных:
-        <strong class="text-text">[TODO: юрлицо, адрес, контактный email]</strong>.
-        По вопросам обработки данных и для запроса удаления аккаунта пишите на
-        этот адрес.
+        Hairo — сервис примерки причёсок. Оператор данных: Igor Deutsch,
+        Hardtstr. 31A, 79618 Rheinfelden, Германия. Контактный email по
+        вопросам обработки данных и для запроса удаления аккаунта:
+        <a href="mailto:hurgadan@gmail.com" class="underline">hurgadan@gmail.com</a>.
+        Реквизиты оператора — в
+        <NuxtLink to="/impressum" class="underline">Impressum</NuxtLink>.
       </p>
     </section>
 
