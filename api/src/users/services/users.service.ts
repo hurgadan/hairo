@@ -55,4 +55,12 @@ export class UsersService {
       locale: existing?.locale ?? data.locale ?? Locale.Ru,
     });
   }
+
+  public touchActivity(id: string): Promise<void> {
+    return this.repo.touchActivity(id);
+  }
+
+  public findInactiveSince(cutoff: Date): Promise<User[]> {
+    return this.repo.findInactiveSince(cutoff);
+  }
 }

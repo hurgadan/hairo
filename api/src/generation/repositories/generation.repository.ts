@@ -19,6 +19,10 @@ export class GenerationRepository {
     return this.generations.findOne({ where: { id, userId } });
   }
 
+  public findByPhotoId(photoId: string): Promise<Generation[]> {
+    return this.generations.find({ where: { photoId } });
+  }
+
   public async update(
     id: string,
     data: Partial<

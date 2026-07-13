@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 
 import { User } from "../dao/user.entity";
 
@@ -25,5 +25,14 @@ export class UsersRepository {
 
   public save(data: Partial<User>): Promise<User> {
     return this.users.save(this.users.create(data));
+  }
+
+  public async touchActivity(id: string): Promise<void> {
+    await this.users.update({ id }, { lastActiveAt: new Date() });
+  }
+
+  /** Пользователи без активности с `cutoff` — кандидаты на GDPR-удаление фото. */
+  public findInactiveSince(cutoff: Date): Promise<User[]> {
+    return this.users.find({ where: { lastActiveAt: LessThan(cutoff) } });
   }
 }
