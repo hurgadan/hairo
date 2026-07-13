@@ -80,7 +80,11 @@ onBeforeUnmount(() => {
         class="h-5 w-5 accent-[var(--accent)]"
       />
       <span class="text-sm text-text-muted">
-        Согласен на обработку фото для подбора.
+        Согласен на
+        <NuxtLink to="/privacy" class="underline" @click.stop
+          >обработку фото</NuxtLink
+        >
+        для подбора.
       </span>
     </label>
 

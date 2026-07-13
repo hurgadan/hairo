@@ -69,6 +69,17 @@ export class GenerationService {
     return this.withResultUrl(generation);
   }
 
+  /** GDPR-удаление по сроку (`retention`): чистит storage-объекты результатов, привязанных к фото. */
+  public async deleteResultsForPhoto(photoId: string): Promise<void> {
+    const generations = await this.generations.findByPhotoId(photoId);
+
+    for (const generation of generations) {
+      if (generation.resultStorageKey) {
+        await this.storage.deleteObject(generation.resultStorageKey);
+      }
+    }
+  }
+
   private async run(
     id: string,
     userId: string,

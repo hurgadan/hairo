@@ -40,6 +40,10 @@ export class User {
   @Column({ type: "varchar", default: Locale.Ru })
   public locale: Locale;
 
+  /** Последняя активность (см. TouchActivityInterceptor) — основа для GDPR-удаления по сроку. */
+  @Column({ name: "last_active_at", type: "timestamp", default: () => "now()" })
+  public lastActiveAt: Date;
+
   @CreateDateColumn({ name: "created_at" })
   public createdAt: Date;
 

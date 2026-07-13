@@ -18,5 +18,6 @@ import { GenerationService } from "./services/generation.service";
   ],
   controllers: [GenerationController],
   providers: [GenerationRepository, GenerationService],
+  exports: [GenerationService],
 })
 export class GenerationModule {}
