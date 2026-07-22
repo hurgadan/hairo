@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 
 import type { AppConfig } from "../../_common/types";
+import { BillingService } from "../../billing/services/billing.service";
 import { User } from "../../users/dao/user.entity";
 import { UsersService } from "../../users/services/users.service";
 import type { LoginDto } from "../dto/login.dto";
@@ -26,6 +27,7 @@ export interface AuthResult {
 export class AuthService {
   constructor(
     private readonly users: UsersService,
+    private readonly billing: BillingService,
     private readonly jwt: JwtService,
     private readonly configService: ConfigService<AppConfig, true>,
   ) {}
@@ -42,12 +44,14 @@ export class AuthService {
       passwordHash,
       locale: dto.locale,
     });
+    await this.billing.grantSignupBonus(user.id);
 
     return this.buildResult(user);
   }
 
   public async loginAsGuest(): Promise<AuthResult> {
     const user = await this.users.createGuest();
+    await this.billing.grantSignupBonus(user.id);
     return this.buildResult(user);
   }
 

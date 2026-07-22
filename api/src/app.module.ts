@@ -7,6 +7,7 @@ import pinoLoggerModule from "./_common/app/app-modules/pino-logger";
 import typeOrmModule from "./_common/app/app-modules/type-orm";
 import config from "./_common/app/config";
 import { AuthModule } from "./auth/auth.module";
+import { BillingModule } from "./billing/billing.module";
 import { CatalogModule } from "./catalog/catalog.module";
 import { FaceAnalysisModule } from "./face-analysis/face-analysis.module";
 import { GenerationModule } from "./generation/generation.module";
@@ -32,6 +33,7 @@ import { LlmModelModule } from "./llm-model/llm-model.module";
     CatalogModule,
     UsersModule,
     AuthModule,
+    BillingModule,
     PhotosModule,
     FaceAnalysisModule,
     GenerationModule,
