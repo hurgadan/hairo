@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { BillingModule } from "../billing/billing.module";
 import { CatalogModule } from "../catalog/catalog.module";
 import { ImageModelModule } from "../image-model/image-model.module";
 import { PhotosModule } from "../photos/photos.module";
@@ -15,6 +16,7 @@ import { GenerationService } from "./services/generation.service";
     PhotosModule,
     CatalogModule,
     ImageModelModule,
+    BillingModule,
   ],
   controllers: [GenerationController],
   providers: [GenerationRepository, GenerationService],

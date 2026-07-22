@@ -17,6 +17,7 @@ import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-tes
 import { getRepository } from "../_common/utils/tests/get-repository";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
 import { AuthModule } from "../auth/auth.module";
+import { BillingModule } from "../billing/billing.module";
 import { CatalogModule } from "../catalog/catalog.module";
 import { Hairstyle } from "../catalog/dao/hairstyle.entity";
 import { ImageModelService } from "../image-model/image-model.service";
@@ -122,6 +123,7 @@ describe("Generation (e2e)", () => {
         ...getTestingModuleImports(),
         UsersModule,
         AuthModule,
+        BillingModule,
         StorageModule,
         PhotosModule,
         CatalogModule,
@@ -193,6 +195,66 @@ describe("Generation (e2e)", () => {
     expect(result.status).toBe(GenerationStatus.Failed);
     expect(result.error).toBe("rate limited");
     expect(imageModelMock.generateImage).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects a second generation once the trial credit is spent (402)", async () => {
+    imageModelMock.generateImage
+      .mockResolvedValueOnce(Buffer.from("enhanced"))
+      .mockResolvedValueOnce(Buffer.from("restyled"));
+
+    const token = await registerUser("broke@example.com");
+    const photoId = await uploadPhoto(token);
+    const hairstyleId = await seedHairstyle();
+
+    // Первая генерация тратит единственный trial-кредит (дебет — синхронно в start()).
+    await request(httpServer)
+      .post("/generation")
+      .set("authorization", `Bearer ${token}`)
+      .send({ photoId, hairstyleId })
+      .expect(202);
+
+    // Вторая — баланс нулевой → 402, задание не создаётся.
+    await request(httpServer)
+      .post("/generation")
+      .set("authorization", `Bearer ${token}`)
+      .send({ photoId, hairstyleId })
+      .expect(402);
+  });
+
+  it("refunds the trial credit when generation fails, allowing a retry", async () => {
+    // Первый прогон падает на enhance → кредит возвращается.
+    imageModelMock.generateImage
+      .mockRejectedValueOnce(new Error("rate limited"))
+      // Ретрай проходит успешно на возвращённый кредит.
+      .mockResolvedValueOnce(Buffer.from("enhanced"))
+      .mockResolvedValueOnce(Buffer.from("restyled"));
+
+    const token = await registerUser("refunded@example.com");
+    const photoId = await uploadPhoto(token);
+    const hairstyleId = await seedHairstyle();
+
+    const first = await request(httpServer)
+      .post("/generation")
+      .set("authorization", `Bearer ${token}`)
+      .send({ photoId, hairstyleId })
+      .expect(202);
+    const failed = await pollUntilSettled(httpServer, token, first.body.id);
+    expect(failed.status).toBe(GenerationStatus.Failed);
+
+    // Кредит вернулся — баланс снова 1, ретрай проходит гейтинг.
+    const balance = await request(httpServer)
+      .get("/billing/balance")
+      .set("authorization", `Bearer ${token}`)
+      .expect(200);
+    expect(balance.body.balance).toBe(1);
+
+    const retry = await request(httpServer)
+      .post("/generation")
+      .set("authorization", `Bearer ${token}`)
+      .send({ photoId, hairstyleId })
+      .expect(202);
+    const done = await pollUntilSettled(httpServer, token, retry.body.id);
+    expect(done.status).toBe(GenerationStatus.Completed);
   });
 
   it("rejects starting a generation for a photo that isn't the caller's (404)", async () => {

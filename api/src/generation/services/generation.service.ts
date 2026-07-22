@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 
 import { GenerationStatus } from "../../_contracts";
+import { BillingService } from "../../billing/services/billing.service";
 import { CatalogService } from "../../catalog/services/catalog.service";
 import { ImageModelService } from "../../image-model/image-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
@@ -27,6 +28,7 @@ export class GenerationService {
     private readonly catalog: CatalogService,
     private readonly storage: StorageService,
     private readonly imageModel: ImageModelService,
+    private readonly billing: BillingService,
   ) {}
 
   /** Создаёт задание и запускает пайплайн в фоне (fire-and-forget) — см. `TECH.md`. */
@@ -39,12 +41,23 @@ export class GenerationService {
     await this.photos.getOwned(userId, photoId);
     await this.catalog.getActive(hairstyleId);
 
-    const generation = await this.generations.save({
-      userId,
-      photoId,
-      hairstyleId,
-      status: GenerationStatus.Pending,
-    });
+    // Списываем кредит до создания задания: атомарный дебет не даёт балансу уйти
+    // в минус и исключает «фантомный» pending-job при нехватке средств (→ HTTP 402).
+    await this.billing.debitForGeneration(userId);
+
+    let generation: Generation;
+    try {
+      generation = await this.generations.save({
+        userId,
+        photoId,
+        hairstyleId,
+        status: GenerationStatus.Pending,
+      });
+    } catch (error) {
+      // Кредит уже списан, а задание не создалось — возвращаем кредит.
+      await this.billing.refundForGeneration(userId);
+      throw error;
+    }
 
     this.run(generation.id, userId, photoId, hairstyleId).catch(
       (error: unknown) => {
@@ -122,6 +135,8 @@ export class GenerationService {
         status: GenerationStatus.Failed,
         error: error instanceof Error ? error.message : "Unknown error",
       });
+      // Пользователь не получил результат из-за нашей ошибки — возвращаем кредит.
+      await this.billing.refundForGeneration(userId, id);
     }
   }
 

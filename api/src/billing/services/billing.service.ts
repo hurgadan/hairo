@@ -30,17 +30,14 @@ export class BillingService {
 
   /**
    * Списывает кредит(ы) за генерацию. Бросает {@link InsufficientCreditsException}
-   * (HTTP 402), если баланса не хватает.
+   * (HTTP 402), если баланса не хватает. Дебет вызывается до создания задания,
+   * поэтому `generationId` ещё нет — леджер-строка дебета остаётся без привязки.
    */
-  public async debitForGeneration(
-    userId: string,
-    generationId: string,
-  ): Promise<void> {
+  public async debitForGeneration(userId: string): Promise<void> {
     const ok = await this.repo.debit({
       userId,
       amount: GENERATION_COST_CREDITS,
       type: CreditTransactionType.GenerationDebit,
-      generationId,
     });
 
     if (!ok) {
@@ -48,16 +45,16 @@ export class BillingService {
     }
   }
 
-  /** Возвращает кредит(ы) за провалившуюся генерацию. */
+  /** Возвращает кредит(ы) за провалившуюся/несозданную генерацию. */
   public async refundForGeneration(
     userId: string,
-    generationId: string,
+    generationId?: string,
   ): Promise<void> {
     await this.repo.credit({
       userId,
       amount: GENERATION_COST_CREDITS,
       type: CreditTransactionType.GenerationRefund,
-      generationId,
+      generationId: generationId ?? null,
     });
   }
 }

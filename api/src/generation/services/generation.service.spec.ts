@@ -1,6 +1,8 @@
 import { NotFoundException } from "@nestjs/common";
 
 import { GenerationStatus } from "../../_contracts/generation/enums";
+import { BillingService } from "../../billing/services/billing.service";
+import { InsufficientCreditsException } from "../../billing/exceptions/insufficient-credits.exception";
 import { CatalogService } from "../../catalog/services/catalog.service";
 import { ImageModelService } from "../../image-model/image-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
@@ -36,11 +38,25 @@ describe("GenerationService", () => {
     generateImage: jest.fn(),
   } as unknown as jest.Mocked<ImageModelService>;
 
+  const billing = {
+    debitForGeneration: jest.fn(),
+    refundForGeneration: jest.fn(),
+  } as unknown as jest.Mocked<BillingService>;
+
   const buildService = (): GenerationService =>
-    new GenerationService(generations, photos, catalog, storage, imageModel);
+    new GenerationService(
+      generations,
+      photos,
+      catalog,
+      storage,
+      imageModel,
+      billing,
+    );
 
   beforeEach(() => {
     jest.clearAllMocks();
+    billing.debitForGeneration.mockResolvedValue(undefined);
+    billing.refundForGeneration.mockResolvedValue(undefined);
     storage.getPublicUrl.mockReturnValue(null);
     storage.getSignedDownloadUrl.mockResolvedValue(
       "https://signed.example/result",
@@ -75,6 +91,32 @@ describe("GenerationService", () => {
         service.start("user-1", "photo-1", "hairstyle-1"),
       ).rejects.toThrow("Hairstyle not found");
       expect(generations.save).not.toHaveBeenCalled();
+      expect(billing.debitForGeneration).not.toHaveBeenCalled();
+    });
+
+    it("rejects with 402 when the balance is insufficient, without creating a job", async () => {
+      photos.getOwned.mockResolvedValue({ id: "photo-1" } as never);
+      billing.debitForGeneration.mockRejectedValue(
+        new InsufficientCreditsException(),
+      );
+      const service = buildService();
+
+      await expect(
+        service.start("user-1", "photo-1", "hairstyle-1"),
+      ).rejects.toBeInstanceOf(InsufficientCreditsException);
+      expect(generations.save).not.toHaveBeenCalled();
+    });
+
+    it("refunds the credit when the job row fails to persist", async () => {
+      photos.getOwned.mockResolvedValue({ id: "photo-1" } as never);
+      generations.save.mockRejectedValue(new Error("db down"));
+      const service = buildService();
+
+      await expect(
+        service.start("user-1", "photo-1", "hairstyle-1"),
+      ).rejects.toThrow("db down");
+      expect(billing.debitForGeneration).toHaveBeenCalledWith("user-1");
+      expect(billing.refundForGeneration).toHaveBeenCalledWith("user-1");
     });
 
     it("creates a pending job, returns immediately, and completes it in the background", async () => {
@@ -104,6 +146,7 @@ describe("GenerationService", () => {
         resultStorageKey: null,
         resultUrl: null,
       });
+      expect(billing.debitForGeneration).toHaveBeenCalledWith("user-1");
       expect(generations.save).toHaveBeenCalledWith({
         userId: "user-1",
         photoId: "photo-1",
@@ -133,6 +176,7 @@ describe("GenerationService", () => {
         resultStorageKey: "generations/user-1/generation-1.png",
         resultContentType: "image/png",
       });
+      expect(billing.refundForGeneration).not.toHaveBeenCalled();
     });
 
     it("marks the job as failed and skips restyle when the enhance step fails", async () => {
@@ -158,6 +202,10 @@ describe("GenerationService", () => {
         status: GenerationStatus.Failed,
         error: "rate limited",
       });
+      expect(billing.refundForGeneration).toHaveBeenCalledWith(
+        "user-1",
+        "generation-1",
+      );
     });
 
     it("marks the job as failed when the restyle step fails", async () => {
@@ -184,6 +232,10 @@ describe("GenerationService", () => {
         status: GenerationStatus.Failed,
         error: "model overloaded",
       });
+      expect(billing.refundForGeneration).toHaveBeenCalledWith(
+        "user-1",
+        "generation-1",
+      );
     });
   });
 
