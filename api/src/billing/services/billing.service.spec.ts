@@ -39,13 +39,12 @@ describe("BillingService", () => {
       repo.debit.mockResolvedValue(true);
       const service = buildService();
 
-      await service.debitForGeneration("user-1", "generation-1");
+      await service.debitForGeneration("user-1");
 
       expect(repo.debit).toHaveBeenCalledWith({
         userId: "user-1",
         amount: GENERATION_COST_CREDITS,
         type: CreditTransactionType.GenerationDebit,
-        generationId: "generation-1",
       });
     });
 
@@ -53,12 +52,12 @@ describe("BillingService", () => {
       repo.debit.mockResolvedValue(false);
       const service = buildService();
 
-      await expect(
-        service.debitForGeneration("user-1", "generation-1"),
-      ).rejects.toBeInstanceOf(InsufficientCreditsException);
-      await expect(
-        service.debitForGeneration("user-1", "generation-1"),
-      ).rejects.toMatchObject({ status: HttpStatus.PAYMENT_REQUIRED });
+      await expect(service.debitForGeneration("user-1")).rejects.toBeInstanceOf(
+        InsufficientCreditsException,
+      );
+      await expect(service.debitForGeneration("user-1")).rejects.toMatchObject({
+        status: HttpStatus.PAYMENT_REQUIRED,
+      });
     });
   });
 
