@@ -26,6 +26,11 @@ async function runGeneration() {
       error.value = result.error ?? "Не удалось сгенерировать образ. Попробуйте ещё раз.";
     }
   } catch (e) {
+    // Баланс исчерпан — ведём на пополнение (с возвратом к генерации после оплаты).
+    if (e instanceof InsufficientCreditsError) {
+      await navigateTo("/balance?reason=out-of-credits");
+      return;
+    }
     error.value = "Не удалось сгенерировать образ. Попробуйте ещё раз.";
     console.error(e);
   } finally {
