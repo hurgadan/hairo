@@ -18,6 +18,12 @@ export interface TelegramUserData {
   locale?: Locale;
 }
 
+export interface UpsertTelegramUserResult {
+  user: User;
+  /** `true` — аккаунт заведён этим вызовом (первый вход), `false` — уже существовал. */
+  created: boolean;
+}
+
 @Injectable()
 export class UsersService {
   constructor(private readonly repo: UsersRepository) {}
@@ -43,10 +49,16 @@ export class UsersService {
     });
   }
 
-  public async upsertTelegramUser(data: TelegramUserData): Promise<User> {
+  /**
+   * Заводит или обновляет Telegram-аккаунт. `created` отличает первый вход от
+   * повторного — по нему начисляется trial (иначе бонус капал бы каждый вход).
+   */
+  public async upsertTelegramUser(
+    data: TelegramUserData,
+  ): Promise<UpsertTelegramUserResult> {
     const existing = await this.repo.findByTelegramId(data.telegramId);
 
-    return this.repo.save({
+    const user = await this.repo.save({
       ...(existing ?? {}),
       telegramId: data.telegramId,
       telegramUsername: data.telegramUsername ?? null,
@@ -54,6 +66,8 @@ export class UsersService {
       lastName: data.lastName ?? null,
       locale: existing?.locale ?? data.locale ?? Locale.Ru,
     });
+
+    return { user, created: !existing };
   }
 
   public touchActivity(id: string): Promise<void> {

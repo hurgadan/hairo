@@ -1,10 +1,12 @@
 import { Server } from "node:http";
 
 import { INestApplication } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
 import { CreditTransactionType } from "../_contracts/billing/enums/transaction-type.enum";
+import { buildTelegramInitData } from "../_common/utils/tests/build-telegram-init-data";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
@@ -17,6 +19,7 @@ describe("Billing (e2e)", () => {
   let app: INestApplication;
   let httpServer: Server;
   let moduleFixture: TestingModule;
+  let botToken: string;
 
   async function registerUser(email: string): Promise<string> {
     const res = await request(httpServer)
@@ -37,6 +40,8 @@ describe("Billing (e2e)", () => {
     }).compile();
 
     ({ app, httpServer } = await createTestingAppAndHttpServer(moduleFixture));
+    botToken =
+      moduleFixture.get(ConfigService).get<string>("telegramBotToken") ?? "";
   });
 
   afterAll(async () => {
@@ -56,6 +61,38 @@ describe("Billing (e2e)", () => {
       .expect(200);
 
     expect(res.body.balance).toBe(SIGNUP_BONUS_CREDITS);
+  });
+
+  it("grants the signup bonus on the first telegram login only", async () => {
+    const initData = buildTelegramInitData(botToken, {
+      id: 777042,
+      username: "tg-newbie",
+      first_name: "Tg",
+    });
+
+    const first = await request(httpServer)
+      .post("/auth/telegram")
+      .send({ initData })
+      .expect(201);
+
+    const afterFirst = await request(httpServer)
+      .get("/billing/balance")
+      .set("authorization", `Bearer ${first.body.accessToken as string}`)
+      .expect(200);
+
+    expect(afterFirst.body.balance).toBe(SIGNUP_BONUS_CREDITS);
+
+    const second = await request(httpServer)
+      .post("/auth/telegram")
+      .send({ initData })
+      .expect(201);
+
+    const afterSecond = await request(httpServer)
+      .get("/billing/balance")
+      .set("authorization", `Bearer ${second.body.accessToken as string}`)
+      .expect(200);
+
+    expect(afterSecond.body.balance).toBe(SIGNUP_BONUS_CREDITS);
   });
 
   it("does not grant the signup bonus to a guest session", async () => {
