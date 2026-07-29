@@ -58,15 +58,23 @@ describe("Billing (e2e)", () => {
     expect(res.body.balance).toBe(SIGNUP_BONUS_CREDITS);
   });
 
-  it("grants the signup bonus to a guest session", async () => {
+  it("does not grant the signup bonus to a guest session", async () => {
     const guest = await request(httpServer).post("/auth/guest").expect(201);
+    const guestToken = guest.body.accessToken as string;
 
-    const res = await request(httpServer)
+    const balance = await request(httpServer)
       .get("/billing/balance")
-      .set("authorization", `Bearer ${guest.body.accessToken as string}`)
+      .set("authorization", `Bearer ${guestToken}`)
       .expect(200);
 
-    expect(res.body.balance).toBe(SIGNUP_BONUS_CREDITS);
+    expect(balance.body.balance).toBe(0);
+
+    const transactions = await request(httpServer)
+      .get("/billing/transactions")
+      .set("authorization", `Bearer ${guestToken}`)
+      .expect(200);
+
+    expect(transactions.body).toHaveLength(0);
   });
 
   it("records the signup bonus in the transaction history", async () => {

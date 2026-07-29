@@ -49,9 +49,13 @@ export class AuthService {
     return this.buildResult(user);
   }
 
+  /**
+   * Гостевая сессия — identity без кредитов: trial начисляется только при
+   * регистрации (`PRODUCT.md` §4.2). Иначе бесплатный тир абьюзится в один
+   * запрос — новая гостевая сессия давала бы новую бесплатную генерацию.
+   */
   public async loginAsGuest(): Promise<AuthResult> {
     const user = await this.users.createGuest();
-    await this.billing.grantSignupBonus(user.id);
     return this.buildResult(user);
   }
 
