@@ -85,12 +85,18 @@ export class AuthService {
       throw new UnauthorizedException("Invalid Telegram initData");
     }
 
-    const user = await this.users.upsertTelegramUser({
+    const { user, created } = await this.users.upsertTelegramUser({
       telegramId: String(tgUser.id),
       telegramUsername: tgUser.username ?? null,
       firstName: tgUser.first_name ?? null,
       lastName: tgUser.last_name ?? null,
     });
+
+    // Вход через initData — сразу полноценный аккаунт (PRODUCT.md §4.3),
+    // поэтому trial начисляется здесь же, но только при заведении аккаунта.
+    if (created) {
+      await this.billing.grantSignupBonus(user.id);
+    }
 
     return this.buildResult(user);
   }

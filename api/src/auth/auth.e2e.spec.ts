@@ -1,4 +1,3 @@
-import * as crypto from "node:crypto";
 import { Server } from "node:http";
 
 import { INestApplication } from "@nestjs/common";
@@ -6,6 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 
+import { buildTelegramInitData } from "../_common/utils/tests/build-telegram-init-data";
 import { clearTables } from "../_common/utils/tests/clear-tables";
 import { createTestingAppAndHttpServer } from "../_common/utils/tests/create-testing-app-and-http-server";
 import { getTestingModuleImports } from "../_common/utils/tests/get-testing-module-imports";
@@ -13,27 +13,11 @@ import { UsersModule } from "../users/users.module";
 import { AuthModule } from "./auth.module";
 
 function buildInitData(botToken: string): string {
-  const params = new URLSearchParams();
-  params.set(
-    "user",
-    JSON.stringify({ id: 555001, username: "tester", first_name: "Vi" }),
-  );
-  params.set("auth_date", Math.floor(Date.now() / 1000).toString());
-
-  const dataCheckString = [...params.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
-  const secret = crypto
-    .createHmac("sha256", "WebAppData")
-    .update(botToken)
-    .digest();
-  params.set(
-    "hash",
-    crypto.createHmac("sha256", secret).update(dataCheckString).digest("hex"),
-  );
-
-  return params.toString();
+  return buildTelegramInitData(botToken, {
+    id: 555001,
+    username: "tester",
+    first_name: "Vi",
+  });
 }
 
 describe("Auth (e2e)", () => {
