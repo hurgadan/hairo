@@ -13,6 +13,24 @@ export interface StorageConfig {
   publicUrl: string | undefined;
 }
 
+export interface MailSmtpConfig {
+  host: string;
+  port: number;
+  /** true — TLS сразу (порт 465); false — открытое соединение с апгрейдом через STARTTLS. */
+  secure: boolean;
+  /** Пусты для локального dev-сервера (Mailpit/MailHog не требуют аутентификации). */
+  user: string | undefined;
+  password: string | undefined;
+}
+
+export interface MailConfig {
+  /** Какой транспорт поднимет фабрика — значения см. в `mail/enums`. */
+  provider: string;
+  /** Адрес в поле From, напр. `Hairo <noreply@hairo.app>`. */
+  from: string;
+  smtp: MailSmtpConfig;
+}
+
 export interface AppConfig {
   appName: string;
   port: number;
@@ -27,4 +45,5 @@ export interface AppConfig {
   googleAiApiKey: string;
   databaseConnectionOptions: DataSourceOptions;
   storage: StorageConfig;
+  mail: MailConfig;
 }

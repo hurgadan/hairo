@@ -27,13 +27,16 @@ data/       — стартовый каталог причёсок (seed)
 cd api
 npm i
 cp .env.dist .env       # настроить при необходимости
-npm run db:up           # dev Postgres (Docker)
+npm run db:up           # dev-инфраструктура (Docker): Postgres, MinIO, Mailpit
 npm run migration:run   # миграции
 npm run seed            # засидить каталог (30 образов)
 npm run start:dev       # http://localhost:3001  (Swagger: /docs)
 ```
 
+Локальные сервисы: MinIO-консоль — http://localhost:9001, почта (Mailpit) — http://localhost:8025.
+
 Тесты:
 ```bash
 npm run docker:test     # e2e в изолированном Postgres (tmpfs)
+npm run mail:test -- you@example.com   # проверить отправку письма текущим транспортом
 ```
