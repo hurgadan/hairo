@@ -43,4 +43,6 @@ services:
       IMAGE_MODEL: gemini-2.5-flash-image
       LLM_MODEL: gemini-2.5-flash
       GOOGLE_AI_API_KEY: test
+      # e2e не поднимают SMTP — письма уходят в лог
+      MAIL_PROVIDER: log
     command: npm run test:e2e

@@ -4,7 +4,7 @@ dotenv.config({ quiet: true });
 
 import * as process from "node:process";
 import { DataSourceOptions } from "typeorm";
-import { AppConfig, StorageConfig } from "../types";
+import { AppConfig, MailConfig, StorageConfig } from "../types";
 
 const databaseConnectionOptions: DataSourceOptions = {
   type: "postgres",
@@ -27,6 +27,20 @@ const storage: StorageConfig = {
   publicUrl: getEnvString("STORAGE_PUBLIC_URL", false) || undefined,
 };
 
+// Все mail-переменные необязательные: без них поднимается log-транспорт,
+// который печатает письмо в лог вместо отправки (dev/test без SMTP).
+const mail: MailConfig = {
+  provider: getEnvString("MAIL_PROVIDER", false) || "log",
+  from: getEnvString("MAIL_FROM", false) || "Hairo <noreply@hairo.local>",
+  smtp: {
+    host: getEnvString("MAIL_SMTP_HOST", false) || "localhost",
+    port: getEnvNumber("MAIL_SMTP_PORT", false) ?? 1025,
+    secure: getEnvBoolean("MAIL_SMTP_SECURE", false) ?? false,
+    user: getEnvString("MAIL_SMTP_USER", false) || undefined,
+    password: getEnvString("MAIL_SMTP_PASSWORD", false) || undefined,
+  },
+};
+
 export default (): AppConfig => ({
   appName: getEnvString("APP_NAME"),
   port: getEnvNumber("PORT", false) ?? 3001,
@@ -41,6 +55,7 @@ export default (): AppConfig => ({
   googleAiApiKey: getEnvString("GOOGLE_AI_API_KEY"),
   databaseConnectionOptions,
   storage,
+  mail,
 });
 
 function getEnvString(envName: string, strict?: true): string;
