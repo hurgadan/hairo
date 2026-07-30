@@ -2,18 +2,27 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import type { AppConfig } from "../_common/types";
 import { BillingModule } from "../billing/billing.module";
+import { MailModule } from "../mail/mail.module";
 import { UsersModule } from "../users/users.module";
 import { AuthController } from "./controllers/auth.controller";
+import { EmailOtpCode } from "./dao/email-otp-code.entity";
+import { OtpRepository } from "./repositories/otp.repository";
 import { AuthService } from "./services/auth.service";
+import { OtpService } from "./services/otp.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([EmailOtpCode]),
     UsersModule,
     BillingModule,
+    // MailModule глобальный, но зависимость объявляем явно: иначе тестовый
+    // модуль, собранный без корневого AppModule, не увидит MailService.
+    MailModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,6 +36,6 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, OtpService, OtpRepository, JwtStrategy],
 })
 export class AuthModule {}
