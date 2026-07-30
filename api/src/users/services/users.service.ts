@@ -6,7 +6,8 @@ import { UsersRepository } from "../repositories/users.repository";
 
 export interface CreateEmailUserData {
   email: string;
-  passwordHash: string;
+  /** Пуст для passwordless-регистрации по коду — пароля у такой учётки нет. */
+  passwordHash?: string | null;
   locale?: Locale;
 }
 
@@ -44,9 +45,35 @@ export class UsersService {
   public createEmailUser(data: CreateEmailUserData): Promise<User> {
     return this.repo.save({
       email: data.email,
-      passwordHash: data.passwordHash,
+      passwordHash: data.passwordHash ?? null,
       locale: data.locale ?? Locale.Ru,
     });
+  }
+
+  /**
+   * Присваивает гостевой учётке email — регистрация не заводит новую строку,
+   * а дозаполняет текущую, поэтому фото и примерки гостя остаются при нём
+   * (`PRODUCT.md` §4.3).
+   */
+  public attachEmail(
+    user: User,
+    email: string,
+    locale?: Locale,
+  ): Promise<User> {
+    return this.repo.save({
+      ...user,
+      email,
+      locale: locale ?? user.locale,
+    });
+  }
+
+  /** Гость — учётка без email и без Telegram, заведённая `POST /auth/guest`. */
+  public isGuest(user: User): boolean {
+    return !user.email && !user.telegramId;
+  }
+
+  public mergeGuestInto(guestId: string, targetUserId: string): Promise<void> {
+    return this.repo.mergeGuestInto(guestId, targetUserId);
   }
 
   /**
