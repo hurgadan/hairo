@@ -2,17 +2,26 @@
 const looks = ["Итал. боб", "Лоб", "Волны"];
 
 const { balance, fetchBalance } = useBilling();
+const { user, isRegistered, ensureUser } = useAuth();
+
 onMounted(() => {
   fetchBalance().catch(() => {
     // Индикатор просто не покажет число, если баланс не загрузился.
   });
+  void ensureUser();
 });
 </script>
 
 <template>
   <div class="flex flex-1 flex-col px-6 pb-8">
     <div class="mt-4 flex items-center justify-between">
-      <h1 class="font-display text-3xl text-text">Мои образы</h1>
+      <div>
+        <h1 class="font-display text-3xl text-text">Мои образы</h1>
+        <p class="text-xs text-text-muted">
+          <template v-if="isRegistered">{{ user?.email }}</template>
+          <template v-else>Гостевая сессия — только в этом браузере</template>
+        </p>
+      </div>
       <NuxtLink
         to="/balance"
         class="flex items-center gap-1 rounded-full bg-text px-3 py-1.5 text-sm font-bold text-bg"

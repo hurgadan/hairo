@@ -3,8 +3,10 @@ withDefaults(
   defineProps<{
     variant?: "primary" | "dark" | "secondary" | "pill";
     block?: boolean;
+    /** `submit` — чтобы в форме срабатывал Enter, а не только клик. */
+    type?: "button" | "submit";
   }>(),
-  { variant: "primary", block: true },
+  { variant: "primary", block: true, type: "button" },
 );
 
 const variants: Record<string, string> = {
@@ -19,7 +21,7 @@ const variants: Record<string, string> = {
 
 <template>
   <button
-    type="button"
+    :type="type"
     class="inline-flex items-center justify-center gap-2 px-5 font-bold transition active:scale-[0.99]"
     :class="[variants[variant], block ? 'w-full' : '']"
   >

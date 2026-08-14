@@ -69,6 +69,34 @@ const filtered = computed(() =>
 function toggle(id: string) {
   wizard.value.selected = wizard.value.selected === id ? null : id;
 }
+
+const { ensureUser, isRegistered } = useAuth();
+const authOpen = ref(false);
+const checkingAuth = ref(false);
+
+/**
+ * Гейт монетизации (PRODUCT.md §4.3): генерация стоит живых денег, поэтому
+ * гостя просим зарегистрироваться ровно здесь — выбор образа уже сделан и
+ * переживёт модалку, дальше сразу результат.
+ */
+async function onGenerate() {
+  if (!wizard.value.selected || checkingAuth.value) return;
+
+  checkingAuth.value = true;
+  await ensureUser();
+  checkingAuth.value = false;
+
+  if (isRegistered.value) {
+    await navigateTo("/result");
+    return;
+  }
+  authOpen.value = true;
+}
+
+async function onRegistered() {
+  authOpen.value = false;
+  await navigateTo("/result");
+}
 </script>
 
 <template>
@@ -117,11 +145,19 @@ function toggle(id: string) {
       </div>
       <AppButton
         class="flex-1"
-        :class="{ 'pointer-events-none opacity-50': !wizard.selected }"
-        @click="navigateTo('/result')"
+        :class="{
+          'pointer-events-none opacity-50': !wizard.selected || checkingAuth,
+        }"
+        @click="onGenerate"
       >
         ✦ Сгенерировать
       </AppButton>
     </div>
   </div>
+
+  <AuthModal
+    v-if="authOpen"
+    @close="authOpen = false"
+    @success="onRegistered"
+  />
 </template>
