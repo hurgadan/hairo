@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 
 import type { AppConfig } from "../../_common/types";
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { BillingService } from "../../billing/services/billing.service";
 import { User } from "../../users/dao/user.entity";
 import { UsersService } from "../../users/services/users.service";
@@ -21,6 +22,13 @@ const BCRYPT_ROUNDS = 10;
 export interface AuthResult {
   accessToken: string;
   user: User;
+}
+
+export interface OtpLoginParams {
+  email: string;
+  locale?: Locale;
+  /** Владелец гостевого токена, если запрос пришёл с ним, — кандидат на линковку. */
+  currentUserId?: string;
 }
 
 @Injectable()
@@ -56,6 +64,41 @@ export class AuthService {
    */
   public async loginAsGuest(): Promise<AuthResult> {
     const user = await this.users.createGuest();
+    return this.buildResult(user);
+  }
+
+  /**
+   * Passwordless-вход: код уже проверен, осталось решить, чей это аккаунт.
+   * Четыре случая (`PRODUCT.md` §4.3, §4.6):
+   *
+   * 1. гость + свободный email → присваиваем гостевую учётку, начисляем trial;
+   * 2. гость + занятый email → это вход в существующий аккаунт, наработки
+   *    гостя переносим туда же, гостя удаляем (бонус не начисляем — аккаунт
+   *    не новый);
+   * 3. без гостя + свободный email → заводим учётку, начисляем trial;
+   * 4. без гостя + занятый email → обычный вход.
+   */
+  public async loginWithOtp(param: OtpLoginParams): Promise<AuthResult> {
+    const email = param.email.trim().toLowerCase();
+    const existing = await this.users.findByEmail(email);
+    const current = param.currentUserId
+      ? await this.users.findById(param.currentUserId)
+      : null;
+    const guest = current && this.users.isGuest(current) ? current : null;
+
+    if (existing) {
+      if (guest && guest.id !== existing.id) {
+        await this.users.mergeGuestInto(guest.id, existing.id);
+      }
+      return this.buildResult(existing);
+    }
+
+    const user = guest
+      ? await this.users.attachEmail(guest, email, param.locale)
+      : await this.users.createEmailUser({ email, locale: param.locale });
+
+    await this.billing.grantSignupBonus(user.id);
+
     return this.buildResult(user);
   }
 
