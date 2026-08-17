@@ -1,5 +1,6 @@
 import type {
   AuthResponse,
+  Locale,
   OtpRequestResult,
   User,
 } from "@hurgadan/hairo-contracts";
@@ -104,13 +105,17 @@ export function useAuth() {
   /**
    * Шаг 1: выслать код на email. Ответ одинаков для известного и неизвестного
    * адреса, так что «зарегистрирован ли этот email» отсюда не узнать.
-   * Локаль письма не передаём — до Фазы 5 (i18n) бэкенд по умолчанию шлёт RU.
+   * `locale` — язык письма и заводимой учётки: письмо уходит на том языке,
+   * на котором человек сейчас смотрит интерфейс.
    */
-  async function requestOtp(email: string): Promise<OtpRequestResult> {
+  async function requestOtp(
+    email: string,
+    locale: Locale,
+  ): Promise<OtpRequestResult> {
     try {
       return await $fetch<OtpRequestResult>(
         `${config.public.apiBase}/auth/otp/request`,
-        { method: "POST", body: { email } },
+        { method: "POST", body: { email, locale } },
       );
     } catch (e) {
       if (isFetchError(e, 429)) {
@@ -124,7 +129,11 @@ export function useAuth() {
    * Шаг 2: проверить код и получить постоянный токен. Гостевой токен передаём,
    * если он есть: тогда учётка дозаполняется, а не создаётся заново.
    */
-  async function verifyOtp(email: string, code: string): Promise<User> {
+  async function verifyOtp(
+    email: string,
+    code: string,
+    locale: Locale,
+  ): Promise<User> {
     const guestToken = loadToken();
 
     let res: AuthResponse;
@@ -133,7 +142,7 @@ export function useAuth() {
         `${config.public.apiBase}/auth/otp/verify`,
         {
           method: "POST",
-          body: { email, code },
+          body: { email, code, locale },
           headers: guestToken ? { authorization: `Bearer ${guestToken}` } : {},
         },
       );
@@ -147,6 +156,27 @@ export function useAuth() {
     return res.user;
   }
 
+  /**
+   * Запоминает язык в учётке. Cookie хватает браузеру, но письма и уведомления
+   * бота уходят без открытой вкладки — им нужен язык, записанный у пользователя.
+   * Гостю без токена запоминать негде, и это не ошибка.
+   */
+  async function saveLocale(locale: Locale): Promise<void> {
+    const existing = loadToken();
+    if (!existing) return;
+
+    try {
+      user.value = await $fetch<User>(`${config.public.apiBase}/users/me`, {
+        method: "PATCH",
+        body: { locale },
+        headers: { authorization: `Bearer ${existing}` },
+      });
+    } catch (e) {
+      // Язык интерфейса уже переключён и лежит в cookie — падать здесь незачем.
+      console.error(e);
+    }
+  }
+
   return {
     token,
     user,
@@ -156,5 +186,6 @@ export function useAuth() {
     ensureUser,
     requestOtp,
     verifyOtp,
+    saveLocale,
   };
 }

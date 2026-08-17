@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n();
+const localePath = useLocalePath();
 const photo = useCurrentPhoto();
 const { start, poll } = useFaceAnalysis();
 
@@ -7,7 +9,7 @@ const running = ref(false);
 
 async function runAnalysis() {
   if (!photo.value) {
-    await navigateTo("/upload");
+    await navigateTo(localePath("/upload"));
     return;
   }
 
@@ -18,13 +20,13 @@ async function runAnalysis() {
     const result = await poll(started.id);
 
     if (result.status !== "completed") {
-      error.value = "Не удалось определить черты лица. Попробуйте ещё раз.";
+      error.value = t("analyze.failed");
       return;
     }
 
-    await navigateTo("/detect");
+    await navigateTo(localePath("/detect"));
   } catch (e) {
-    error.value = "Не удалось определить черты лица. Попробуйте ещё раз.";
+    error.value = t("analyze.failed");
     console.error(e);
   } finally {
     running.value = false;
@@ -44,29 +46,32 @@ onMounted(runAnalysis);
           class="h-14 w-14 animate-spin rounded-full border-4 border-border-strong border-t-accent"
         />
         <div>
-          <h1 class="font-display text-3xl text-text">Анализируем фото</h1>
+          <h1 class="font-display text-3xl text-text">
+            {{ $t("analyze.title") }}
+          </h1>
           <p class="mt-2 text-sm text-text-muted">
-            Определяем форму лица, длину и текстуру волос — это займёт пару
-            секунд.
+            {{ $t("analyze.subtitle") }}
           </p>
         </div>
       </template>
 
       <template v-else>
         <div>
-          <h1 class="font-display text-3xl text-text">Что-то пошло не так</h1>
+          <h1 class="font-display text-3xl text-text">
+            {{ $t("common.errorTitle") }}
+          </h1>
           <p class="mt-2 text-sm text-text-muted">{{ error }}</p>
         </div>
         <div class="flex w-full flex-col gap-3">
           <AppButton :class="{ 'pointer-events-none opacity-50': running }" @click="runAnalysis">
-            Попробовать снова
+            {{ $t("common.retry") }}
           </AppButton>
           <button
             type="button"
             class="text-sm font-semibold text-text-muted"
-            @click="navigateTo('/wizard')"
+            @click="navigateTo(localePath('/wizard'))"
           >
-            Продолжить без анализа
+            {{ $t("analyze.skip") }}
           </button>
         </div>
       </template>

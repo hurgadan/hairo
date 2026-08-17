@@ -4,9 +4,27 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  modules: ["@nuxtjs/i18n"],
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
+  },
+  // Языки плацдарма (PROJECT.md): русскоязычная диаспора → коренной DACH.
+  // Русский — по умолчанию и без префикса, остальные живут на /de и /es:
+  // органика в DACH требует отдельного адреса на язык.
+  i18n: {
+    locales: [
+      { code: "ru", language: "ru-RU", name: "Русский", file: "ru.json" },
+      { code: "de", language: "de-DE", name: "Deutsch", file: "de.json" },
+      { code: "es", language: "es-ES", name: "Español", file: "es.json" },
+    ],
+    defaultLocale: "ru",
+    strategy: "prefix_except_default",
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "hairo-locale",
+      redirectOn: "root",
+    },
   },
   runtimeConfig: {
     public: {

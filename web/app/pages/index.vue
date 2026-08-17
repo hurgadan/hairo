@@ -1,17 +1,20 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
   <div class="flex flex-1 flex-col px-6 pb-8">
     <section class="pt-6">
       <p
         class="text-xs font-semibold tracking-widest text-accent-dark uppercase"
       >
-        AI-примерка причёсок
+        {{ $t("landing.kicker") }}
       </p>
       <h1 class="mt-3 font-display text-4xl leading-tight text-text">
-        Примерьте новую причёску по своему фото
+        {{ $t("landing.title") }}
       </h1>
       <p class="mt-3 text-text-muted">
-        Загрузите селфи — подберём образы, которые вам идут, и покажем результат
-        на вашем лице.
+        {{ $t("landing.subtitle") }}
       </p>
     </section>
 
@@ -22,27 +25,33 @@
         <span
           class="rounded-full bg-surface/90 px-3 py-1 text-xs font-bold text-text-muted"
         >
-          до
+          {{ $t("landing.before") }}
         </span>
       </div>
       <div
         class="flex aspect-[3/4] items-end justify-center bg-accent-soft pb-4"
       >
         <span class="rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
-          после
+          {{ $t("landing.after") }}
         </span>
       </div>
     </section>
 
     <div class="mt-auto pt-8">
-      <AppButton @click="navigateTo('/upload')">✦ Примерить причёску</AppButton>
+      <AppButton @click="navigateTo(localePath('/upload'))">
+        {{ $t("landing.cta") }}
+      </AppButton>
       <p class="mt-3 text-center text-sm font-semibold text-text-muted">
-        Первая примерка — бесплатно · 30 образов
+        {{ $t("landing.freeFirst") }}
       </p>
       <p class="mt-4 text-center text-xs text-text-muted">
-        <NuxtLink to="/privacy" class="underline">Обработка данных</NuxtLink>
+        <NuxtLink :to="localePath('/privacy')" class="underline">
+          {{ $t("landing.privacy") }}
+        </NuxtLink>
         ·
-        <NuxtLink to="/impressum" class="underline">Impressum</NuxtLink>
+        <NuxtLink :to="localePath('/impressum')" class="underline">
+          {{ $t("landing.impressum") }}
+        </NuxtLink>
       </p>
     </div>
   </div>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n();
+const localePath = useLocalePath();
 const photo = useCurrentPhoto();
 const wizard = useWizard();
 const { start, poll, current } = useGeneration();
@@ -8,11 +10,11 @@ const running = ref(false);
 
 async function runGeneration() {
   if (!photo.value) {
-    await navigateTo("/upload");
+    await navigateTo(localePath("/upload"));
     return;
   }
   if (!wizard.value.selected) {
-    await navigateTo("/catalog");
+    await navigateTo(localePath("/catalog"));
     return;
   }
 
@@ -23,15 +25,15 @@ async function runGeneration() {
     const result = await poll(started.id);
 
     if (result.status !== "completed") {
-      error.value = result.error ?? "Не удалось сгенерировать образ. Попробуйте ещё раз.";
+      error.value = result.error ?? t("result.failed");
     }
   } catch (e) {
     // Баланс исчерпан — ведём на пополнение (с возвратом к генерации после оплаты).
     if (e instanceof InsufficientCreditsError) {
-      await navigateTo("/balance?reason=out-of-credits");
+      await navigateTo(localePath("/balance") + "?reason=out-of-credits");
       return;
     }
-    error.value = "Не удалось сгенерировать образ. Попробуйте ещё раз.";
+    error.value = t("result.failed");
     console.error(e);
   } finally {
     running.value = false;
@@ -49,9 +51,11 @@ onMounted(runGeneration);
           class="h-14 w-14 animate-spin rounded-full border-4 border-border-strong border-t-accent"
         />
         <div>
-          <h1 class="font-display text-3xl text-text">Создаём ваш образ</h1>
+          <h1 class="font-display text-3xl text-text">
+            {{ $t("result.title") }}
+          </h1>
           <p class="mt-2 text-sm text-text-muted">
-            Улучшаем фото и примеряем причёску — это может занять минуту.
+            {{ $t("result.subtitle") }}
           </p>
         </div>
       </div>
@@ -60,7 +64,9 @@ onMounted(runGeneration);
     <template v-else-if="error">
       <div class="flex flex-1 flex-col items-center justify-center gap-6 text-center">
         <div>
-          <h1 class="font-display text-3xl text-text">Что-то пошло не так</h1>
+          <h1 class="font-display text-3xl text-text">
+            {{ $t("common.errorTitle") }}
+          </h1>
           <p class="mt-2 text-sm text-text-muted">{{ error }}</p>
         </div>
         <div class="flex w-full flex-col gap-3">
@@ -68,14 +74,14 @@ onMounted(runGeneration);
             :class="{ 'pointer-events-none opacity-50': running }"
             @click="runGeneration"
           >
-            Попробовать снова
+            {{ $t("common.retry") }}
           </AppButton>
           <button
             type="button"
             class="text-sm font-semibold text-text-muted"
-            @click="navigateTo('/catalog')"
+            @click="navigateTo(localePath('/catalog'))"
           >
-            Выбрать другой образ
+            {{ $t("result.pickAnother") }}
           </button>
         </div>
       </div>
@@ -96,9 +102,11 @@ onMounted(runGeneration);
           </div>
           <div>
             <p class="text-xs font-bold tracking-wide text-accent uppercase">
-              ✓ Готово
+              {{ $t("result.ready") }}
             </p>
-            <p class="font-display text-3xl text-white">Вот ваш новый образ</p>
+            <p class="font-display text-3xl text-white">
+              {{ $t("result.readyTitle") }}
+            </p>
           </div>
         </div>
 
@@ -109,7 +117,7 @@ onMounted(runGeneration);
             download
             target="_blank"
           >
-            <AppButton class="w-full">↓ Скачать</AppButton>
+            <AppButton class="w-full">{{ $t("result.download") }}</AppButton>
           </a>
           <AppButton variant="secondary" :block="false" class="w-[52px] px-0">
             ↗
@@ -117,15 +125,16 @@ onMounted(runGeneration);
         </div>
 
         <p class="mt-4 text-center text-sm text-text-muted">
-          Поделитесь и получите <span class="text-accent">+2 примерки</span>
+          {{ $t("result.share") }}
+          <span class="text-accent">{{ $t("result.shareBonus") }}</span>
         </p>
 
         <div class="mt-6 flex gap-3">
-          <AppButton variant="secondary" @click="navigateTo('/catalog')">
-            Ещё образ
+          <AppButton variant="secondary" @click="navigateTo(localePath('/catalog'))">
+            {{ $t("result.oneMore") }}
           </AppButton>
-          <AppButton variant="dark" @click="navigateTo('/balance')">
-            Пополнить
+          <AppButton variant="dark" @click="navigateTo(localePath('/balance'))">
+            {{ $t("result.topUp") }}
           </AppButton>
         </div>
       </div>

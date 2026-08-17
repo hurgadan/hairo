@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n();
+const localePath = useLocalePath();
 const { upload } = usePhotos();
 
 const file = ref<File | null>(null);
@@ -25,9 +27,9 @@ async function onContinue() {
   error.value = null;
   try {
     await upload(file.value, consent.value);
-    await navigateTo("/analyze");
+    await navigateTo(localePath("/analyze"));
   } catch (e) {
-    error.value = "Не удалось загрузить фото. Попробуйте ещё раз.";
+    error.value = t("upload.failed");
     console.error(e);
   } finally {
     uploading.value = false;
@@ -43,9 +45,9 @@ onBeforeUnmount(() => {
   <div class="flex flex-1 flex-col px-6 pb-8">
     <StepProgress :total="3" :current="1" class="mt-4" />
 
-    <h1 class="mt-6 font-display text-3xl text-text">Загрузите селфи</h1>
+    <h1 class="mt-6 font-display text-3xl text-text">{{ $t("upload.title") }}</h1>
     <p class="mt-2 text-sm text-text-muted">
-      Лучше всего анфас при дневном свете.
+      {{ $t("upload.subtitle") }}
     </p>
 
     <label
@@ -54,7 +56,7 @@ onBeforeUnmount(() => {
       <img
         v-if="previewUrl"
         :src="previewUrl"
-        alt="Ваше селфи"
+        :alt="$t('upload.selfieAlt')"
         class="h-full w-full object-cover"
       />
       <template v-else>
@@ -63,7 +65,7 @@ onBeforeUnmount(() => {
         >
           📷
         </span>
-        <span class="font-semibold text-text">Выберите фото</span>
+        <span class="font-semibold text-text">{{ $t("upload.pick") }}</span>
       </template>
       <input
         type="file"
@@ -80,11 +82,11 @@ onBeforeUnmount(() => {
         class="h-5 w-5 accent-[var(--accent)]"
       />
       <span class="text-sm text-text-muted">
-        Согласен на
-        <NuxtLink to="/privacy" class="underline" @click.stop
-          >обработку фото</NuxtLink
-        >
-        для подбора.
+        {{ $t("upload.consentBefore") }}
+        <NuxtLink :to="localePath('/privacy')" class="underline" @click.stop>{{
+          $t("upload.consentLink")
+        }}</NuxtLink>
+        {{ $t("upload.consentAfter") }}
       </span>
     </label>
 
@@ -94,7 +96,7 @@ onBeforeUnmount(() => {
         :class="{ 'pointer-events-none opacity-50': !canSubmit }"
         @click="onContinue"
       >
-        {{ uploading ? "Загрузка…" : "Продолжить" }}
+        {{ uploading ? $t("upload.uploading") : $t("common.continue") }}
       </AppButton>
     </div>
   </div>

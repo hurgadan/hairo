@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import type { Locale } from "@hurgadan/hairo-contracts";
+
 /**
  * Регистрация на пике мотивации (PRODUCT.md §4.3): email + код из письма,
  * без пароля. Открывается с кнопки «Сгенерировать» — гость уже залил селфи,
  * прошёл визард и выбрал образ, регистрация читается как последнее действие.
  */
 const emit = defineEmits<{ close: []; success: [] }>();
+
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
 
 const CODE_LENGTH = 6;
 /** Пауза между письмами на один адрес (бэкенд: `OTP_RESEND_AFTER_SECONDS`).
@@ -58,7 +63,7 @@ function focusStepInput(): void {
 async function sendCode(): Promise<void> {
   const value = email.value.trim().toLowerCase();
   if (!EMAIL_RE.test(value)) {
-    error.value = "Проверьте адрес — кажется, в нём опечатка.";
+    error.value = t("auth.emailInvalid");
     return;
   }
   email.value = value;
@@ -67,7 +72,7 @@ async function sendCode(): Promise<void> {
   error.value = null;
   notice.value = null;
   try {
-    const res = await requestOtp(value);
+    const res = await requestOtp(value, locale.value as Locale);
     expiresInMinutes.value = res.expiresInMinutes;
     startCountdown(res.resendAfterSeconds);
     code.value = "";
@@ -78,16 +83,16 @@ async function sendCode(): Promise<void> {
       startCountdown(e.retryAfterSeconds);
       if (e.retryAfterSeconds > ADDRESS_RESEND_SECONDS) {
         // Часовой лимит по IP: письма не было, ждать на шаге кода бессмысленно.
-        error.value = `Слишком много запросов. Попробуйте через ${resendLabel.value}.`;
+        error.value = t("auth.tooManyRequests", { time: resendLabel.value });
         return;
       }
       // Код на этот адрес уже уходил меньше минуты назад — он ещё жив.
-      notice.value = "Код уже отправлен — проверьте почту.";
+      notice.value = t("auth.alreadySent");
       step.value = "code";
       focusStepInput();
       return;
     }
-    error.value = "Не удалось отправить код. Попробуйте ещё раз.";
+    error.value = t("auth.sendFailed");
     console.error(e);
   } finally {
     pending.value = false;
@@ -101,16 +106,16 @@ async function submitCode(): Promise<void> {
   error.value = null;
   notice.value = null;
   try {
-    await verifyOtp(email.value, code.value);
+    await verifyOtp(email.value, code.value, locale.value as Locale);
     emit("success");
   } catch (e) {
     if (e instanceof InvalidOtpError) {
-      error.value = "Код неверный или устарел. Введите ещё раз или запросите новый.";
+      error.value = t("auth.codeInvalid");
       code.value = "";
       focusStepInput();
       return;
     }
-    error.value = "Не удалось проверить код. Попробуйте ещё раз.";
+    error.value = t("auth.verifyFailed");
     console.error(e);
   } finally {
     pending.value = false;
@@ -162,23 +167,25 @@ onBeforeUnmount(() => {
       class="sheet relative w-full max-w-md rounded-t-[28px] border-t border-border bg-surface px-6 pt-6 pb-8 shadow-[0_-8px_24px_-12px_rgba(60,40,30,0.35)]"
       role="dialog"
       aria-modal="true"
-      :aria-label="step === 'email' ? 'Регистрация' : 'Ввод кода из письма'"
+      :aria-label="
+        step === 'email' ? $t('auth.dialogEmail') : $t('auth.dialogCode')
+      "
     >
       <button
         type="button"
         class="absolute top-5 right-5 text-xl leading-none text-text-muted"
-        aria-label="Закрыть"
+        :aria-label="$t('common.close')"
         @click="emit('close')"
       >
         ✕
       </button>
 
       <template v-if="step === 'email'">
-        <h2 class="font-display text-3xl text-text">Ещё один шаг</h2>
+        <h2 class="font-display text-3xl text-text">
+          {{ $t("auth.emailTitle") }}
+        </h2>
         <p class="mt-2 text-sm text-text-muted">
-          Пришлём код на почту — пароль придумывать не нужно. Селфи, ответы и
-          выбранный образ останутся на месте, а первая примерка будет
-          бесплатной.
+          {{ $t("auth.emailSubtitle") }}
         </p>
 
         <form class="mt-5 flex flex-col gap-3" @submit.prevent="sendCode">
@@ -189,30 +196,36 @@ onBeforeUnmount(() => {
             inputmode="email"
             autocomplete="email"
             placeholder="you@example.com"
-            aria-label="Email"
+            :aria-label="$t('auth.emailLabel')"
           />
           <AppButton
             type="submit"
             :class="{ 'pointer-events-none opacity-50': pending }"
           >
-            {{ pending ? "Отправляем…" : "Получить код" }}
+            {{ pending ? $t("auth.sending") : $t("auth.sendCode") }}
           </AppButton>
         </form>
 
         <p class="mt-3 text-center text-xs text-text-muted">
-          Нажимая «Получить код», вы принимаете
-          <NuxtLink to="/privacy" class="underline">
-            политику конфиденциальности
+          {{ $t("auth.consentBefore") }}
+          <NuxtLink :to="localePath('/privacy')" class="underline">
+            {{ $t("auth.consentLink") }}
           </NuxtLink>
         </p>
       </template>
 
       <template v-else>
-        <h2 class="font-display text-3xl text-text">Проверьте почту</h2>
+        <h2 class="font-display text-3xl text-text">
+          {{ $t("auth.codeTitle") }}
+        </h2>
         <p class="mt-2 text-sm text-text-muted">
-          Отправили код из {{ CODE_LENGTH }} цифр на
-          <span class="font-semibold text-text">{{ email }}</span
-          >. Он действует {{ expiresInMinutes }} минут.
+          {{
+            $t("auth.codeSubtitle", {
+              length: CODE_LENGTH,
+              email,
+              minutes: expiresInMinutes,
+            })
+          }}
         </p>
 
         <form class="mt-5 flex flex-col gap-3" @submit.prevent="submitCode">
@@ -224,7 +237,7 @@ onBeforeUnmount(() => {
             autocomplete="one-time-code"
             :maxlength="CODE_LENGTH"
             placeholder="000000"
-            aria-label="Код из письма"
+            :aria-label="$t('auth.codeLabel')"
             class="text-center text-2xl font-bold tracking-[0.4em]"
           />
           <AppButton
@@ -234,7 +247,7 @@ onBeforeUnmount(() => {
                 pending || code.length !== CODE_LENGTH,
             }"
           >
-            {{ pending ? "Проверяем…" : "Подтвердить" }}
+            {{ pending ? $t("auth.checking") : $t("auth.submitCode") }}
           </AppButton>
         </form>
 
@@ -244,10 +257,10 @@ onBeforeUnmount(() => {
             class="font-semibold text-text-muted"
             @click="backToEmail"
           >
-            Другой адрес
+            {{ $t("auth.otherEmail") }}
           </button>
           <span v-if="resendIn > 0" class="text-text-muted">
-            Новый код через {{ resendLabel }}
+            {{ $t("auth.resendIn", { time: resendLabel }) }}
           </span>
           <button
             v-else
@@ -256,7 +269,7 @@ onBeforeUnmount(() => {
             :class="{ 'pointer-events-none opacity-50': pending }"
             @click="sendCode"
           >
-            Отправить ещё раз
+            {{ $t("auth.resend") }}
           </button>
         </div>
       </template>

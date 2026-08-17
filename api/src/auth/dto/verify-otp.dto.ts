@@ -1,7 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNumberString, Length } from "class-validator";
+import {
+  IsEmail,
+  IsEnum,
+  IsNumberString,
+  IsOptional,
+  Length,
+} from "class-validator";
 
 import { BodyVerifyOtp } from "../../_contracts/auth/body-verify-otp.type";
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { OTP_CODE_LENGTH } from "../constants";
 
 export class VerifyOtpDto implements BodyVerifyOtp {
@@ -13,4 +20,9 @@ export class VerifyOtpDto implements BodyVerifyOtp {
   @IsNumberString()
   @Length(OTP_CODE_LENGTH, OTP_CODE_LENGTH)
   public code: string;
+
+  @ApiProperty({ required: false, enum: Locale })
+  @IsOptional()
+  @IsEnum(Locale)
+  public locale?: Locale;
 }

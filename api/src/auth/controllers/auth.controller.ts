@@ -97,6 +97,7 @@ export class AuthController {
       await this.auth.loginWithOtp({
         email: dto.email,
         currentUserId: current?.userId,
+        locale: dto.locale,
       }),
     );
   }

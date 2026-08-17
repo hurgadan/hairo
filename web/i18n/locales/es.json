@@ -1,0 +1,210 @@
+{
+  "common": {
+    "continue": "Continuar",
+    "next": "Siguiente",
+    "retry": "Intentar de nuevo",
+    "close": "Cerrar",
+    "errorTitle": "Algo salió mal"
+  },
+  "header": {
+    "language": "Idioma",
+    "themeToLight": "Tema claro",
+    "themeToDark": "Tema oscuro"
+  },
+  "landing": {
+    "kicker": "Peinados con IA",
+    "title": "Prueba un peinado nuevo en tu propia foto",
+    "subtitle": "Sube un selfie: encontramos los peinados que te favorecen y te los mostramos en tu cara.",
+    "before": "antes",
+    "after": "después",
+    "cta": "✦ Probar un peinado",
+    "freeFirst": "Primera prueba gratis · 30 peinados",
+    "privacy": "Privacidad",
+    "impressum": "Aviso legal"
+  },
+  "upload": {
+    "title": "Sube un selfie",
+    "subtitle": "Mejor de frente y con luz natural.",
+    "pick": "Elegir foto",
+    "selfieAlt": "Tu selfie",
+    "consentBefore": "Acepto el",
+    "consentLink": "tratamiento de mi foto",
+    "consentAfter": "para la selección de peinados.",
+    "uploading": "Subiendo…",
+    "failed": "No se pudo subir la foto. Inténtalo de nuevo."
+  },
+  "analyze": {
+    "title": "Analizando la foto",
+    "subtitle": "Estamos determinando la forma del rostro, el largo y la textura del cabello: tarda unos segundos.",
+    "failed": "No se pudieron determinar tus rasgos. Inténtalo de nuevo.",
+    "skip": "Continuar sin análisis"
+  },
+  "detect": {
+    "done": "✓ Foto analizada",
+    "title": "Esto es lo que detectamos",
+    "faceShape": "Forma del rostro",
+    "currentLength": "Largo actual",
+    "texture": "Textura",
+    "density": "Densidad",
+    "edit": "Cambiar",
+    "cta": "Correcto, seguir"
+  },
+  "wizard": {
+    "step": "Paso {current} de {total}",
+    "skip": "Solo muéstrame opciones →",
+    "finish": "Ver peinados",
+    "gender": {
+      "title": "¿Qué peinados te mostramos?",
+      "feminine": "Femeninos",
+      "masculine": "Masculinos",
+      "all": "Mostrar todos"
+    },
+    "length": {
+      "title": "¿Qué largo quieres?",
+      "shorter": "Más corto que ahora",
+      "same": "Más o menos como ahora",
+      "longer": "Más largo",
+      "any": "Me da igual"
+    },
+    "boldness": {
+      "title": "¿Cómo de atrevido quieres el cambio?",
+      "light": "Un retoque suave",
+      "lightHint": "Renovarte sin dejar de ser tú",
+      "noticeable": "Un cambio visible",
+      "noticeableHint": "Nuevo look, pero reconocible",
+      "radical": "Radical",
+      "radicalHint": "Otra persona por completo"
+    },
+    "occasion": {
+      "title": "Ocasión y estilo",
+      "hint": "Puedes elegir varias."
+    },
+    "maintenance": {
+      "title": "¿Cuánto peinado estás dispuesta o dispuesto a hacer?",
+      "low": "El mínimo esfuerzo",
+      "medium": "Medio",
+      "high": "Me gusta peinarme"
+    },
+    "color": {
+      "title": "¿Color de pelo?",
+      "keep": "Mantener el mío",
+      "change": "Cambiar de color",
+      "changeHint": "El tono se elige en el siguiente paso"
+    }
+  },
+  "catalog": {
+    "title": "Esto te queda bien",
+    "count": "{n} peinado según tus respuestas | {n} peinados según tus respuestas",
+    "all": "Todos",
+    "loading": "Cargando…",
+    "loadFailed": "No se pudo cargar el catálogo: {message}",
+    "pickPrompt": "Elige un peinado",
+    "picked": "Elegido",
+    "freeFirst": "1.ª prueba gratis",
+    "generate": "✦ Generar",
+    "preview": "vista previa"
+  },
+  "result": {
+    "title": "Creando tu look",
+    "subtitle": "Estamos mejorando la foto y probando el peinado: puede tardar un minuto.",
+    "failed": "No se pudo generar el look. Inténtalo de nuevo.",
+    "pickAnother": "Elegir otro peinado",
+    "ready": "✓ Listo",
+    "readyTitle": "Aquí tienes tu nuevo look",
+    "download": "↓ Descargar",
+    "share": "Comparte y consigue",
+    "shareBonus": "+2 pruebas",
+    "oneMore": "Otro peinado",
+    "topUp": "Recargar"
+  },
+  "balance": {
+    "tryOns": "{n} prueba | {n} pruebas",
+    "outOfCreditsTitle": "Se acabaron las pruebas",
+    "outOfCreditsText": "Recarga tu saldo para probar el siguiente peinado: los créditos no caducan.",
+    "title": "Sigue probando",
+    "textRegistered": "La primera fue gratis. Los créditos no caducan.",
+    "textGuest": "La primera prueba es gratis: se añade al registrarte. Los créditos no caducan.",
+    "balance": "Saldo: {tryOns}",
+    "account": "Cuenta: {email}",
+    "guestSession": "Sesión de invitado: la cuenta se crea con la primera prueba",
+    "perLook": "{price} por peinado",
+    "best": "MEJOR PRECIO",
+    "history": "Historial",
+    "payLater": "Pago muy pronto",
+    "payLaterHint": "El pago online con Stripe llegará en la próxima actualización.",
+    "tx": {
+      "signup_bonus": "Bono por registro",
+      "purchase": "Recarga",
+      "generation_debit": "Prueba",
+      "generation_refund": "Reembolso de prueba"
+    }
+  },
+  "gallery": {
+    "title": "Mis looks",
+    "guestSession": "Sesión de invitado: solo en este navegador",
+    "referralTitle": "Invita a un amigo",
+    "referralText": "Los dos recibís 2 pruebas gratis.",
+    "referralCta": "Compartir enlace",
+    "newLook": "Nuevo look"
+  },
+  "auth": {
+    "emailTitle": "Un paso más",
+    "emailSubtitle": "Te enviamos un código por correo: no hace falta contraseña. Tu selfie, tus respuestas y el peinado elegido se mantienen, y la primera prueba es gratis.",
+    "emailLabel": "Correo electrónico",
+    "emailInvalid": "Revisa la dirección: parece que hay una errata.",
+    "sending": "Enviando…",
+    "sendCode": "Enviar código",
+    "consentBefore": "Al pulsar «Enviar código» aceptas la",
+    "consentLink": "política de privacidad",
+    "codeTitle": "Revisa tu correo",
+    "codeSubtitle": "Enviamos un código de {length} dígitos a {email}. Es válido {minutes} minutos.",
+    "codeLabel": "Código del correo",
+    "checking": "Comprobando…",
+    "submitCode": "Confirmar",
+    "otherEmail": "Otra dirección",
+    "resendIn": "Nuevo código en {time}",
+    "resend": "Enviar de nuevo",
+    "alreadySent": "El código ya está enviado: revisa tu correo.",
+    "tooManyRequests": "Demasiadas solicitudes. Inténtalo en {time}.",
+    "sendFailed": "No se pudo enviar el código. Inténtalo de nuevo.",
+    "codeInvalid": "El código es incorrecto o ha caducado. Vuelve a escribirlo o pide uno nuevo.",
+    "verifyFailed": "No se pudo comprobar el código. Inténtalo de nuevo.",
+    "dialogEmail": "Registro",
+    "dialogCode": "Introducir el código del correo"
+  },
+  "taxonomy": {
+    "faceShape": {
+      "oval": "Ovalado",
+      "round": "Redondo",
+      "square": "Cuadrado",
+      "heart": "Corazón",
+      "oblong": "Alargado",
+      "diamond": "Diamante"
+    },
+    "length": {
+      "buzz": "Muy corto",
+      "short": "Corto",
+      "chin": "Hasta la barbilla",
+      "shoulder": "Hasta los hombros",
+      "mid": "Media melena",
+      "long": "Largo"
+    },
+    "texture": {
+      "straight": "Liso",
+      "wavy": "Ondulado",
+      "curly": "Rizado",
+      "coily": "Afro"
+    },
+    "density": {
+      "fine": "Fino",
+      "medium": "Medio",
+      "thick": "Denso"
+    },
+    "occasion": {
+      "everyday": "Diario",
+      "work": "Trabajo",
+      "event": "Evento",
+      "bold": "Atrevido"
+    }
+  }
+}

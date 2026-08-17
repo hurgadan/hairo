@@ -1,0 +1,210 @@
+{
+  "common": {
+    "continue": "Weiter",
+    "next": "Weiter",
+    "retry": "Erneut versuchen",
+    "close": "Schließen",
+    "errorTitle": "Da ist etwas schiefgelaufen"
+  },
+  "header": {
+    "language": "Sprache",
+    "themeToLight": "Helles Design",
+    "themeToDark": "Dunkles Design"
+  },
+  "landing": {
+    "kicker": "KI-Frisuren zum Anprobieren",
+    "title": "Probieren Sie eine neue Frisur auf Ihrem eigenen Foto",
+    "subtitle": "Laden Sie ein Selfie hoch — wir finden Frisuren, die zu Ihnen passen, und zeigen sie an Ihrem Gesicht.",
+    "before": "vorher",
+    "after": "nachher",
+    "cta": "✦ Frisur anprobieren",
+    "freeFirst": "Erste Anprobe gratis · 30 Frisuren",
+    "privacy": "Datenschutz",
+    "impressum": "Impressum"
+  },
+  "upload": {
+    "title": "Selfie hochladen",
+    "subtitle": "Am besten frontal und bei Tageslicht.",
+    "pick": "Foto auswählen",
+    "selfieAlt": "Ihr Selfie",
+    "consentBefore": "Ich willige in die",
+    "consentLink": "Verarbeitung meines Fotos",
+    "consentAfter": "zur Frisurenauswahl ein.",
+    "uploading": "Wird hochgeladen…",
+    "failed": "Das Foto konnte nicht hochgeladen werden. Bitte erneut versuchen."
+  },
+  "analyze": {
+    "title": "Foto wird analysiert",
+    "subtitle": "Wir bestimmen Gesichtsform, Haarlänge und -textur — das dauert nur ein paar Sekunden.",
+    "failed": "Die Gesichtsmerkmale konnten nicht bestimmt werden. Bitte erneut versuchen.",
+    "skip": "Ohne Analyse fortfahren"
+  },
+  "detect": {
+    "done": "✓ Foto analysiert",
+    "title": "Das haben wir erkannt",
+    "faceShape": "Gesichtsform",
+    "currentLength": "Aktuelle Länge",
+    "texture": "Textur",
+    "density": "Haardichte",
+    "edit": "Ändern",
+    "cta": "Passt, weiter"
+  },
+  "wizard": {
+    "step": "Schritt {current} von {total}",
+    "skip": "Zeigen Sie mir einfach Vorschläge →",
+    "finish": "Frisuren anzeigen",
+    "gender": {
+      "title": "Welche Frisuren sollen wir zeigen?",
+      "feminine": "Feminine",
+      "masculine": "Maskuline",
+      "all": "Alle anzeigen"
+    },
+    "length": {
+      "title": "Gewünschte Länge?",
+      "shorter": "Kürzer als jetzt",
+      "same": "Etwa wie jetzt",
+      "longer": "Länger",
+      "any": "Egal"
+    },
+    "boldness": {
+      "title": "Wie mutig darf die Veränderung sein?",
+      "light": "Leichte Auffrischung",
+      "lightHint": "Frischer aussehen, aber ganz Sie selbst",
+      "noticeable": "Deutliche Veränderung",
+      "noticeableHint": "Neuer Look, aber wiedererkennbar",
+      "radical": "Radikal",
+      "radicalHint": "Ein völlig anderer Mensch"
+    },
+    "occasion": {
+      "title": "Anlass und Vibe",
+      "hint": "Mehrfachauswahl möglich."
+    },
+    "maintenance": {
+      "title": "Wie viel Styling darf es sein?",
+      "low": "Möglichst wenig Aufwand",
+      "medium": "Mittel",
+      "high": "Ich style gerne"
+    },
+    "color": {
+      "title": "Haarfarbe?",
+      "keep": "Meine Farbe behalten",
+      "change": "Farbe ändern",
+      "changeHint": "Den Ton wählen Sie im nächsten Schritt"
+    }
+  },
+  "catalog": {
+    "title": "Das passt zu Ihnen",
+    "count": "{n} Frisur zu Ihren Antworten | {n} Frisuren zu Ihren Antworten",
+    "all": "Alle",
+    "loading": "Wird geladen…",
+    "loadFailed": "Der Katalog konnte nicht geladen werden: {message}",
+    "pickPrompt": "Frisur auswählen",
+    "picked": "Ausgewählt",
+    "freeFirst": "1. Anprobe gratis",
+    "generate": "✦ Generieren",
+    "preview": "Vorschau"
+  },
+  "result": {
+    "title": "Ihr Look entsteht",
+    "subtitle": "Wir verbessern das Foto und setzen die Frisur ein — das kann eine Minute dauern.",
+    "failed": "Der Look konnte nicht generiert werden. Bitte erneut versuchen.",
+    "pickAnother": "Andere Frisur wählen",
+    "ready": "✓ Fertig",
+    "readyTitle": "Hier ist Ihr neuer Look",
+    "download": "↓ Herunterladen",
+    "share": "Teilen Sie und erhalten Sie",
+    "shareBonus": "+2 Anproben",
+    "oneMore": "Noch eine Frisur",
+    "topUp": "Aufladen"
+  },
+  "balance": {
+    "tryOns": "{n} Anprobe | {n} Anproben",
+    "outOfCreditsTitle": "Keine Anproben mehr",
+    "outOfCreditsText": "Laden Sie Ihr Guthaben auf, um die nächste Frisur anzuprobieren — Credits verfallen nicht.",
+    "title": "Weiter anprobieren",
+    "textRegistered": "Die erste war gratis. Credits verfallen nicht.",
+    "textGuest": "Die erste Anprobe ist gratis — Sie erhalten sie bei der Registrierung. Credits verfallen nicht.",
+    "balance": "Guthaben: {tryOns}",
+    "account": "Konto: {email}",
+    "guestSession": "Gastsitzung — das Konto entsteht bei der ersten Anprobe",
+    "perLook": "{price} pro Frisur",
+    "best": "BELIEBT",
+    "history": "Verlauf",
+    "payLater": "Bezahlung folgt",
+    "payLaterHint": "Die Online-Zahlung über Stripe kommt mit dem nächsten Update.",
+    "tx": {
+      "signup_bonus": "Bonus für die Registrierung",
+      "purchase": "Aufladung",
+      "generation_debit": "Anprobe",
+      "generation_refund": "Erstattung für Anprobe"
+    }
+  },
+  "gallery": {
+    "title": "Meine Looks",
+    "guestSession": "Gastsitzung — nur in diesem Browser",
+    "referralTitle": "Freund einladen",
+    "referralText": "Sie beide erhalten je 2 kostenlose Anproben.",
+    "referralCta": "Link teilen",
+    "newLook": "Neuer Look"
+  },
+  "auth": {
+    "emailTitle": "Nur noch ein Schritt",
+    "emailSubtitle": "Wir schicken Ihnen einen Code per E-Mail — ein Passwort brauchen Sie nicht. Selfie, Antworten und die gewählte Frisur bleiben erhalten, und die erste Anprobe ist gratis.",
+    "emailLabel": "E-Mail",
+    "emailInvalid": "Bitte prüfen Sie die Adresse — da scheint ein Tippfehler zu sein.",
+    "sending": "Wird gesendet…",
+    "sendCode": "Code anfordern",
+    "consentBefore": "Mit «Code anfordern» akzeptieren Sie die",
+    "consentLink": "Datenschutzerklärung",
+    "codeTitle": "Prüfen Sie Ihr Postfach",
+    "codeSubtitle": "Wir haben einen {length}-stelligen Code an {email} geschickt. Er gilt {minutes} Minuten.",
+    "codeLabel": "Code aus der E-Mail",
+    "checking": "Wird geprüft…",
+    "submitCode": "Bestätigen",
+    "otherEmail": "Andere Adresse",
+    "resendIn": "Neuer Code in {time}",
+    "resend": "Erneut senden",
+    "alreadySent": "Der Code ist schon unterwegs — prüfen Sie Ihr Postfach.",
+    "tooManyRequests": "Zu viele Anfragen. Bitte in {time} erneut versuchen.",
+    "sendFailed": "Der Code konnte nicht gesendet werden. Bitte erneut versuchen.",
+    "codeInvalid": "Der Code ist falsch oder abgelaufen. Bitte erneut eingeben oder einen neuen anfordern.",
+    "verifyFailed": "Der Code konnte nicht geprüft werden. Bitte erneut versuchen.",
+    "dialogEmail": "Registrierung",
+    "dialogCode": "Code aus der E-Mail eingeben"
+  },
+  "taxonomy": {
+    "faceShape": {
+      "oval": "Oval",
+      "round": "Rund",
+      "square": "Eckig",
+      "heart": "Herzförmig",
+      "oblong": "Länglich",
+      "diamond": "Rautenförmig"
+    },
+    "length": {
+      "buzz": "Sehr kurz",
+      "short": "Kurz",
+      "chin": "Kinnlang",
+      "shoulder": "Schulterlang",
+      "mid": "Mittellang",
+      "long": "Lang"
+    },
+    "texture": {
+      "straight": "Glatt",
+      "wavy": "Wellig",
+      "curly": "Lockig",
+      "coily": "Afro"
+    },
+    "density": {
+      "fine": "Fein",
+      "medium": "Mittel",
+      "thick": "Dicht"
+    },
+    "occasion": {
+      "everyday": "Alltag",
+      "work": "Business",
+      "event": "Anlass",
+      "bold": "Mutig"
+    }
+  }
+}

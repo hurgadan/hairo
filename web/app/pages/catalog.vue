@@ -11,6 +11,8 @@ const LENGTH_ORDER = [
   HairLength.Long,
 ];
 
+const { t } = useI18n();
+const localePath = useLocalePath();
 const config = useRuntimeConfig();
 const wizard = useWizard();
 const analysis = useCurrentAnalysis();
@@ -53,15 +55,21 @@ const { data, pending, error } = await useFetch<Hairstyle[]>(
   { query },
 );
 
-const activeGroup = ref("Все");
+// Группы приходят из БД плоской русской строкой; enum и переводы — срез 2
+// Фазы 5, поэтому здесь переводится только пункт «все».
+const ALL_GROUPS = "*";
+const activeGroup = ref(ALL_GROUPS);
 
 const groups = computed(() => [
-  "Все",
+  ALL_GROUPS,
   ...Array.from(new Set((data.value ?? []).map((h) => h.groupName))),
 ]);
 
+const groupLabel = (group: string): string =>
+  group === ALL_GROUPS ? t("catalog.all") : group;
+
 const filtered = computed(() =>
-  activeGroup.value === "Все"
+  activeGroup.value === ALL_GROUPS
     ? (data.value ?? [])
     : (data.value ?? []).filter((h) => h.groupName === activeGroup.value),
 );
@@ -87,7 +95,7 @@ async function onGenerate() {
   checkingAuth.value = false;
 
   if (isRegistered.value) {
-    await navigateTo("/result");
+    await navigateTo(localePath("/result"));
     return;
   }
   authOpen.value = true;
@@ -95,15 +103,17 @@ async function onGenerate() {
 
 async function onRegistered() {
   authOpen.value = false;
-  await navigateTo("/result");
+  await navigateTo(localePath("/result"));
 }
 </script>
 
 <template>
   <div class="flex flex-1 flex-col px-6 pb-28">
-    <h1 class="mt-4 font-display text-3xl text-text">Вам подойдёт</h1>
+    <h1 class="mt-4 font-display text-3xl text-text">
+      {{ $t("catalog.title") }}
+    </h1>
     <p class="text-sm text-text-muted">
-      {{ filtered.length }} образов по вашим ответам
+      {{ $t("catalog.count", { n: filtered.length }, filtered.length) }}
     </p>
 
     <div class="mt-4 flex gap-2 overflow-x-auto pb-1">
@@ -113,13 +123,13 @@ async function onRegistered() {
         :active="activeGroup === g"
         @click="activeGroup = g"
       >
-        {{ g }}
+        {{ groupLabel(g) }}
       </AppChip>
     </div>
 
-    <p v-if="pending" class="mt-6 text-text-muted">Загрузка…</p>
+    <p v-if="pending" class="mt-6 text-text-muted">{{ $t("catalog.loading") }}</p>
     <p v-else-if="error" class="mt-6 text-red-600">
-      Не удалось загрузить каталог: {{ error.message }}
+      {{ $t("catalog.loadFailed", { message: error.message }) }}
     </p>
     <div v-else class="mt-4 grid grid-cols-2 gap-3">
       <HairstyleCard
@@ -139,9 +149,9 @@ async function onRegistered() {
     >
       <div>
         <div class="font-bold text-text">
-          {{ wizard.selected ? "Выбрано" : "Выберите образ" }}
+          {{ wizard.selected ? $t("catalog.picked") : $t("catalog.pickPrompt") }}
         </div>
-        <div class="text-xs text-text-muted">1-я генерация бесплатно</div>
+        <div class="text-xs text-text-muted">{{ $t("catalog.freeFirst") }}</div>
       </div>
       <AppButton
         class="flex-1"
@@ -150,7 +160,7 @@ async function onRegistered() {
         }"
         @click="onGenerate"
       >
-        ✦ Сгенерировать
+        {{ $t("catalog.generate") }}
       </AppButton>
     </div>
   </div>
