@@ -12,15 +12,6 @@ export class InsufficientCreditsError extends Error {
   }
 }
 
-/** Совпадает ли HTTP-статус ошибки `$fetch` (ofetch кладёт его в `statusCode`). */
-function isFetchError(e: unknown, status: number): boolean {
-  return (
-    typeof e === "object" &&
-    e !== null &&
-    (e as { statusCode?: number }).statusCode === status
-  );
-}
-
 /** Результат последней генерации — доступен экрану "Результат". */
 export function useCurrentGeneration() {
   return useState<Generation | null>("current-generation", () => null);

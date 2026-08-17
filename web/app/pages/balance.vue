@@ -17,9 +17,11 @@ const route = useRoute();
 const outOfCredits = computed(() => route.query.reason === "out-of-credits");
 
 const { balance, fetchBalance, fetchTransactions } = useBilling();
+const { user, isRegistered, ensureUser } = useAuth();
 const transactions = ref<CreditTransaction[]>([]);
 
 onMounted(async () => {
+  void ensureUser();
   await Promise.all([
     fetchBalance(),
     fetchTransactions().then((t) => {
@@ -67,12 +69,22 @@ const formatDate = (iso: string): string =>
         <template v-if="outOfCredits">
           Пополните баланс, чтобы примерить следующий образ — кредиты не сгорают.
         </template>
-        <template v-else>
+        <template v-else-if="isRegistered">
           Первая была бесплатной. Кредиты не сгорают.
+        </template>
+        <template v-else>
+          Первая примерка бесплатна — она начисляется при регистрации. Кредиты
+          не сгорают.
         </template>
       </p>
       <p v-if="balance !== null" class="mt-3 text-sm font-bold text-text">
         Баланс: {{ balance }} {{ primerkaWord(balance) }}
+      </p>
+      <p class="mt-1 text-xs text-text-muted">
+        <template v-if="isRegistered">Аккаунт: {{ user?.email }}</template>
+        <template v-else>
+          Гостевая сессия — аккаунт заводится при первой примерке
+        </template>
       </p>
     </div>
 
