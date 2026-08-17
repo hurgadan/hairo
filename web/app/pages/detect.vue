@@ -1,37 +1,16 @@
 <script setup lang="ts">
 import type { FaceAnalysisResult } from "@hurgadan/hairo-contracts";
 
-// Ярлыки для значений таксономии (CATALOG.md §1-2) — код на английском, отображение на русском.
-const FACE_SHAPE_LABELS: Record<string, string> = {
-  oval: "Овальное",
-  round: "Круглое",
-  square: "Квадратное",
-  heart: "Сердце",
-  oblong: "Вытянутое",
-  diamond: "Ромб",
-};
+// Значения таксономии (CATALOG.md §1-2) приходят кодами — подписи берём из
+// словарей по ключу `taxonomy.*`, чтобы они менялись вместе с языком.
+const { t, te } = useI18n();
+const localePath = useLocalePath();
 
-const LENGTH_LABELS: Record<string, string> = {
-  buzz: "Очень короткая",
-  short: "Короткая",
-  chin: "До подбородка",
-  shoulder: "До плеч",
-  mid: "Средняя",
-  long: "Длинная",
-};
-
-const TEXTURE_LABELS: Record<string, string> = {
-  straight: "Прямые",
-  wavy: "Волнистые",
-  curly: "Кудрявые",
-  coily: "Афро",
-};
-
-const DENSITY_LABELS: Record<string, string> = {
-  fine: "Тонкие",
-  medium: "Средняя",
-  thick: "Густые",
-};
+/** Код без перевода показываем как есть — лучше «oval», чем пустая строка. */
+function taxonomy(group: string, code: string): string {
+  const key = `taxonomy.${group}.${code}`;
+  return te(key) ? t(key) : code;
+}
 
 const analysis = useCurrentAnalysis();
 
@@ -41,22 +20,20 @@ const detected = computed(() => {
 
   return [
     {
-      label: "Форма лица",
-      value: FACE_SHAPE_LABELS[result.faceShape] ?? result.faceShape,
+      label: t("detect.faceShape"),
+      value: taxonomy("faceShape", result.faceShape),
     },
     {
-      label: "Текущая длина",
-      value: LENGTH_LABELS[result.length] ?? result.length,
+      label: t("detect.currentLength"),
+      value: taxonomy("length", result.length),
     },
     {
-      label: "Текстура",
-      value: result.texture
-        .map((t) => TEXTURE_LABELS[t] ?? t)
-        .join(", "),
+      label: t("detect.texture"),
+      value: result.texture.map((x) => taxonomy("texture", x)).join(", "),
     },
     {
-      label: "Густота",
-      value: DENSITY_LABELS[result.density] ?? result.density,
+      label: t("detect.density"),
+      value: taxonomy("density", result.density),
     },
   ];
 });
@@ -64,7 +41,7 @@ const detected = computed(() => {
 onMounted(() => {
   // Прямой заход без пройденного анализа — вернуть в начало флоу.
   if (!analysis.value || analysis.value.status !== "completed") {
-    navigateTo("/analyze");
+    navigateTo(localePath("/analyze"));
   }
 });
 </script>
@@ -74,10 +51,10 @@ onMounted(() => {
     <StepProgress :total="3" :current="2" class="mt-4" />
 
     <p class="mt-6 text-xs font-bold tracking-wide text-success uppercase">
-      ✓ Фото проанализировано
+      {{ $t("detect.done") }}
     </p>
     <h1 class="mt-2 font-display text-3xl text-text">
-      Мы определили ваши черты
+      {{ $t("detect.title") }}
     </h1>
 
     <div class="mt-6 flex flex-col gap-3">
@@ -90,12 +67,16 @@ onMounted(() => {
           <div class="text-xs text-text-muted">{{ row.label }}</div>
           <div class="font-bold text-text">{{ row.value }}</div>
         </div>
-        <span class="text-sm font-semibold text-accent-dark">Изменить</span>
+        <span class="text-sm font-semibold text-accent-dark">
+          {{ $t("detect.edit") }}
+        </span>
       </div>
     </div>
 
     <div class="mt-auto pt-8">
-      <AppButton @click="navigateTo('/wizard')">Всё верно, дальше</AppButton>
+      <AppButton @click="navigateTo(localePath('/wizard'))">
+        {{ $t("detect.cta") }}
+      </AppButton>
     </div>
   </div>
 </template>

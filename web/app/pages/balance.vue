@@ -4,12 +4,14 @@ import {
   type CreditTransaction,
 } from "@hurgadan/hairo-contracts";
 
+const { t, locale } = useI18n();
+
 // Пакеты зафиксированы в Фазе 4 (COGS + Stripe-комиссия) — см. PRODUCT.md §4.2.
 // `credits` идёт в будущий Stripe-checkout (Срез 3), сейчас витрина.
 const packs = [
-  { credits: 5, sub: "€1,00 за образ", price: "€4,99", best: false },
-  { credits: 20, sub: "€0,75 за образ", price: "€14,99", best: true },
-  { credits: 50, sub: "€0,60 за образ", price: "€29,99", best: false },
+  { credits: 5, perLook: "€1,00", price: "€4,99", best: false },
+  { credits: 20, perLook: "€0,75", price: "€14,99", best: true },
+  { credits: 50, perLook: "€0,60", price: "€29,99", best: false },
 ];
 const selected = ref(1);
 
@@ -32,23 +34,13 @@ onMounted(async () => {
   });
 });
 
-const primerkaWord = (n: number): string => {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return "примерка";
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return "примерки";
-  return "примерок";
-};
+/** Число примерок со словом в правильной форме — правила склонения в словарях. */
+const tryOns = (n: number): string => t("balance.tryOns", { n }, n);
 
-const TX_LABELS: Record<CreditTransactionType, string> = {
-  [CreditTransactionType.SignupBonus]: "Бонус за регистрацию",
-  [CreditTransactionType.Purchase]: "Пополнение",
-  [CreditTransactionType.GenerationDebit]: "Примерка",
-  [CreditTransactionType.GenerationRefund]: "Возврат за примерку",
-};
+const txLabel = (type: CreditTransactionType): string => t(`balance.tx.${type}`);
 
 const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString("ru-RU", {
+  new Date(iso).toLocaleDateString(locale.value, {
     day: "numeric",
     month: "short",
   });
@@ -63,27 +55,28 @@ const formatDate = (iso: string): string =>
         ✦
       </div>
       <h1 class="mt-4 font-display text-3xl text-text">
-        {{ outOfCredits ? "Примерки закончились" : "Продолжите примерки" }}
+        {{ outOfCredits ? $t("balance.outOfCreditsTitle") : $t("balance.title") }}
       </h1>
       <p class="mt-2 text-sm text-text-muted">
         <template v-if="outOfCredits">
-          Пополните баланс, чтобы примерить следующий образ — кредиты не сгорают.
+          {{ $t("balance.outOfCreditsText") }}
         </template>
         <template v-else-if="isRegistered">
-          Первая была бесплатной. Кредиты не сгорают.
+          {{ $t("balance.textRegistered") }}
         </template>
         <template v-else>
-          Первая примерка бесплатна — она начисляется при регистрации. Кредиты
-          не сгорают.
+          {{ $t("balance.textGuest") }}
         </template>
       </p>
       <p v-if="balance !== null" class="mt-3 text-sm font-bold text-text">
-        Баланс: {{ balance }} {{ primerkaWord(balance) }}
+        {{ $t("balance.balance", { tryOns: tryOns(balance) }) }}
       </p>
       <p class="mt-1 text-xs text-text-muted">
-        <template v-if="isRegistered">Аккаунт: {{ user?.email }}</template>
+        <template v-if="isRegistered">
+          {{ $t("balance.account", { email: user?.email }) }}
+        </template>
         <template v-else>
-          Гостевая сессия — аккаунт заводится при первой примерке
+          {{ $t("balance.guestSession") }}
         </template>
       </p>
     </div>
@@ -105,13 +98,13 @@ const formatDate = (iso: string): string =>
           v-if="p.best"
           class="absolute -top-2 left-4 rounded-full bg-accent px-2 py-0.5 text-[10px] font-extrabold tracking-wide text-white"
         >
-          ВЫГОДНО
+          {{ $t("balance.best") }}
         </span>
         <div class="flex-1">
-          <div class="font-bold text-text">
-            {{ p.credits }} {{ primerkaWord(p.credits) }}
+          <div class="font-bold text-text">{{ tryOns(p.credits) }}</div>
+          <div class="text-xs text-text-muted">
+            {{ $t("balance.perLook", { price: p.perLook }) }}
           </div>
-          <div class="text-xs text-text-muted">{{ p.sub }}</div>
         </div>
         <div class="font-extrabold text-text">{{ p.price }}</div>
       </button>
@@ -119,7 +112,7 @@ const formatDate = (iso: string): string =>
 
     <section v-if="transactions.length" class="mt-8">
       <h2 class="text-xs font-bold tracking-wide text-text-muted uppercase">
-        История
+        {{ $t("balance.history") }}
       </h2>
       <ul class="mt-3 flex flex-col divide-y divide-border-strong">
         <li
@@ -129,7 +122,7 @@ const formatDate = (iso: string): string =>
         >
           <div>
             <div class="text-sm font-semibold text-text">
-              {{ TX_LABELS[tx.type] }}
+              {{ txLabel(tx.type) }}
             </div>
             <div class="text-xs text-text-muted">
               {{ formatDate(tx.createdAt) }}
@@ -147,10 +140,10 @@ const formatDate = (iso: string): string =>
 
     <div class="mt-auto pt-8">
       <AppButton variant="dark" disabled class="opacity-50">
-        Оплата скоро
+        {{ $t("balance.payLater") }}
       </AppButton>
       <p class="mt-3 text-center text-xs text-text-muted">
-        Онлайн-оплата через Stripe появится в следующем обновлении.
+        {{ $t("balance.payLaterHint") }}
       </p>
     </div>
   </div>

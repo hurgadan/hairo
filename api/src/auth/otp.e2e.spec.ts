@@ -13,6 +13,7 @@ import { MailService } from "../mail/services/mail.service";
 import { MailModule } from "../mail/mail.module";
 import { PhotoAnalysis } from "../face-analysis/dao/photo-analysis.entity";
 import { Photo } from "../photos/dao/photo.entity";
+import { Locale } from "../_contracts/users/enums/locale.enum";
 import { PhotoKind, PhotoStatus } from "../_contracts/photos/enums";
 import { User } from "../users/dao/user.entity";
 import { UsersModule } from "../users/users.module";
@@ -147,6 +148,32 @@ describe("Auth OTP (e2e)", () => {
       .set("authorization", `Bearer ${token}`)
       .expect(200);
     expect(balance.body.balance).toBe(1);
+  });
+
+  it("keeps the language the signup was done in", async () => {
+    const code = await requestCode("deutsch@example.com");
+
+    const res = await request(httpServer)
+      .post("/auth/otp/verify")
+      .send({ email: "deutsch@example.com", code, locale: Locale.De })
+      .expect(200);
+
+    // Язык учётки правит письмами и ботом — они уходят без открытой вкладки.
+    expect(res.body.user.locale).toBe(Locale.De);
+  });
+
+  it("fills the guest account in the language of the signup", async () => {
+    const guest = await request(httpServer).post("/auth/guest").expect(201);
+    const code = await requestCode("guest-de@example.com");
+
+    const res = await request(httpServer)
+      .post("/auth/otp/verify")
+      .set("authorization", `Bearer ${guest.body.accessToken as string}`)
+      .send({ email: "guest-de@example.com", code, locale: Locale.De })
+      .expect(200);
+
+    expect(res.body.user.id).toBe(guest.body.user.id);
+    expect(res.body.user.locale).toBe(Locale.De);
   });
 
   it("rejects a wrong code and burns the attempt", async () => {

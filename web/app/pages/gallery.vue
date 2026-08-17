@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const localePath = useLocalePath();
+
+// Плейсхолдеры до реальной галереи (Фаза 6) — намеренно без перевода.
 const looks = ["Итал. боб", "Лоб", "Волны"];
 
 const { balance, fetchBalance } = useBilling();
@@ -16,14 +19,14 @@ onMounted(() => {
   <div class="flex flex-1 flex-col px-6 pb-8">
     <div class="mt-4 flex items-center justify-between">
       <div>
-        <h1 class="font-display text-3xl text-text">Мои образы</h1>
+        <h1 class="font-display text-3xl text-text">{{ $t("gallery.title") }}</h1>
         <p class="text-xs text-text-muted">
           <template v-if="isRegistered">{{ user?.email }}</template>
-          <template v-else>Гостевая сессия — только в этом браузере</template>
+          <template v-else>{{ $t("gallery.guestSession") }}</template>
         </p>
       </div>
       <NuxtLink
-        to="/balance"
+        :to="localePath('/balance')"
         class="flex items-center gap-1 rounded-full bg-text px-3 py-1.5 text-sm font-bold text-bg"
       >
         ✦ {{ balance ?? "…" }}
@@ -33,15 +36,15 @@ onMounted(() => {
     <div
       class="mt-4 rounded-2xl bg-gradient-to-br from-accent to-accent-dark p-4 text-white"
     >
-      <div class="font-bold">Приведите друга</div>
+      <div class="font-bold">{{ $t("gallery.referralTitle") }}</div>
       <p class="mt-1 max-w-[14rem] text-sm text-white/85">
-        Вы оба получите по 2 бесплатных примерки.
+        {{ $t("gallery.referralText") }}
       </p>
       <button
         type="button"
         class="mt-3 rounded-xl bg-surface px-4 py-2 text-sm font-bold text-accent-dark"
       >
-        Поделиться ссылкой
+        {{ $t("gallery.referralCta") }}
       </button>
     </div>
 
@@ -58,11 +61,11 @@ onMounted(() => {
         </span>
       </div>
       <NuxtLink
-        to="/upload"
+        :to="localePath('/upload')"
         class="flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border-strong text-text-muted"
       >
         <span class="text-2xl">＋</span>
-        <span class="text-xs font-semibold">Новый образ</span>
+        <span class="text-xs font-semibold">{{ $t("gallery.newLook") }}</span>
       </NuxtLink>
     </div>
   </div>

@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import type { Hairstyle } from "@hurgadan/hairo-contracts";
 
-defineProps<{ hairstyle: Hairstyle; selected?: boolean; match?: number }>();
+const props = defineProps<{
+  hairstyle: Hairstyle;
+  selected?: boolean;
+  match?: number;
+}>();
+
+const { locale } = useI18n();
+
+const title = computed(
+  () => pickLocalized(props.hairstyle.name, locale.value) ?? props.hairstyle.slug,
+);
 </script>
 
 <template>
@@ -12,7 +22,7 @@ defineProps<{ hairstyle: Hairstyle; selected?: boolean; match?: number }>();
     <div
       class="relative flex aspect-[3/4] items-center justify-center bg-surface-2 text-xs text-text-muted"
     >
-      превью
+      {{ $t("catalog.preview") }}
       <span
         v-if="match"
         class="absolute top-2 right-2 rounded-full bg-surface px-2 py-0.5 text-[11px] font-extrabold text-accent-dark"
@@ -27,9 +37,7 @@ defineProps<{ hairstyle: Hairstyle; selected?: boolean; match?: number }>();
       </span>
     </div>
     <div class="p-3">
-      <h3 class="font-display text-lg text-text">
-        {{ hairstyle.name.ru ?? hairstyle.slug }}
-      </h3>
+      <h3 class="font-display text-lg text-text">{{ title }}</h3>
       <p class="text-xs text-text-muted">{{ hairstyle.groupName }}</p>
     </div>
   </article>

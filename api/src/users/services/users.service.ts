@@ -19,6 +19,10 @@ export interface TelegramUserData {
   locale?: Locale;
 }
 
+export interface UpdateUserData {
+  locale?: Locale;
+}
+
 export interface UpsertTelegramUserResult {
   user: User;
   /** `true` — аккаунт заведён этим вызовом (первый вход), `false` — уже существовал. */
@@ -64,6 +68,21 @@ export class UsersService {
       ...user,
       email,
       locale: locale ?? user.locale,
+    });
+  }
+
+  /**
+   * Правка своего профиля. Пустой патч допустим и просто ничего не меняет —
+   * поля профиля необязательные, и отсутствие поля не должно быть ошибкой.
+   * `null` — пользователя с таким id уже нет.
+   */
+  public async update(id: string, data: UpdateUserData): Promise<User | null> {
+    const user = await this.repo.findById(id);
+    if (!user) return null;
+
+    return this.repo.save({
+      ...user,
+      locale: data.locale ?? user.locale,
     });
   }
 

@@ -1,17 +1,33 @@
 <script setup lang="ts">
 import { Occasion } from "@hurgadan/hairo-contracts";
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 const wizard = useWizard();
 const analysis = useCurrentAnalysis();
 const step = ref(1);
 const total = 6;
 
-const occasionOptions: { v: Occasion; t: string }[] = [
-  { v: Occasion.Everyday, t: "Повседнев" },
-  { v: Occasion.Work, t: "Деловой" },
-  { v: Occasion.Event, t: "Событие" },
-  { v: Occasion.Bold, t: "Смелый" },
-];
+const genderOptions = computed(() => [
+  { v: "feminine", t: t("wizard.gender.feminine") },
+  { v: "masculine", t: t("wizard.gender.masculine") },
+  { v: "all", t: t("wizard.gender.all") },
+]);
+
+const lengthOptions = computed(() => [
+  { v: "shorter", t: t("wizard.length.shorter") },
+  { v: "same", t: t("wizard.length.same") },
+  { v: "longer", t: t("wizard.length.longer") },
+  { v: "any", t: t("wizard.length.any") },
+]);
+
+const occasionOptions = computed<{ v: Occasion; t: string }[]>(() => [
+  { v: Occasion.Everyday, t: t("taxonomy.occasion.everyday") },
+  { v: Occasion.Work, t: t("taxonomy.occasion.work") },
+  { v: Occasion.Event, t: t("taxonomy.occasion.event") },
+  { v: Occasion.Bold, t: t("taxonomy.occasion.bold") },
+]);
 
 function toggleOccasion(o: Occasion) {
   const list = wizard.value.occasions;
@@ -22,12 +38,12 @@ function toggleOccasion(o: Occasion) {
 
 function next() {
   if (step.value < total) step.value += 1;
-  else navigateTo("/catalog");
+  else navigateTo(localePath("/catalog"));
 }
 
 function back() {
   if (step.value > 1) step.value -= 1;
-  else navigateTo("/detect");
+  else navigateTo(localePath("/detect"));
 }
 
 onMounted(() => {
@@ -48,21 +64,17 @@ onMounted(() => {
     <StepProgress :total="total" :current="step" class="mt-4" />
 
     <p class="mt-6 text-xs font-bold tracking-wide text-accent-dark uppercase">
-      Шаг {{ step }} из {{ total }}
+      {{ $t("wizard.step", { current: step, total }) }}
     </p>
 
     <!-- 1. Пол-подача -->
     <template v-if="step === 1">
       <h1 class="mt-2 font-display text-3xl text-text">
-        Какие образы показать?
+        {{ $t("wizard.gender.title") }}
       </h1>
       <div class="mt-6 flex flex-col gap-3">
         <OptionCard
-          v-for="opt in [
-            { v: 'feminine', t: 'Женские' },
-            { v: 'masculine', t: 'Мужские' },
-            { v: 'all', t: 'Показать все' },
-          ]"
+          v-for="opt in genderOptions"
           :key="opt.v"
           :title="opt.t"
           :active="wizard.gender === opt.v"
@@ -73,15 +85,12 @@ onMounted(() => {
 
     <!-- 2. Длина -->
     <template v-else-if="step === 2">
-      <h1 class="mt-2 font-display text-3xl text-text">Желаемая длина?</h1>
+      <h1 class="mt-2 font-display text-3xl text-text">
+        {{ $t("wizard.length.title") }}
+      </h1>
       <div class="mt-6 flex flex-col gap-3">
         <OptionCard
-          v-for="opt in [
-            { v: 'shorter', t: 'Короче, чем сейчас' },
-            { v: 'same', t: 'Примерно как сейчас' },
-            { v: 'longer', t: 'Длиннее' },
-            { v: 'any', t: 'Не важно' },
-          ]"
+          v-for="opt in lengthOptions"
           :key="opt.v"
           :title="opt.t"
           :active="wizard.length === opt.v"
@@ -93,24 +102,24 @@ onMounted(() => {
     <!-- 3. Смелость -->
     <template v-else-if="step === 3">
       <h1 class="mt-2 font-display text-3xl text-text">
-        Насколько смелую смену хотите?
+        {{ $t("wizard.boldness.title") }}
       </h1>
       <div class="mt-6 flex flex-col gap-3">
         <OptionCard
-          :title="'Лёгкое обновление'"
-          subtitle="Освежить, оставаясь собой"
+          :title="$t('wizard.boldness.light')"
+          :subtitle="$t('wizard.boldness.lightHint')"
           :active="wizard.boldness === 'light'"
           @click="wizard.boldness = 'light'"
         />
         <OptionCard
-          :title="'Заметная смена'"
-          subtitle="Новый образ, но узнаваемо"
+          :title="$t('wizard.boldness.noticeable')"
+          :subtitle="$t('wizard.boldness.noticeableHint')"
           :active="wizard.boldness === 'noticeable'"
           @click="wizard.boldness = 'noticeable'"
         />
         <OptionCard
-          :title="'Кардинально'"
-          subtitle="Полностью другой человек"
+          :title="$t('wizard.boldness.radical')"
+          :subtitle="$t('wizard.boldness.radicalHint')"
           :active="wizard.boldness === 'radical'"
           @click="wizard.boldness = 'radical'"
         />
@@ -119,8 +128,12 @@ onMounted(() => {
 
     <!-- 4. Повод / вайб (мультивыбор) -->
     <template v-else-if="step === 4">
-      <h1 class="mt-2 font-display text-3xl text-text">Повод и вайб</h1>
-      <p class="mt-2 text-sm text-text-muted">Можно выбрать несколько.</p>
+      <h1 class="mt-2 font-display text-3xl text-text">
+        {{ $t("wizard.occasion.title") }}
+      </h1>
+      <p class="mt-2 text-sm text-text-muted">
+        {{ $t("wizard.occasion.hint") }}
+      </p>
       <div class="mt-6 flex flex-wrap gap-2">
         <AppChip
           v-for="opt in occasionOptions"
@@ -136,21 +149,21 @@ onMounted(() => {
     <!-- 5. Уход -->
     <template v-else-if="step === 5">
       <h1 class="mt-2 font-display text-3xl text-text">
-        Готовность к укладке?
+        {{ $t("wizard.maintenance.title") }}
       </h1>
       <div class="mt-6 flex flex-col gap-3">
         <OptionCard
-          :title="'Минимум возни'"
+          :title="$t('wizard.maintenance.low')"
           :active="wizard.maintenance === 'low'"
           @click="wizard.maintenance = 'low'"
         />
         <OptionCard
-          :title="'Средне'"
+          :title="$t('wizard.maintenance.medium')"
           :active="wizard.maintenance === 'medium'"
           @click="wizard.maintenance = 'medium'"
         />
         <OptionCard
-          :title="'Готов(а) заморочиться'"
+          :title="$t('wizard.maintenance.high')"
           :active="wizard.maintenance === 'high'"
           @click="wizard.maintenance = 'high'"
         />
@@ -159,16 +172,18 @@ onMounted(() => {
 
     <!-- 6. Цвет -->
     <template v-else>
-      <h1 class="mt-2 font-display text-3xl text-text">Цвет волос?</h1>
+      <h1 class="mt-2 font-display text-3xl text-text">
+        {{ $t("wizard.color.title") }}
+      </h1>
       <div class="mt-6 flex flex-col gap-3">
         <OptionCard
-          :title="'Оставить свой'"
+          :title="$t('wizard.color.keep')"
           :active="!wizard.changeColor"
           @click="wizard.changeColor = false"
         />
         <OptionCard
-          :title="'Сменить цвет'"
-          subtitle="Выбор оттенка — на следующем шаге"
+          :title="$t('wizard.color.change')"
+          :subtitle="$t('wizard.color.changeHint')"
           :active="wizard.changeColor"
           @click="wizard.changeColor = true"
         />
@@ -177,8 +192,8 @@ onMounted(() => {
 
     <div class="mt-auto pt-8">
       <p class="mb-4 text-center text-sm font-semibold text-accent-dark">
-        <button type="button" @click="navigateTo('/catalog')">
-          Просто покажите варианты →
+        <button type="button" @click="navigateTo(localePath('/catalog'))">
+          {{ $t("wizard.skip") }}
         </button>
       </p>
       <div class="flex gap-3">
@@ -186,7 +201,7 @@ onMounted(() => {
           ←
         </AppButton>
         <AppButton class="flex-1" @click="next">
-          {{ step === total ? "Показать образы" : "Далее" }}
+          {{ step === total ? $t("wizard.finish") : $t("common.next") }}
         </AppButton>
       </div>
     </div>
