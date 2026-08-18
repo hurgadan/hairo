@@ -102,7 +102,16 @@
     "picked": "Elegido",
     "freeFirst": "1.ª prueba gratis",
     "generate": "✦ Generar",
-    "preview": "vista previa"
+    "preview": "vista previa",
+    "groups": {
+      "bob": "Bob",
+      "curly": "Rizos",
+      "mid_length": "Media melena",
+      "long": "Largo",
+      "short": "Corto",
+      "masculine": "Masculino/unisex",
+      "event": "Evento"
+    }
   },
   "result": {
     "title": "Creando tu look",

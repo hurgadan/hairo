@@ -8,6 +8,7 @@ const props = defineProps<{
 }>();
 
 const { locale } = useI18n();
+const groupName = useGroupLabel();
 
 const title = computed(
   () => pickLocalized(props.hairstyle.name, locale.value) ?? props.hairstyle.slug,
@@ -38,7 +39,9 @@ const title = computed(
     </div>
     <div class="p-3">
       <h3 class="font-display text-lg text-text">{{ title }}</h3>
-      <p class="text-xs text-text-muted">{{ hairstyle.groupName }}</p>
+      <p class="text-xs text-text-muted">
+        {{ groupName(hairstyle.groupName) }}
+      </p>
     </div>
   </article>
 </template>

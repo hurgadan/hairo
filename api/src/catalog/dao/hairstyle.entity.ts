@@ -15,6 +15,7 @@ import {
 } from "../../_contracts/enums";
 import { Aesthetic } from "../../_contracts/catalog/enums/aesthetic.enum";
 import { Fringe } from "../../_contracts/catalog/enums/fringe.enum";
+import { HairstyleGroup } from "../../_contracts/catalog/enums/hairstyle-group.enum";
 import { Maintenance } from "../../_contracts/catalog/enums/maintenance.enum";
 import { Occasion } from "../../_contracts/catalog/enums/occasion.enum";
 import { LocalizedText } from "../../_contracts/localized-text.type";
@@ -40,8 +41,8 @@ export class Hairstyle {
   @Column({ type: "jsonb", nullable: true })
   public description: LocalizedText | null;
 
-  @Column({ name: "group_name" })
-  public groupName: string;
+  @Column({ name: "group_name", type: "varchar" })
+  public groupName: HairstyleGroup;
 
   // структурные теги (CATALOG.md §1)
   @Column()

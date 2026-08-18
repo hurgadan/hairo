@@ -6,6 +6,7 @@ import request from "supertest";
 import { Repository } from "typeorm";
 
 import { GenerationStatus } from "../_contracts/generation/enums";
+import { HairstyleGroup } from "../_contracts/catalog/enums/hairstyle-group.enum";
 import {
   GenderPresentation,
   HairLength,
@@ -104,7 +105,7 @@ describe("Generation (e2e)", () => {
       hairstyles.create({
         slug: `style-${Date.now()}-${Math.random()}`,
         name: { ru: "Тестовый образ" },
-        groupName: "Тест",
+        groupName: HairstyleGroup.MidLength,
         length: HairLength.Shoulder,
         genderPresentation: GenderPresentation.Unisex,
         maintenance: Maintenance.Medium,

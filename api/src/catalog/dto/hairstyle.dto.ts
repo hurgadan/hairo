@@ -8,6 +8,7 @@ import {
 } from "../../_contracts/enums";
 import { Aesthetic } from "../../_contracts/catalog/enums/aesthetic.enum";
 import { Fringe } from "../../_contracts/catalog/enums/fringe.enum";
+import { HairstyleGroup } from "../../_contracts/catalog/enums/hairstyle-group.enum";
 import { Maintenance } from "../../_contracts/catalog/enums/maintenance.enum";
 import { Occasion } from "../../_contracts/catalog/enums/occasion.enum";
 import { Hairstyle } from "../../_contracts/catalog/hairstyle.type";
@@ -33,9 +34,9 @@ export class HairstyleDto implements Hairstyle {
   @Transform(({ obj }) => obj.description, { toClassOnly: true })
   public description: LocalizedText | null;
 
-  @ApiProperty()
+  @ApiProperty({ enum: HairstyleGroup })
   @Expose()
-  public groupName: string;
+  public groupName: HairstyleGroup;
 
   @ApiProperty({ enum: HairLength })
   @Expose()

@@ -7,6 +7,7 @@ import {
   HairLength,
   HairTexture,
 } from "../_contracts/enums";
+import { HairstyleGroup } from "../_contracts/catalog/enums/hairstyle-group.enum";
 import { GenerationStatus } from "../_contracts/generation/enums";
 import { Maintenance } from "../_contracts/catalog/enums/maintenance.enum";
 import { clearTables } from "../_common/utils/tests/clear-tables";
@@ -100,7 +101,7 @@ describe("Retention (e2e)", () => {
       hairstyles.create({
         slug: `style-${Date.now()}-${Math.random()}`,
         name: { ru: "Тест" },
-        groupName: "Тест",
+        groupName: HairstyleGroup.MidLength,
         length: HairLength.Shoulder,
         genderPresentation: GenderPresentation.Unisex,
         maintenance: Maintenance.Medium,

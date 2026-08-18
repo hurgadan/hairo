@@ -12,6 +12,7 @@ import {
   HairLength,
   HairTexture,
 } from "../_contracts/enums";
+import { HairstyleGroup } from "../_contracts/catalog/enums/hairstyle-group.enum";
 import { Maintenance } from "../_contracts/catalog/enums/maintenance.enum";
 import { Occasion } from "../_contracts/catalog/enums/occasion.enum";
 import { clearTables } from "../_common/utils/tests/clear-tables";
@@ -49,7 +50,7 @@ describe("Catalog (e2e)", () => {
       hairstyles.create({
         slug: "french-bob",
         name: { ru: "Французский боб" },
-        groupName: "Боб",
+        groupName: HairstyleGroup.Bob,
         length: HairLength.Chin,
         genderPresentation: GenderPresentation.Feminine,
         maintenance: Maintenance.Low,

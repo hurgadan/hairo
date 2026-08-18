@@ -102,7 +102,16 @@
     "picked": "Ausgewählt",
     "freeFirst": "1. Anprobe gratis",
     "generate": "✦ Generieren",
-    "preview": "Vorschau"
+    "preview": "Vorschau",
+    "groups": {
+      "bob": "Bob",
+      "curly": "Locken",
+      "mid_length": "Mittellang",
+      "long": "Lang",
+      "short": "Kurz",
+      "masculine": "Herren/Unisex",
+      "event": "Anlass"
+    }
   },
   "result": {
     "title": "Ihr Look entsteht",
