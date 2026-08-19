@@ -55,10 +55,10 @@ const { data, pending, error } = await useFetch<Hairstyle[]>(
   { query },
 );
 
-// Группы приходят из БД плоской русской строкой; enum и переводы — срез 2
-// Фазы 5, поэтому здесь переводится только пункт «все».
+// Группы приходят кодами `HairstyleGroup`; подписи — из словарей.
 const ALL_GROUPS = "*";
 const activeGroup = ref(ALL_GROUPS);
+const groupName = useGroupLabel();
 
 const groups = computed(() => [
   ALL_GROUPS,
@@ -66,7 +66,7 @@ const groups = computed(() => [
 ]);
 
 const groupLabel = (group: string): string =>
-  group === ALL_GROUPS ? t("catalog.all") : group;
+  group === ALL_GROUPS ? t("catalog.all") : groupName(group);
 
 const filtered = computed(() =>
   activeGroup.value === ALL_GROUPS

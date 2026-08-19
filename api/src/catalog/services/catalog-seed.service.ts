@@ -12,8 +12,10 @@ import {
 } from "../../_contracts/enums";
 import { Aesthetic } from "../../_contracts/catalog/enums/aesthetic.enum";
 import { Fringe } from "../../_contracts/catalog/enums/fringe.enum";
+import { HairstyleGroup } from "../../_contracts/catalog/enums/hairstyle-group.enum";
 import { Maintenance } from "../../_contracts/catalog/enums/maintenance.enum";
 import { Occasion } from "../../_contracts/catalog/enums/occasion.enum";
+import { LocalizedText } from "../../_contracts/localized-text.type";
 import { SEED_FILE_RELATIVE_PATH } from "../constants";
 import { Finish } from "../enums/finish.enum";
 import { Layering } from "../enums/layering.enum";
@@ -22,9 +24,9 @@ import { CatalogRepository } from "../repositories/catalog.repository";
 
 interface SeedHairstyle {
   slug: string;
-  name: Record<string, string>;
-  group: string;
-  desc_ru?: string;
+  name: LocalizedText;
+  group: HairstyleGroup;
+  desc?: LocalizedText;
   length: HairLength;
   gender_presentation: GenderPresentation;
   texture?: HairTexture[];
@@ -61,7 +63,7 @@ export class CatalogSeedService {
       await this.repo.upsertBySlug({
         slug: item.slug,
         name: item.name,
-        description: item.desc_ru ? { ru: item.desc_ru } : null,
+        description: item.desc ?? null,
         groupName: item.group,
         length: item.length,
         genderPresentation: item.gender_presentation,
