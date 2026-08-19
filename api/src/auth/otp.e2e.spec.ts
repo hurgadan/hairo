@@ -124,6 +124,36 @@ describe("Auth OTP (e2e)", () => {
     expect(sent.code).toMatch(/^\d{6}$/);
   });
 
+  it("sends the letter in the language of the request", async () => {
+    await request(httpServer)
+      .post("/auth/otp/request")
+      .send({ email: "hallo@example.com", locale: Locale.De })
+      .expect(200);
+
+    const [sent] = mailMock.sendVerificationCode.mock.calls[0];
+    expect(sent.locale).toBe(Locale.De);
+  });
+
+  it("falls back to the language of an existing account", async () => {
+    // Клиент локаль не передал (бот, старый фронт) — берём язык из учётки.
+    await request(httpServer)
+      .post("/auth/register")
+      .send({
+        email: "known@example.com",
+        password: "supersecret",
+        locale: Locale.Es,
+      })
+      .expect(201);
+
+    await request(httpServer)
+      .post("/auth/otp/request")
+      .send({ email: "known@example.com" })
+      .expect(200);
+
+    const [sent] = mailMock.sendVerificationCode.mock.calls[0];
+    expect(sent.locale).toBe(Locale.Es);
+  });
+
   it("stores only a hash of the code", async () => {
     const code = await requestCode("hash@example.com");
 

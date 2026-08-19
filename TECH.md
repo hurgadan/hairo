@@ -34,7 +34,7 @@
 - **Локальная разработка:** **Mailpit** в `docker-compose` (`db:up`) — SMTP на `:1025`, веб-интерфейс на `:8025`. Аутентификация не нужна: если `MAIL_SMTP_USER`/`PASSWORD` пусты, `auth` не передаётся вовсе. (Mailpit — поддерживаемая замена архивированного MailHog, порты и UX те же; чтобы вернуться на MailHog, достаточно поменять `image` в compose.)
 - **Тесты/CI:** `MAIL_PROVIDER=log` — e2e не поднимают SMTP-сервер.
 - **Продакшн:** SMTP-креды провайдера с EU-регионом (Mailgun EU / Postmark / Resend) — код не меняется, только env. Провайдер не выбран: решается при заведении домена отправки. Вендорный HTTP API (если понадобится — вебхуки доставки, шаблоны на стороне провайдера) добавляется новым классом с `itIsMe` и одной строкой в списке фабрики.
-- **Шаблоны:** Handlebars в `mail/templates/` — по два файла на письмо (`*.html.hbs` + `*.text.hbs`), компилируются один раз на старте. `.hbs` копируются в `dist` через `assets` в `nest-cli.json`.
+- **Шаблоны:** Handlebars в `mail/templates/{locale}/` — по два файла на письмо (`*.html.hbs` + `*.text.hbs`), все локали компилируются один раз на старте. `.hbs` копируются в `dist` через `assets` в `nest-cli.json`. Язык письма приходит от вызывающего (`ISendVerificationCode.locale`); если файла для него нет — берётся русский, поэтому новый язык в `Locale` не роняет старт, пока письма для него не написаны. Тема письма — единственный текст вне шаблона, живёт словарём в `mail/constants`.
 - **Env:** `MAIL_PROVIDER`, `MAIL_FROM`, `MAIL_SMTP_HOST`, `MAIL_SMTP_PORT`, `MAIL_SMTP_SECURE`, `MAIL_SMTP_USER`, `MAIL_SMTP_PASSWORD` (см. `.env.dist`). Все необязательные — без них поднимается `log`-транспорт.
 - **Проверка вживую:** `npm run mail:test -- you@example.com`.
 
