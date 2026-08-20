@@ -6,6 +6,7 @@ import * as bcrypt from "bcrypt";
 import { OtpRequestResult } from "../../_contracts/auth/otp-request-result.type";
 import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { MailService } from "../../mail/services/mail.service";
+import { UsersService } from "../../users/services/users.service";
 import {
   OTP_CODE_LENGTH,
   OTP_EXPIRES_IN_MINUTES,
@@ -30,6 +31,7 @@ export class OtpService {
   constructor(
     private readonly repo: OtpRepository,
     private readonly mail: MailService,
+    private readonly users: UsersService,
   ) {}
 
   /**
@@ -57,6 +59,7 @@ export class OtpService {
       to: email,
       code,
       expiresInMinutes: OTP_EXPIRES_IN_MINUTES,
+      locale: await this.resolveLocale(email, param.locale),
     });
 
     return {
@@ -84,6 +87,21 @@ export class OtpService {
     }
 
     await this.repo.markConsumed(active.id, new Date());
+  }
+
+  /**
+   * Язык письма: сначала тот, на котором человек прямо сейчас смотрит
+   * интерфейс, иначе — язык уже существующей учётки (для клиентов, которые
+   * локаль не передают), иначе фолбэк на стороне `MailService`.
+   */
+  private async resolveLocale(
+    email: string,
+    requested?: Locale,
+  ): Promise<Locale | undefined> {
+    if (requested) return requested;
+
+    const existing = await this.users.findByEmail(email);
+    return existing?.locale;
   }
 
   private async assertNotThrottled(

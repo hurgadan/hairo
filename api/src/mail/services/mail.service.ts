@@ -6,7 +6,9 @@ import { ConfigService } from "@nestjs/config";
 import * as handlebars from "handlebars";
 
 import { AppConfig } from "../../_common/types";
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import {
+  FALLBACK_MAIL_LOCALE,
   TEMPLATES_DIR,
   VERIFICATION_CODE_SUBJECT,
   VERIFICATION_CODE_TEMPLATE,
@@ -19,6 +21,8 @@ export interface ISendVerificationCode {
   code: string;
   /** Срок жизни кода — подставляется в текст письма (владелец срока — вызывающий модуль). */
   expiresInMinutes: number;
+  /** Язык письма; без него — фолбэк-локаль. */
+  locale?: Locale;
 }
 
 type TemplatePair = {
@@ -33,40 +37,65 @@ type TemplatePair = {
 @Injectable()
 export class MailService {
   private readonly transport: BaseTransport;
-  private readonly verificationCode: TemplatePair;
+  private readonly verificationCode: Record<Locale, TemplatePair>;
 
   constructor(private readonly config: ConfigService<AppConfig, true>) {
     this.transport = createTransport(this.config);
     // Шаблоны компилируются один раз на старте — рендер письма не читает диск.
-    this.verificationCode = compileTemplate(VERIFICATION_CODE_TEMPLATE);
+    this.verificationCode = compileForAllLocales(VERIFICATION_CODE_TEMPLATE);
   }
 
   public async sendVerificationCode(
     param: ISendVerificationCode,
   ): Promise<void> {
+    const locale = param.locale ?? FALLBACK_MAIL_LOCALE;
+    const subject = VERIFICATION_CODE_SUBJECT[locale];
+    const template = this.verificationCode[locale];
+
     const context = {
       code: param.code,
       expiresInMinutes: param.expiresInMinutes,
-      subject: VERIFICATION_CODE_SUBJECT,
+      subject,
     };
 
     await this.transport.sendMail({
       to: param.to,
-      subject: VERIFICATION_CODE_SUBJECT,
-      html: this.verificationCode.html(context),
-      text: this.verificationCode.text(context),
+      subject,
+      html: template.html(context),
+      text: template.text(context),
     });
   }
 }
 
-function compileTemplate(name: string): TemplatePair {
+function compileForAllLocales(name: string): Record<Locale, TemplatePair> {
+  const compiled = {} as Record<Locale, TemplatePair>;
+  for (const locale of Object.values(Locale)) {
+    compiled[locale] = compileTemplate(name, locale);
+  }
+  return compiled;
+}
+
+function compileTemplate(name: string, locale: Locale): TemplatePair {
   const read = (extension: "html" | "text"): handlebars.TemplateDelegate =>
     handlebars.compile(
-      fs.readFileSync(
-        path.join(__dirname, "..", TEMPLATES_DIR, `${name}.${extension}.hbs`),
-        "utf8",
-      ),
+      fs.readFileSync(resolveFile(name, locale, extension), "utf8"),
     );
 
   return { html: read("html"), text: read("text") };
+}
+
+/**
+ * Файл шаблона для языка, иначе — фолбэк-локаль. Так новый язык в `Locale`
+ * не роняет старт приложения, пока для него не написаны письма.
+ */
+function resolveFile(
+  name: string,
+  locale: Locale,
+  extension: "html" | "text",
+): string {
+  const at = (dir: Locale): string =>
+    path.join(__dirname, "..", TEMPLATES_DIR, dir, `${name}.${extension}.hbs`);
+
+  const localized = at(locale);
+  return fs.existsSync(localized) ? localized : at(FALLBACK_MAIL_LOCALE);
 }

@@ -1,6 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 
 import { AppConfig } from "../../_common/types";
+import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { VERIFICATION_CODE_SUBJECT } from "../constants";
 import { createTransport } from "../transports/create-transport";
 
@@ -36,13 +37,46 @@ describe("MailService", () => {
     const sent = sendMail.mock.calls[0][0];
 
     expect(sent.to).toBe("user@example.com");
-    expect(sent.subject).toBe(VERIFICATION_CODE_SUBJECT);
+    expect(sent.subject).toBe(VERIFICATION_CODE_SUBJECT[Locale.Ru]);
     expect(sent.html).toContain("482913");
     expect(sent.html).toContain("10");
     expect(sent.text).toContain("482913");
     expect(sent.text).toContain("10");
     // текстовая версия — без разметки
     expect(sent.text).not.toContain("<");
+  });
+
+  it("sends the letter in the requested language", async () => {
+    const service = buildService();
+
+    await service.sendVerificationCode({
+      to: "hans@example.com",
+      code: "482913",
+      expiresInMinutes: 10,
+      locale: Locale.De,
+    });
+
+    const sent = sendMail.mock.calls[0][0];
+
+    expect(sent.subject).toBe(VERIFICATION_CODE_SUBJECT[Locale.De]);
+    expect(sent.html).toContain("Ihr Anmeldecode");
+    expect(sent.html).toContain('lang="de"');
+    expect(sent.text).toContain("Ihr Anmeldecode");
+  });
+
+  it("falls back to Russian when no language is given", async () => {
+    const service = buildService();
+
+    await service.sendVerificationCode({
+      to: "user@example.com",
+      code: "482913",
+      expiresInMinutes: 10,
+    });
+
+    const sent = sendMail.mock.calls[0][0];
+
+    expect(sent.subject).toBe(VERIFICATION_CODE_SUBJECT[Locale.Ru]);
+    expect(sent.html).toContain("Код для входа");
   });
 
   it("builds the transport once, not per message", async () => {
