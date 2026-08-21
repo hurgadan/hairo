@@ -20,7 +20,9 @@ jest.mock("grammy", () => ({
 }));
 
 describe("TelegramService", () => {
-  const handlers = { register: jest.fn() } as unknown as jest.Mocked<HandlersService>;
+  const handlers = {
+    register: jest.fn(),
+  } as unknown as jest.Mocked<HandlersService>;
   const messages = new MessagesService();
   const users = { findById: jest.fn() } as unknown as jest.Mocked<UsersService>;
 
