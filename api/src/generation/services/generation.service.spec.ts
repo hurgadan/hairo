@@ -7,6 +7,7 @@ import { CatalogService } from "../../catalog/services/catalog.service";
 import { ImageModelService } from "../../image-model/image-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";
+import { TelegramService } from "../../telegram/services/telegram.service";
 import { GenerationRepository } from "../repositories/generation.repository";
 import { GenerationService } from "./generation.service";
 
@@ -43,6 +44,10 @@ describe("GenerationService", () => {
     refundForGeneration: jest.fn(),
   } as unknown as jest.Mocked<BillingService>;
 
+  const telegram = {
+    notifyGenerationReady: jest.fn(),
+  } as unknown as jest.Mocked<TelegramService>;
+
   const buildService = (): GenerationService =>
     new GenerationService(
       generations,
@@ -51,12 +56,14 @@ describe("GenerationService", () => {
       storage,
       imageModel,
       billing,
+      telegram,
     );
 
   beforeEach(() => {
     jest.clearAllMocks();
     billing.debitForGeneration.mockResolvedValue(undefined);
     billing.refundForGeneration.mockResolvedValue(undefined);
+    telegram.notifyGenerationReady.mockResolvedValue(undefined);
     storage.getPublicUrl.mockReturnValue(null);
     storage.getSignedDownloadUrl.mockResolvedValue(
       "https://signed.example/result",

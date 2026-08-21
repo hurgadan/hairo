@@ -6,6 +6,7 @@ import { CatalogService } from "../../catalog/services/catalog.service";
 import { ImageModelService } from "../../image-model/image-model.service";
 import { PhotosService } from "../../photos/services/photos.service";
 import { StorageService } from "../../storage/services/storage.service";
+import { TelegramService } from "../../telegram/services/telegram.service";
 import {
   buildRestylePrompt,
   ENHANCE_PROMPT,
@@ -29,6 +30,7 @@ export class GenerationService {
     private readonly storage: StorageService,
     private readonly imageModel: ImageModelService,
     private readonly billing: BillingService,
+    private readonly telegram: TelegramService,
   ) {}
 
   /** Создаёт задание и запускает пайплайн в фоне (fire-and-forget) — см. `TECH.md`. */
@@ -126,6 +128,11 @@ export class GenerationService {
         resultStorageKey,
         resultContentType: GENERATED_IMAGE_MIME_TYPE,
       });
+
+      // Генерация идёт в фоне: тот, кто пришёл из Telegram, мог давно закрыть
+      // приложение. Метод не бросает — недоставленное сообщение не должно
+      // превращать удачную генерацию в проваленную.
+      await this.telegram.notifyGenerationReady(userId);
     } catch (error) {
       this.logger.error(
         `generation ${id} failed`,

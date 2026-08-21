@@ -11,12 +11,6 @@ export const TEMPLATES_DIR = "templates";
 
 export const VERIFICATION_CODE_TEMPLATE = "verification-code";
 
-/**
- * Язык письма, когда запрошенного перевода нет: у русского шаблоны есть всегда
- * (плацдарм — русскоязычная диаспора), поэтому именно он держит фолбэк.
- */
-export const FALLBACK_MAIL_LOCALE = Locale.Ru;
-
 /** Тема письма — единственный текст письма вне шаблона, поэтому живёт здесь. */
 export const VERIFICATION_CODE_SUBJECT: Record<Locale, string> = {
   [Locale.Ru]: "Код подтверждения Hairo",
