@@ -37,5 +37,8 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
   ],
   controllers: [AuthController],
   providers: [AuthService, OtpService, OtpRepository, JwtStrategy],
+  // AuthService нужен боту: `/start` — это вход, и заводить учётку он обязан
+  // тем же путём, что и Mini App, а не своей копией логики.
+  exports: [AuthService],
 })
 export class AuthModule {}

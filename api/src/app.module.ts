@@ -16,6 +16,7 @@ import { MailModule } from "./mail/mail.module";
 import { PhotosModule } from "./photos/photos.module";
 import { RetentionModule } from "./retention/retention.module";
 import { StorageModule } from "./storage/storage.module";
+import { TelegramModule } from "./telegram/telegram.module";
 import { TouchActivityInterceptor } from "./users/interceptors/touch-activity.interceptor";
 import { UsersModule } from "./users/users.module";
 import { ImageModelModule } from "./image-model/image-model.module";
@@ -40,6 +41,7 @@ import { LlmModelModule } from "./llm-model/llm-model.module";
     FaceAnalysisModule,
     GenerationModule,
     RetentionModule,
+    TelegramModule,
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: TouchActivityInterceptor }],
 })

@@ -11,7 +11,10 @@ import type { AppConfig } from "../../_common/types";
 import { Locale } from "../../_contracts/users/enums/locale.enum";
 import { BillingService } from "../../billing/services/billing.service";
 import { User } from "../../users/dao/user.entity";
-import { UsersService } from "../../users/services/users.service";
+import {
+  TelegramUserData,
+  UsersService,
+} from "../../users/services/users.service";
 import type { LoginDto } from "../dto/login.dto";
 import type { RegisterDto } from "../dto/register.dto";
 import type { JwtPayload } from "../types/jwt-payload.type";
@@ -128,14 +131,25 @@ export class AuthService {
       throw new UnauthorizedException("Invalid Telegram initData");
     }
 
-    const { user, created } = await this.users.upsertTelegramUser({
+    return this.loginWithTelegramUser({
       telegramId: String(tgUser.id),
       telegramUsername: tgUser.username ?? null,
       firstName: tgUser.first_name ?? null,
       lastName: tgUser.last_name ?? null,
     });
+  }
 
-    // Вход через initData — сразу полноценный аккаунт (PRODUCT.md §4.3),
+  /**
+   * Вход по уже доверенным данным Telegram-пользователя. Так входит бот:
+   * апдейт пришёл от Telegram на наш токен, отдельная проверка подписи ему не
+   * нужна — в отличие от Mini App, где `initData` приходит через браузер.
+   */
+  public async loginWithTelegramUser(
+    data: TelegramUserData,
+  ): Promise<AuthResult> {
+    const { user, created } = await this.users.upsertTelegramUser(data);
+
+    // Вход через Telegram — сразу полноценный аккаунт (PRODUCT.md §4.3),
     // поэтому trial начисляется здесь же, но только при заведении аккаунта.
     if (created) {
       await this.billing.grantSignupBonus(user.id);
